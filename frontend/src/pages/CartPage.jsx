@@ -109,7 +109,7 @@ export default function CartPage() {
           Savat ({items.length} ta mahsulot)
         </h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 'var(--space-8)', alignItems: 'start' }}>
+        <div className="cart-grid">
           {/* Cart Items */}
           <div>
             {items.map(item => (

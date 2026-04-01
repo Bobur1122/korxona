@@ -5,11 +5,10 @@ import { useCart } from '../context/CartContext';
 import { useToast } from './Toast';
 
 const categoryLabels = {
-  "ko'ylak": "Ko'ylak",
-  "shim": "Shim",
-  "kostyum": "Kostyum",
-  "palto": "Palto",
-  "sport": "Sport kiyim",
+  "oddiy": "Oddiy plyonka",
+  "uv_plyonka": "UV himoyali",
+  "kop_qavatli": "Ko'p qavatli",
+  "maxsus": "Maxsus plyonka",
   "boshqa": "Boshqa"
 };
 
@@ -32,7 +31,7 @@ export default function ProductCard({ product }) {
   return (
     <Link to={`/products/${product._id}`} className="product-card">
       <img
-        src={product.image || `https://placehold.co/400x300/f1f5f9/64748b?text=${encodeURIComponent(product.name)}`}
+        src={product.image || `https://placehold.co/400x300/f0fdf4/16a34a?text=${encodeURIComponent(product.name)}`}
         alt={product.name}
         className="product-card-image"
       />
@@ -41,6 +40,11 @@ export default function ProductCard({ product }) {
           {categoryLabels[product.category] || product.category}
         </div>
         <h3 className="product-card-name">{product.name}</h3>
+        {product.thickness && (
+          <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}>
+            Qalinlik: {product.thickness} mkm {product.width ? `• Eni: ${product.width}m` : ''}
+          </div>
+        )}
         <div className="product-card-price">
           {product.price.toLocaleString()} <span>so'm</span>
         </div>

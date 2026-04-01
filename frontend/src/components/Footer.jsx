@@ -1,44 +1,29 @@
 import { Link } from 'react-router-dom';
+import { Phone } from 'lucide-react';
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <Link to="/" className="logo" style={{ color: 'white' }}>
-              Tikuv<span style={{ color: 'var(--color-accent-light)' }}>Pro</span>
-            </Link>
-            <p>
-              Professional tikuvchilik kompaniyasi. Yuqori sifatli kiyimlar ishlab chiqarish
-              bo'yicha yetakchi korxona.
-            </p>
-          </div>
-
-          <div>
-            <h4 className="footer-title">Sahifalar</h4>
+        <div className="footer-simple">
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <img src="/logo.png" alt="Original Grand Plast" style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
+          </Link>
+          <div className="footer-links-row">
             <Link to="/" className="footer-link">Bosh sahifa</Link>
             <Link to="/about" className="footer-link">Biz haqimizda</Link>
             <Link to="/products" className="footer-link">Mahsulotlar</Link>
           </div>
-
-          <div>
-            <h4 className="footer-title">Xizmatlar</h4>
-            <span className="footer-link">Buyurtma tikish</span>
-            <span className="footer-link">Ulgurji sotish</span>
-            <span className="footer-link">Maxsus dizayn</span>
-          </div>
-
-          <div>
-            <h4 className="footer-title">Aloqa</h4>
-            <span className="footer-link">📞 +998 90 123 45 67</span>
-            <span className="footer-link">✉️ info@tikuvpro.uz</span>
-            <span className="footer-link">📍 Toshkent, O'zbekiston</span>
+          <div className="footer-contact-row">
+            <a href="tel:+998996066333" style={{ color: 'inherit', textDecoration: 'none' }}>
+              <Phone size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
+              +998 99 606 63 33
+            </a>
+            <span>ogp-info@mail.ru</span>
           </div>
         </div>
-
         <div className="footer-bottom">
-          © {new Date().getFullYear()} TikuvPro. Barcha huquqlar himoyalangan.
+          © {new Date().getFullYear()} Original Grand Plast MChJ. Toshkent, Uchtepa tumani. Barcha huquqlar himoyalangan.
         </div>
       </div>
     </footer>

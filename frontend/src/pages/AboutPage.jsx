@@ -1,65 +1,57 @@
-import { Target, Eye, Heart, Users, Award, Scissors, Clock, MapPin, Phone, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Phone } from 'lucide-react';
 
 export default function AboutPage() {
   return (
     <div className="fade-in">
-      {/* Hero Banner */}
-      <section style={{
-        background: 'linear-gradient(135deg, var(--color-primary) 0%, #1a1f3d 50%, var(--color-primary-light) 100%)',
-        color: 'white',
-        padding: 'var(--space-24) 0',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          position: 'absolute', top: '-40%', right: '-15%', width: 500, height: 500,
-          borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.2), transparent 70%)', pointerEvents: 'none'
-        }}></div>
+      {/* Hero */}
+      <section className="cta-section" style={{ padding: 'calc(var(--space-24) + 60px) 0 var(--space-20)', textAlign: 'center' }}>
+        <div className="hero-bg-glow hero-glow-1"></div>
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex', background: 'rgba(99,102,241,0.2)', color: 'var(--color-accent-light)', border: '1px solid rgba(99,102,241,0.3)' }}>
-            2014-yildan beri
-          </span>
+          <div className="hero-badge" style={{ background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)' }}>
+            2005 yildan beri faoliyat yuritmoqda
+          </div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, var(--font-size-5xl))', fontWeight: 800, marginBottom: 'var(--space-4)', letterSpacing: '-0.03em' }}>
-            Biz haqimizda
+            Original Grand Plast MChJ
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 600, margin: '0 auto', fontSize: 'var(--font-size-lg)', lineHeight: 1.7 }}>
-            Professional tikuvchilik sohasida 10 yildan ortiq tajriba. O'zbekistonning ishonchli va sifatli kiyim ishlab chiqaruvchisi.
+          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 650, margin: '0 auto', fontSize: 'var(--font-size-lg)', lineHeight: 1.7 }}>
+            Polietilen plyonka va qadoqlash materiallari ishlab chiqaruvchi yetakchi korxona. O'zbekistonda birinchi bo'lib 12 metrlik uch qatlamli issiqxona plyonkasini ishlab chiqargan.
           </p>
         </div>
       </section>
 
       {/* Company Story */}
-      <section className="about-section" style={{ padding: 'var(--space-20) 0' }}>
+      <section className="section" style={{ padding: 'var(--space-20) 0' }}>
         <div className="container">
           <div className="about-grid">
             <div className="about-content">
-              <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Bizning tarix</span>
-              <h2>TikuvPro kompaniyasi haqida</h2>
+              <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Tarix</span>
+              <h2>Korxona haqida</h2>
               <p>
-                TikuvPro — 2014-yilda Toshkent shahrida tashkil etilgan professional tikuvchilik kompaniyasi.
-                O'n yildan ortiq faoliyatimiz davomida biz O'zbekistonning eng ishonchli kiyim ishlab chiqaruvchilaridan biriga aylandik.
+                <strong>Original Grand Plast MChJ</strong> 2005 yilda Toshkent shahrida tashkil topgan bo'lib, asosiy faoliyat 
+                yo'nalishi polietilen plyonka va qadoqlash materiallari ishlab chiqarishdir. Korxona ilk yillarida turli xil 
+                polietilen mahsulotlar (paketlar, plyonkalar) ishlab chiqarishga ixtisoslashdi.
               </p>
               <p>
-                Zamonaviy Yaponiya va Germaniya jihozlari bilan jihozlangan ishlab chiqarish sexlarimizda 30 dan ortiq
-                tajribali tikuvchi va dizaynerlar jamoamiz sizning brendingiz uchun mukammal kiyimlarni yaratishga qodir.
+                <strong>2013 yilda</strong> kompaniya o'z ishlab chiqarish quvvatini kengaytirib, O'zbekistonda birinchi marotaba 
+                uch qatlamli, kengligi <strong>12 metr</strong> bo'lgan issiqxona plyonkasi ishlab chiqarish liniyasini ishga tushirdi. 
+                Bu loyiha agrar tarmoqqa mo'ljallangan mahsulotlarimizni sezilarli darajada kengaytirdi.
               </p>
               <p>
-                Biz individual buyurtmalardan tortib, 10,000 donagacha bo'lgan ulgurji partiyalargacha — har qanday hajmdagi
-                buyurtmalarni professional darajada bajaramiz. Har bir tikuv — bizning obro'yimiz.
+                Hozirgi kunda Original Grand Plast mahsulotlari qishloq xo'jaligi (issiqxonalar), qurilish 
+                (tom yopish va izolyatsiya), sanoat va kundalik iste'mol sohalarida keng qo'llanilmoqda. 
+                Mahsulotlarimiz Ispaniya, Koreya, Xitoy, Turkiya, Singapur va Rossiya kabi davlatlardan olib 
+                kiriladigan yuqori sifatli xomashyo asosida ishlab chiqiladi.
               </p>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginTop: 'var(--space-8)' }}>
                 {[
-                  { value: '500+', label: 'Bajarilgan buyurtmalar' },
-                  { value: '50+', label: 'Doimiy mijozlar' },
-                  { value: '30+', label: 'Malakali ustalar' },
-                  { value: '10+', label: 'Yillik tajriba' }
+                  { value: '2005', label: 'Tashkil etilgan' },
+                  { value: '12m', label: 'Max plyonka kengligi' },
+                  { value: '3 qatlamli', label: 'Texnologiya' },
+                  { value: '5+', label: 'Mahsulot turi' }
                 ].map((s, i) => (
-                  <div key={i} style={{
-                    padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)',
-                    background: 'var(--color-accent-bg)', textAlign: 'center'
-                  }}>
+                  <div key={i} className="feature-card" style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
                     <div style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 800, color: 'var(--color-accent)' }}>{s.value}</div>
                     <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>{s.label}</div>
                   </div>
@@ -67,152 +59,131 @@ export default function AboutPage() {
               </div>
             </div>
             <div style={{
-              background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%)',
+              background: 'linear-gradient(135deg, #022c22 0%, var(--color-primary) 50%, #065F46 100%)',
               borderRadius: 'var(--radius-2xl)',
               padding: 'var(--space-8)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              color: 'white',
-              textAlign: 'center',
-              minHeight: 450,
-              position: 'relative',
-              overflow: 'hidden'
+              display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+              color: 'white', textAlign: 'center', minHeight: 400, position: 'relative', overflow: 'hidden'
             }}>
-              <div style={{
-                position: 'absolute', bottom: '-30%', left: '-20%', width: 300, height: 300,
-                borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.2), transparent 70%)'
-              }}></div>
-              <Scissors size={64} style={{ opacity: 0.3, marginBottom: 'var(--space-6)' }} />
-              <div style={{ fontSize: 'var(--font-size-5xl)', fontWeight: 800, marginBottom: 'var(--space-2)', position: 'relative' }}>10+</div>
-              <div style={{ fontSize: 'var(--font-size-lg)', opacity: 0.7, position: 'relative' }}>yillik tajriba</div>
-              <div style={{ marginTop: 'var(--space-8)', display: 'flex', gap: 'var(--space-6)', position: 'relative' }}>
-                {[Award, Clock, Users].map((Icon, i) => (
-                  <div key={i} style={{
-                    width: 48, height: 48, borderRadius: 'var(--radius-lg)',
-                    background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                  }}>
-                    <Icon size={20} />
-                  </div>
-                ))}
+              <div style={{ position: 'absolute', bottom: '-30%', left: '-20%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.2), transparent 70%)' }}></div>
+              <div style={{ fontSize: 80, opacity: 0.08, position: 'absolute', top: 20, right: 20, fontWeight: 900, letterSpacing: '-0.05em' }}>OGP</div>
+              <div style={{ position: 'relative', marginBottom: 'var(--space-6)' }}>
+                <div style={{ fontSize: 'var(--font-size-5xl)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 }}>Original</div>
+                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 800, color: 'var(--color-accent-light)', letterSpacing: '-0.02em' }}>Grand Plast</div>
+              </div>
+              <div style={{ fontSize: 'var(--font-size-sm)', opacity: 0.4 }}>2005 yildan beri • Toshkent</div>
+              <div style={{ marginTop: 'var(--space-6)', padding: 'var(--space-3) var(--space-5)', background: 'rgba(255,255,255,0.1)', borderRadius: 'var(--radius-full)', fontSize: 'var(--font-size-xs)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                O'zbekistonda №1 issiqxona plyonkasi
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Products */}
       <section className="section" style={{ background: 'var(--color-surface)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Qadriyatlar</span>
-            <h2 className="section-title" style={{ fontSize: 'var(--font-size-4xl)' }}>Missiya va qadriyatlarimiz</h2>
-            <p className="section-subtitle" style={{ margin: '0 auto' }}>
-              Kompaniyamiz asosiy tamoyillari va maqsadlari
-            </p>
+            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Faoliyat</span>
+            <h2 className="section-title">Asosiy yo'nalishlar</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'var(--space-6)', maxWidth: 1100, margin: '0 auto' }}>
+          <div className="features-grid">
             {[
-              { icon: Target, title: 'Missiyamiz', desc: "O'zbekiston tikuvchilik sanoatini jahon standartlariga olib chiqish va mahalliy brendlarni qo'llab-quvvatlash.", color: '#6366F1' },
-              { icon: Eye, title: 'Vizyonimiz', desc: "Markaziy Osiyodagi eng ishonchli va innovatsion tikuvchilik brendiga aylanib, xalqaro bozorga chiqish.", color: '#10B981' },
-              { icon: Heart, title: 'Qadriyatlar', desc: "Sifat, halollik, innovatsiya va mijozga hurmat — bizning har bir tikuvimizda aks etadi.", color: '#F59E0B' },
-              { icon: Users, title: 'Jamoamiz', desc: "30+ malakali tikuvchi, 5 dizayner va 3 sifat nazoratchisi — sizga eng yaxshi xizmatni ko'rsatadi.", color: '#3B82F6' }
+              { emoji: '🌿', title: 'Issiqxona plyonkasi', desc: 'Kuchli UV nurlanishga chidamli, uch qatlamli polietilen plyonka. 12 m gacha kenglik.' },
+              { emoji: '📦', title: 'Termo-usadoz plyonka', desc: 'Issiq bilan ishlov berilganda tavlanib, mahsulotlarni mustahkam o\'rashda qo\'llaniladi.' },
+              { emoji: '🛍️', title: 'Polietilen paketlar', desc: 'Banklar uchun pulni vakuum bilan o\'rash sumkalari va turli hajmdagi paketlar.' },
+              { emoji: '💧', title: 'PET kapsulalar', desc: 'Suv va yog\' idishlari uchun 28-140 gramm oralig\'idagi qopqoq materiallari.' },
+              { emoji: '🏗️', title: 'Tom yopish materiallari', desc: '"Roof Cover" — gidroizolyatsiya uchun rulonli material. Issiq va sovuqqa chidamli.' },
+              { emoji: '⚫', title: 'Bitum-polimer mastika', desc: 'Gidroizolyatsiya va hermetizatsiya ishlari uchun maxsus polimer mastika.' }
             ].map((item, i) => (
-              <div key={i} className="mission-card" style={{ padding: 'var(--space-8)' }}>
-                <div style={{
-                  width: 56, height: 56, borderRadius: 'var(--radius-xl)',
-                  background: `${item.color}15`, color: item.color,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 'var(--space-5)'
-                }}>
-                  <item.icon size={26} />
-                </div>
-                <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>{item.title}</h3>
-                <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>{item.desc}</p>
+              <div key={i} className="feature-card">
+                <div style={{ fontSize: 36, marginBottom: 'var(--space-3)', lineHeight: 1 }}>{item.emoji}</div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* What we offer */}
+      {/* Mission */}
       <section className="section">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Xizmatlar</span>
-            <h2 className="section-title">Biz nimalar taklif qilamiz?</h2>
+            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Qadriyatlar</span>
+            <h2 className="section-title">Missiya va maqsad</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
+          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
             {[
-              { title: "Buyurtma tikish", desc: "Sizning dizayn va talablaringiz bo'yicha maxsus kiyimlar tikish. Sketch taqdim qiling — biz amalga oshiramiz.", image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=300&fit=crop" },
-              { title: "Ulgurji ishlab chiqarish", desc: "100 donadan 10,000 donagacha partiyalarda sifatli kiyimlar ishlab chiqarish. Brendingiz etiketkasi bilan.", image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=300&fit=crop" },
-              { title: "Dizayn xizmati", desc: "Professional dizaynerlar jamoamiz sizning g'oyangizni real mahsulotga aylantiradi. Konsultatsiya bepul.", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=300&fit=crop" }
+              { emoji: '🎯', title: 'Missiyamiz', desc: 'Zamonaviy texnologiyalar va sifatli xomashyolardan foydalanib, mijozlarga foydali va arzon qadoqlash yechimlarini taqdim etish.' },
+              { emoji: '💎', title: 'Qadriyatlarimiz', desc: 'Sifat, ishonchlilik va innovatsiyalar. Har bir hamkor bilan uzoq muddatli hamkorlikni saqlashga intilamiz.' },
+              { emoji: '🌱', title: 'Ekologiya', desc: 'Chiqindilarni kamaytirish va qayta ishlash imkoniyatlariga e\'tibor qaratamiz.' },
+              { emoji: '🤝', title: 'Individual yondashuv', desc: 'Har bir mijoz bilan alohida ishlash. Katta partiyalar uchun maxsus narx shartlari.' }
             ].map((item, i) => (
-              <div key={i} className="card" style={{ overflow: 'hidden' }}>
-                <img src={item.image} alt={item.title} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
-                <div className="card-body" style={{ padding: 'var(--space-6)' }}>
-                  <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>{item.title}</h3>
-                  <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>{item.desc}</p>
-                </div>
+              <div key={i} className="feature-card">
+                <div style={{ fontSize: 36, marginBottom: 'var(--space-3)', lineHeight: 1 }}>{item.emoji}</div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact & Map */}
+      {/* Contact */}
       <section className="section" style={{ background: 'var(--color-surface)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Manzil</span>
-            <h2 className="section-title">Bizning manzil</h2>
+            <span className="badge badge-accent" style={{ marginBottom: 'var(--space-4)', display: 'inline-flex' }}>Aloqa</span>
+            <h2 className="section-title">Biz bilan bog'laning</h2>
             <p className="section-subtitle" style={{ margin: '0 auto' }}>
-              Toshkent shahridagi ofis va ishlab chiqarish binomiz
+              Savollaringiz bo'lsa yoki buyurtma bermoqchi bo'lsangiz — murojaat qiling
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-8)', alignItems: 'start' }}>
-            <div>
-              <div className="map-container">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.254169893101!2d69.27927647605068!3d41.31115397131356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b0cc379e9c3%3A0xa5a9323b4aa5cb98!2sTashkent%2C%20Uzbekistan!5e0!3m2!1sen!2s!4v1703147698761!5m2!1sen!2s"
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="TikuvPro joylashuvi"
-                ></iframe>
-              </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-8)', alignItems: 'start' }}>
+            <div className="map-container">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.254169893101!2d69.27927647605068!3d41.31115397131356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8b0cc379e9c3%3A0xa5a9323b4aa5cb98!2sTashkent%2C%20Uzbekistan!5e0!3m2!1sen!2s!4v1703147698761!5m2!1sen!2s"
+                allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                title="Original Grand Plast manzili"
+              ></iframe>
             </div>
-            <div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-                {[
-                  { icon: MapPin, label: 'Manzil', value: "Toshkent sh., Yakkasaroy tumani, Shota Rustaveli ko'chasi, 45-uy", color: '#6366F1' },
-                  { icon: Phone, label: 'Telefon', value: '+998 90 123 45 67', color: '#10B981' },
-                  { icon: Mail, label: 'Email', value: 'info@tikuvpro.uz', color: '#3B82F6' },
-                  { icon: Clock, label: 'Ish vaqti', value: 'Du-Sh: 09:00 - 18:00', color: '#F59E0B' }
-                ].map((item, i) => (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'flex-start', gap: 'var(--space-4)',
-                    padding: 'var(--space-5)', background: 'var(--color-bg)',
-                    borderRadius: 'var(--radius-xl)', border: '1px solid var(--color-border-light)'
-                  }}>
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 'var(--radius-lg)',
-                      background: `${item.color}15`, color: item.color,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                    }}>
-                      <item.icon size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>{item.label}</div>
-                      <div style={{ fontWeight: 500, fontSize: 'var(--font-size-sm)' }}>{item.value}</div>
-                    </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              {[
+                { emoji: '📍', label: 'Manzil', value: "Toshkent sh., Uchtepa tumani, Foziltepa ko'chasi, 9-uy" },
+                { emoji: '📞', label: 'Telefon', value: '+998 99 606 63 33' },
+                { emoji: '📞', label: 'Telefon 2', value: '+998 99 818 63 33' },
+                { emoji: '📞', label: 'Telefon 3', value: '+998 99 828 63 33' },
+                { emoji: '📧', label: 'Email', value: 'ogp-info@mail.ru' },
+                { emoji: '🌐', label: 'Veb-sayt', value: 'ogp.uz' },
+                { emoji: '🕐', label: 'Ish vaqti', value: 'Du-Ju: 08:00 - 18:00' }
+              ].map((item, i) => (
+                <div key={i} className="feature-card" style={{ textAlign: 'left', padding: 'var(--space-3) var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                  <div style={{ fontSize: 24, lineHeight: 1, flexShrink: 0 }}>{item.emoji}</div>
+                  <div>
+                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', fontWeight: 500 }}>{item.label}</div>
+                    <div style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)' }}>{item.value}</div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta-section" style={{ padding: 'var(--space-16) 0' }}>
+        <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 800, marginBottom: 'var(--space-4)' }}>
+            Hamkorlik qilishga tayyormisiz?
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 'var(--space-6)' }}>
+            Mahsulotlar, narxlar va yetkazib berish haqida batafsil ma'lumot uchun qo'ng'iroq qiling
+          </p>
+          <a href="tel:+998996066333" className="btn btn-primary btn-lg">
+            <Phone size={18} /> Qo'ng'iroq qilish
+          </a>
         </div>
       </section>
     </div>

@@ -39,11 +39,11 @@ export default function Dashboard() {
       {
         label: 'Daromad (so\'m)',
         data: stats.monthlyRevenue.map(m => m.revenue),
-        borderColor: '#6366F1',
-        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderColor: '#16A34A',
+        backgroundColor: 'rgba(22, 163, 74, 0.1)',
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: '#6366F1',
+        pointBackgroundColor: '#16A34A',
       },
       {
         label: 'Buyurtmalar',
@@ -63,7 +63,7 @@ export default function Dashboard() {
     datasets: [{
       label: 'Kunlik daromad',
       data: stats.dailyOrders.map(d => d.revenue),
-      backgroundColor: 'rgba(99, 102, 241, 0.7)',
+      backgroundColor: 'rgba(22, 163, 74, 0.7)',
       borderRadius: 6,
     }]
   };
@@ -89,7 +89,7 @@ export default function Dashboard() {
     labels: stats.ordersByStatus.map(s => statusLabels[s._id] || s._id),
     datasets: [{
       data: stats.ordersByStatus.map(s => s.count),
-      backgroundColor: ['#F59E0B', '#3B82F6', '#6366F1', '#10B981'],
+      backgroundColor: ['#F59E0B', '#3B82F6', '#16A34A', '#10B981'],
       borderWidth: 0,
     }]
   };

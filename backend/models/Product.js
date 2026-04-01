@@ -32,9 +32,30 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Kategoriya kiritilishi shart'],
     trim: true,
     enum: {
-      values: ['ko\'ylak', 'shim', 'kostyum', 'palto', 'sport', 'boshqa'],
+      values: ['Issiqxona plyonkasi', 'Termo-usadoz plyonka', 'Polietilen paketlar', 'PET kapsulalar', 'Tom yopish materiallari', 'Bitum-polimer mastika'],
       message: 'Noto\'g\'ri kategoriya'
     }
+  },
+  thickness: {
+    type: Number,
+    min: [0, 'Qalinlik manfiy bo\'lishi mumkin emas']
+  },
+  width: {
+    type: Number,
+    min: [0, 'Eni manfiy bo\'lishi mumkin emas']
+  },
+  length: {
+    type: Number,
+    min: [0, 'Uzunlik manfiy bo\'lishi mumkin emas']
+  },
+  uvProtection: {
+    type: Boolean,
+    default: false
+  },
+  color: {
+    type: String,
+    trim: true,
+    default: 'shaffof'
   },
   isActive: {
     type: Boolean,

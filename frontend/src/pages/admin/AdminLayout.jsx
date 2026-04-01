@@ -46,7 +46,7 @@ export default function AdminLayout() {
         <button onClick={() => setMobileOpen(!mobileOpen)} id="mobile-sidebar-toggle">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-        <span>TikuvPro <span style={{ color: 'var(--color-accent-light)', fontWeight: 400 }}>Admin</span></span>
+        <img src="/logo.png" alt="OGP" style={{ height: 28, width: 'auto' }} />
       </div>
 
       {/* Mobile overlay */}
@@ -56,9 +56,7 @@ export default function AdminLayout() {
 
       <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
-          <span className="sidebar-brand">
-            Tikuv<span style={{ color: 'var(--color-accent-light)' }}>Pro</span>
-          </span>
+          <img src="/logo.png" alt="OGP" className="sidebar-brand" style={{ height: 32, width: 'auto' }} />
           <button
             className="sidebar-toggle"
             onClick={() => {

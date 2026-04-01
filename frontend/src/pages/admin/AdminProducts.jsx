@@ -3,15 +3,14 @@ import { Plus, Edit, Trash2, X, Upload, Image } from 'lucide-react';
 import { api } from '../../api';
 
 const categories = [
-  { value: "ko'ylak", label: "Ko'ylak" },
-  { value: 'shim', label: 'Shim' },
-  { value: 'kostyum', label: 'Kostyum' },
-  { value: 'palto', label: 'Palto' },
-  { value: 'sport', label: 'Sport kiyim' },
+  { value: 'oddiy', label: 'Oddiy plyonka' },
+  { value: 'uv_plyonka', label: 'UV himoyali' },
+  { value: 'kop_qavatli', label: "Ko'p qavatli" },
+  { value: 'maxsus', label: 'Maxsus plyonka' },
   { value: 'boshqa', label: 'Boshqa' }
 ];
 
-const emptyForm = { name: '', description: '', price: '', stock: '', category: "ko'ylak", image: '', isActive: true };
+const emptyForm = { name: '', description: '', price: '', stock: '', category: 'oddiy', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -52,6 +51,11 @@ export default function AdminProducts() {
       stock: product.stock,
       category: product.category,
       image: product.image || '',
+      thickness: product.thickness || '',
+      width: product.width || '',
+      length: product.length || '',
+      uvProtection: product.uvProtection || false,
+      color: product.color || 'shaffof',
       isActive: product.isActive
     });
     setImagePreview(product.image || '');
@@ -99,7 +103,14 @@ export default function AdminProducts() {
     setSaving(true);
     setError('');
     try {
-      const data = { ...form, price: Number(form.price), stock: Number(form.stock) };
+      const data = {
+        ...form,
+        price: Number(form.price),
+        stock: Number(form.stock),
+        thickness: form.thickness ? Number(form.thickness) : undefined,
+        width: form.width ? Number(form.width) : undefined,
+        length: form.length ? Number(form.length) : undefined,
+      };
       if (editing) {
         await api.updateProduct(editing, data);
       } else {
@@ -147,6 +158,7 @@ export default function AdminProducts() {
               <th>Rasm</th>
               <th>Nomi</th>
               <th>Kategoriya</th>
+              <th>Qalinlik</th>
               <th>Narx</th>
               <th>Mavjud</th>
               <th>Holat</th>
@@ -158,13 +170,14 @@ export default function AdminProducts() {
               <tr key={p._id}>
                 <td>
                   <img
-                    src={p.image || `https://placehold.co/40x40/f1f5f9/64748b?text=${p.name[0]}`}
+                    src={p.image || `https://placehold.co/40x40/f0fdf4/16a34a?text=${p.name[0]}`}
                     alt={p.name}
                     style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
                   />
                 </td>
                 <td style={{ fontWeight: 500 }}>{p.name}</td>
                 <td>{categories.find(c => c.value === p.category)?.label || p.category}</td>
+                <td>{p.thickness ? `${p.thickness} mkm` : '—'}</td>
                 <td>{p.price.toLocaleString()} so'm</td>
                 <td>
                   <span className={`badge ${p.stock > 0 ? 'badge-success' : 'badge-error'}`}>
@@ -201,7 +214,7 @@ export default function AdminProducts() {
       {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 560 }}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)' }}>
               <h2 className="modal-title" style={{ margin: 0 }}>
                 {editing ? 'Mahsulotni tahrirlash' : 'Yangi mahsulot'}
@@ -317,6 +330,36 @@ export default function AdminProducts() {
                   {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </div>
+
+              {/* Plyonka xususiyatlari */}
+              <div style={{ background: 'var(--color-accent-bg)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)', marginBottom: 'var(--space-5)' }}>
+                <label className="form-label" style={{ color: 'var(--color-accent)', marginBottom: 'var(--space-3)' }}>Plyonka xususiyatlari</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 'var(--space-3)' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Qalinlik (mkm)</label>
+                    <input type="number" className="form-input" name="thickness" value={form.thickness} onChange={handleChange} min="0" placeholder="100" />
+                  </div>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Eni (m)</label>
+                    <input type="number" className="form-input" name="width" value={form.width} onChange={handleChange} min="0" step="0.1" placeholder="6" />
+                  </div>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Uzunlik (m)</label>
+                    <input type="number" className="form-input" name="length" value={form.length} onChange={handleChange} min="0" placeholder="50" />
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)', marginTop: 'var(--space-3)' }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Rang</label>
+                    <input type="text" className="form-input" name="color" value={form.color} onChange={handleChange} placeholder="shaffof" />
+                  </div>
+                  <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-end', gap: 'var(--space-2)' }}>
+                    <input type="checkbox" name="uvProtection" checked={form.uvProtection} onChange={handleChange} id="uv-protection" />
+                    <label htmlFor="uv-protection" className="form-label" style={{ margin: 0, fontSize: 'var(--font-size-xs)' }}>UV himoyali</label>
+                  </div>
+                </div>
+              </div>
+
               <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                 <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} id="product-active" />
                 <label htmlFor="product-active" className="form-label" style={{ margin: 0 }}>Faol</label>

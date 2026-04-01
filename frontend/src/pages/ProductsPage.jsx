@@ -5,11 +5,10 @@ import ProductCard from '../components/ProductCard';
 
 const categories = [
   { value: '', label: 'Barcha kategoriyalar' },
-  { value: "ko'ylak", label: "Ko'ylak" },
-  { value: 'shim', label: 'Shim' },
-  { value: 'kostyum', label: 'Kostyum' },
-  { value: 'palto', label: 'Palto' },
-  { value: 'sport', label: 'Sport kiyim' },
+  { value: 'oddiy', label: 'Oddiy plyonka' },
+  { value: 'uv_plyonka', label: 'UV himoyali' },
+  { value: 'kop_qavatli', label: "Ko'p qavatli" },
+  { value: 'maxsus', label: 'Maxsus plyonka' },
   { value: 'boshqa', label: 'Boshqa' }
 ];
 
@@ -17,7 +16,7 @@ const sortOptions = [
   { value: '', label: 'Standart' },
   { value: 'price_asc', label: 'Narx: arzon → qimmat' },
   { value: 'price_desc', label: 'Narx: qimmat → arzon' },
-  { value: 'name', label: 'Nomi bo\'yicha' }
+  { value: 'name', label: "Nomi bo'yicha" }
 ];
 
 export default function ProductsPage() {
@@ -72,7 +71,7 @@ export default function ProductsPage() {
             Mahsulotlar
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 'var(--font-size-lg)' }}>
-            Barcha kiyim turlarini ko'ring va buyurtma bering
+            Issiq xona uchun barcha turdagi plyonkalarni ko'ring va buyurtma bering
           </p>
         </div>
       </section>
@@ -85,7 +84,7 @@ export default function ProductsPage() {
               <input
                 type="text"
                 className="form-input"
-                placeholder="Mahsulot qidirish..."
+                placeholder="Plyonka qidirish..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 id="product-search"

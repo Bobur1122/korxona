@@ -22,7 +22,7 @@ export default function Navbar() {
     <header className="header">
       <div className="container header-inner">
         <Link to="/" className="logo">
-          Tikuv<span>Pro</span>
+          <img src="/logo.png" alt="Original Grand Plast" style={{ height: 38, width: 'auto', objectFit: 'contain' }} />
         </Link>
 
         <nav className="nav-links">
@@ -72,23 +72,30 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className={`mobile-nav ${mobileOpen ? 'open' : ''}`}>
-        {links.map(link => (
-          <Link
-            key={link.to}
-            to={link.to}
-            className={`nav-link ${isActive(link.to) ? 'active' : ''}`}
-            onClick={() => setMobileOpen(false)}
-          >
-            {link.label}
-          </Link>
-        ))}
-        {isAdmin && (
-          <Link to="/admin" className="nav-link" onClick={() => setMobileOpen(false)}>
-            Admin Panel
-          </Link>
-        )}
-      </nav>
+      {mobileOpen && (
+        <nav className="mobile-nav open">
+          {links.map(link => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`nav-link ${isActive(link.to) ? 'active' : ''}`}
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+          {isAdmin && (
+            <Link to="/admin" className="nav-link" onClick={() => setMobileOpen(false)}>
+              Admin Panel
+            </Link>
+          )}
+          {!user && (
+            <Link to="/login" className="btn btn-primary" onClick={() => setMobileOpen(false)} style={{ marginTop: 'var(--space-4)' }}>
+              Kirish
+            </Link>
+          )}
+        </nav>
+      )}
     </header>
   );
 }
