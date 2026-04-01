@@ -74,8 +74,8 @@ export default function AdminProducts() {
       const formData = new FormData();
       formData.append('image', file);
 
-      const token = localStorage.getItem('token');
-      const res = await fetch('/api/upload', {
+      const uploadUrl = (import.meta.env.VITE_API_URL || '/api') + '/upload';
+      const res = await fetch(uploadUrl, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData
