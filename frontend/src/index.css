@@ -196,6 +196,97 @@ ul, ol {
   max-width: 600px;
 }
 
+.section-alt {
+  background: linear-gradient(135deg, rgba(6,78,59,0.03) 0%, rgba(22,163,74,0.05) 50%, rgba(16,185,129,0.03) 100%) !important;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(22, 163, 74, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-accent-dark);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feature-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(16, 185, 129, 0.08) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+  color: var(--color-accent);
+  transition: all var(--transition-base);
+}
+
+.feature-icon-wrap.small {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+}
+
+.feature-card:hover .feature-icon-wrap {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.3);
+}
+
+.feature-card {
+  cursor: pointer;
+}
+
+.testimonial-card {
+  text-align: left;
+  cursor: default;
+}
+
+.testimonial-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: var(--space-3);
+}
+
+.testimonial-author {
+  border-top: 1px solid var(--glass-border);
+  padding-top: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.faq-card {
+  text-align: left;
+  padding: var(--space-5) var(--space-6);
+  cursor: default;
+}
+
 /* ===========================
    BUTTONS
    =========================== */
