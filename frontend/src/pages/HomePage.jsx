@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { ArrowRight, Phone, Factory, Shield, Truck, Globe, Banknote, Handshake, Wrench, PhoneCall, Leaf, Package, ShoppingBag, Droplets, Building2, Circle, Star, Mail } from 'lucide-react';
+import { ArrowRight, Globe, ShieldCheck, Factory, PlaySquare, FileText, Cpu, PenTool, CheckCircle, Award } from 'lucide-react';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 
@@ -11,131 +11,211 @@ export default function HomePage() {
     api.getProducts('limit=8').then(res => setFeatured(res.data)).catch(() => {});
   }, []);
 
-  const productTypes = [
-    { icon: <Leaf size={28} />, title: 'Issiqxona plyonkasi', desc: 'UV-barqaror, uch qatlamli polietilen plyonka. Kengligi 12 metrgacha — O\'zbekistonda birinchi va yagona. O\'simliklar uchun optimal mikroiqlim yaratadi, uzoq muddatli foydalanishga moslashtirilgan.', link: '/products' },
-    { icon: <Package size={28} />, title: 'Termo-usadoz plyonka', desc: 'Issiq bilan ishlov berilganda qisqarib mahsulotni mustahkam o\'raydigan qadoqlash filmi. Sanoat, omborxonalar va chakana savdo uchun. Qalinligi 20-50 mikron.', link: '/products' },
-    { icon: <ShoppingBag size={28} />, title: 'Polietilen paketlar', desc: 'Turli hajm va qalinlikda umumiy maqsadli paketlar. Banklar uchun pulni vakuum usuli bilan qadoqlash sumkalari — maxsus mustahkam qatlamga ega.', link: '/products' },
-    { icon: <Droplets size={28} />, title: 'PET kapsulalar', desc: 'Suv va yog\' idishlari uchun egiluvchan qopqoq materiallari. 1 litr suv uchun ~28 gr, 5-10 litr yog\' uchun 84-140 gr. Sovuqqa va kimyoviy ta\'sirga chidamli.', link: '/products' },
-    { icon: <Building2 size={28} />, title: 'Tom yopish materiallari', desc: '"Roof Cover" — yog\'och va metal damlamalar uchun rulonli gidroizolyatsiya materiali. Alyuminiy folga yoki oddiy variant. 1-1.5 m kenglikda.', link: '/products' },
-    { icon: <Circle size={28} />, title: 'Bitum-polimer mastika', desc: 'Gidroizolyatsiya va hermetizatsiya uchun maxsus polimer aralashma. Qurilish va ta\'mirlash ishlarida keng qo\'llaniladi. 20 kg qadoqda.', link: '/products' }
-  ];
-
-  const advantages = [
-    { icon: <Factory size={24} />, title: 'Zamonaviy uskunalar', desc: 'Yevropa va Osiyo texnologiyalari asosida jihozlangan ishlab chiqarish sexlari. Har bir bosqichda sifat nazorati.' },
-    { icon: <Globe size={24} />, title: 'Import xomashyo', desc: 'Ispaniya, Koreya, Xitoy, Turkiya, Singapur va Rossiyadan keltirilgan yuqori sifatli materiallar.' },
-    { icon: <Shield size={24} />, title: 'Texnik nazorat', desc: 'Barcha mahsulotlar tegishli texnik shartnomalarga mos kelishini kafolatlaymiz. Nazorat har bosqichda.' },
-    { icon: <Truck size={24} />, title: 'Bepul yetkazish', desc: 'Toshkent ichida kuryer va pochta orqali bepul. Viloyatlarga kelishilgan transport bilan.' },
-    { icon: <Banknote size={24} />, title: 'Moslashuvchan narx', desc: 'Katta partiyalar uchun maxsus chegirmalar. Doimiy mijozlarga VIP shartlar.' },
-    { icon: <Handshake size={24} />, title: 'Individual yondashuv', desc: 'Har bir buyurtma alohida muzokara asosida. O\'lcham va xususiyatlar talabga binoan.' },
-    { icon: <Wrench size={24} />, title: 'Professional maslahat', desc: 'Mahsulot tanlashda mutaxassislarimiz bepul maslahat berishadi.' },
-    { icon: <PhoneCall size={24} />, title: '3 ta aloqa raqami', desc: '+998 99 606 63 33 / 818 63 33 / 828 63 33 — doim aloqadamiz.' }
-  ];
-
   return (
     <div className="fade-in">
-      {/* Hero */}
-      <section className="hero">
+      {/* ENTERPRISE HERO */}
+      <section className="hero" style={{ background: 'transparent' }}>
         <div className="hero-bg-glow hero-glow-1"></div>
         <div className="hero-bg-glow hero-glow-2"></div>
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="hero-content" style={{ maxWidth: 750 }}>
-            <div className="hero-badge">
-              <Factory size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-              2005 yildan beri ishlab chiqarish • O'zbekistonda №1
+          <div className="hero-content" style={{ maxWidth: 850, textAlign: 'left', margin: 0 }}>
+            <div className="hero-badge" style={{ background: 'rgba(30, 41, 59, 0.8)', color: 'var(--color-text-secondary)', border: '1px solid rgba(255,255,255,0.1)'}}>
+              <Globe size={16} className="text-info" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6, color: '#0EA5E9' }} />
+              Xalqaro standartlardagi qadoqlash integratsiyasi
             </div>
-            <h1>
-              <span className="accent">Original Grand Plast</span> — polietilen plyonka va qadoqlash materiallari ishlab chiqaruvchi
+            <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, var(--font-size-5xl))', lineHeight: 1.1 }}>
+              Sanoat va Qishloq Xo'jaligi Uchun <br/>
+              <span className="accent" style={{ background: 'linear-gradient(90deg, #10B981 0%, #00A651 100%)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
+                Innovatsion Plyonkalar
+              </span>
             </h1>
-            <p>
-              2013 yildan buyon O'zbekistonda yagona — kengligi 12 metrgacha bo'lgan uch qatlamli issiqxona plyonkasini 
-              ishlab chiqaruvchi zamonaviy korxona. Ispaniya, Koreya, Turkiya va Singapurdan import qilingan yuqori sifatli 
-              xomashyo asosida qishloq xo'jaligi, qurilish va sanoat uchun mahsulotlar tayyorlaymiz.
+            <p style={{ fontSize: 'var(--font-size-xl)', color: 'var(--color-text-secondary)', maxWidth: 650, marginTop: 'var(--space-6)' }}>
+              2005 yildan beri Markaziy Osiyodagi eng yirik polimer materiallari ishlab chiqaruvchi zavodlaridan biri. Uch qatlamli kogeztruziya, 12 metrgacha kenglik va ISO 9001 kafolati.
             </p>
-            <div className="hero-actions">
-              <Link to="/products" className="btn btn-primary btn-lg" id="hero-cta-products">
-                Katalogni ko'rish <ArrowRight size={18} />
+            <div className="hero-actions" style={{ justifyContent: 'flex-start', marginTop: 'var(--space-8)' }}>
+              <Link to="/products" className="btn btn-primary btn-lg" style={{ background: 'var(--color-accent)', color: '#0F172A' }}>
+                Katalogni o'rganish <ArrowRight size={18} />
               </Link>
-              <a href="tel:+998996066333" className="btn btn-lg btn-glass" id="hero-cta-call">
-                <Phone size={16} /> Bog'lanish
+              <a href="#company" className="btn btn-lg btn-glass">
+                Kompaniya profili
               </a>
             </div>
-            <div className="hero-stats">
+            
+            <div className="hero-stats" style={{ justifyContent: 'flex-start', gap: 'var(--space-12)', marginTop: 'var(--space-12)', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 'var(--space-8)' }}>
               <div>
-                <div className="hero-stat-value">2005</div>
-                <div className="hero-stat-label">Tashkil etilgan</div>
+                <div className="hero-stat-value" style={{ color: '#F8FAFC' }}>7500+</div>
+                <div className="hero-stat-label">Tonna / yiliga ishlab chiqarish</div>
               </div>
               <div>
-                <div className="hero-stat-value">12m</div>
-                <div className="hero-stat-label">Plyonka kengligi</div>
+                <div className="hero-stat-value" style={{ color: '#F8FAFC' }}>12m</div>
+                <div className="hero-stat-label">Uch qatlamli plyonka kengligi</div>
               </div>
               <div>
-                <div className="hero-stat-value">3</div>
-                <div className="hero-stat-label">Qatlamli texnologiya</div>
-              </div>
-              <div>
-                <div className="hero-stat-value">6+</div>
-                <div className="hero-stat-label">Soha yo'nalishi</div>
+                <div className="hero-stat-value" style={{ color: '#F8FAFC' }}>15+</div>
+                <div className="hero-stat-label">Export davlatlari (Rossiya, MDH)</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Products Overview */}
-      <section className="section">
+      {/* CORE CAPABILITIES & CERTIFICATIONS */}
+      <section className="section" style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(10px)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="section-badge">Mahsulotlar assortimenti</span>
-            <h2 className="section-title" style={{ fontSize: 'var(--font-size-4xl)' }}>Ishlab chiqarish yo'nalishlari</h2>
-            <p className="section-subtitle" style={{ margin: '0 auto' }}>
-              Qishloq xo'jaligi, qurilish, sanoat, oziq-ovqat va banklar uchun polietilen mahsulotlar
-            </p>
-          </div>
-          <div className="features-grid">
-            {productTypes.map((item, i) => (
-              <Link key={i} to={item.link} className="feature-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                <div className="feature-icon-wrap">{item.icon}</div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <div style={{ marginTop: 'var(--space-4)', color: 'var(--color-accent)', fontWeight: 600, fontSize: 'var(--font-size-sm)', display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
-                  Batafsil <ArrowRight size={14} />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Advantages */}
-      <section className="section section-alt">
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="section-badge">Nima uchun biz?</span>
-            <h2 className="section-title">Original Grand Plast afzalliklari</h2>
-          </div>
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
-            {advantages.map((item, i) => (
-              <div key={i} className="feature-card" style={{ cursor: 'default' }}>
-                <div className="feature-icon-wrap small">{item.icon}</div>
-                <h3 style={{ fontSize: 'var(--font-size-base)' }}>{item.title}</h3>
-                <p>{item.desc}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-10)', alignItems: 'center' }}>
+            <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-6)' }}>
+              <h3 style={{ fontSize: 'var(--font-size-lg)', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: 2 }}>Ishonchli Hamkor</h3>
+              <div style={{ display: 'flex', gap: 'var(--space-6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}><ShieldCheck size={24} className="text-info" color="#0EA5E9" /> <span style={{ fontWeight: 600 }}>ISO 9001:2015</span></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}><Award size={24} className="text-warning" color="#F59E0B" /> <span style={{ fontWeight: 600 }}>O'zDSt 2824:2014</span></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}><CheckCircle size={24} className="text-success" color="#10B981" /> <span style={{ fontWeight: 600 }}>EAC Sertifikati</span></div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* TECHNICAL SOLUTIONS */}
       <section className="section">
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-8)', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+          <div style={{ marginBottom: 'var(--space-12)' }}>
+            <span className="section-badge">Texnologik Yechimlar</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+              <h2 className="section-title">Sanoat uchun maxsus plyonkalar</h2>
+              <p className="section-subtitle" style={{ margin: 0, textAlign: 'right' }}>
+                Fizik-mexanik ko'rsatkichlari yuqori bo'lgan, iqlim <br/>sharoitlariga chidamli qoplamalar
+              </p>
+            </div>
+          </div>
+          
+          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
+            {/* Prod 1 */}
+            <div className="card" style={{ padding: 'var(--space-8)' }}>
+               <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>Agro / Issiqxona Komplekslari</h3>
+               <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>Zavodimiz qalinligi 100 dan 200 mikrongacha bo'lgan ko'p qatlamli UV, IR va EVA qo'shimchali plyonkalarni ishlab chiqaradi.</p>
+               <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Maksimal kenglik:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-accent-light)' }}>12 Metrgacha</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>UV Kafolat:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>3-5 Yil</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Yorug'lik o'tkazuvchanlik:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>88-92%</span>
+                  </div>
+               </div>
+               <Link to="/products" className="btn btn-ghost" style={{ width: '100%' }}>Parametrlarni ko'rish</Link>
+            </div>
+
+            {/* Prod 2 */}
+            <div className="card" style={{ padding: 'var(--space-8)' }}>
+               <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>Termo Qadoqlash (Shrink)</h3>
+               <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>Guruhli va palletli qadoqlash uchun mo'ljallangan, avtomat uzatgichli liniyalar uchun ideal deformatsiya kuchi bo'lgan texnik plyonkalar.</p>
+               <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Uzilishdagi cho'zilish:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-info)' }}>≥ 350% MD</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Termik siqilish:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>T 50-70% / K 30-50%</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Zichlik (Density):</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>0.920 - 0.925 g/cm³</span>
+                  </div>
+               </div>
+               <Link to="/products" className="btn btn-ghost" style={{ width: '100%' }}>Parametrlarni ko'rish</Link>
+            </div>
+            
+            {/* Prod 3 */}
+            <div className="card" style={{ padding: 'var(--space-8)' }}>
+               <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>Bozor va Bank Tizimi Paketi</h3>
+               <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>Og'ir yuk ko'tarishga mo'ljallangan va xavfsizlik (vakuumli bank sumkalari) uchun eng kuchli ekstrudirovka qilingan polimer qopchalar.</p>
+               <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Payvand choki kuchi:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-error)' }}>Plexus texnologiyasi</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Chidamli yuk:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>35 Kggacha</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Vakuum muhr:</span>
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>Mavjud (Bank uchun)</span>
+                  </div>
+               </div>
+               <Link to="/products" className="btn btn-ghost" style={{ width: '100%' }}>Parametrlarni ko'rish</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MANUFACTURING INFRASTRUCTURE */}
+      <section id="company" className="section section-alt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-12)', alignItems: 'center' }}>
             <div>
-              <span className="section-badge">Katalog</span>
-              <h2 className="section-title">Mahsulotlar</h2>
-              <p className="section-subtitle">Barcha narxlar so'rov asosida kelishiladi. Katta partiyalarga chegirmalar.</p>
+              <span className="section-badge">Infratuzilma</span>
+              <h2 className="section-title" style={{ fontSize: 'var(--font-size-4xl)' }}>Modernlashtirilgan Ishlab Chiqarish Bazasiga Egamiz</h2>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-lg)', marginBottom: 'var(--space-6)' }}>
+                Zavod hududida oxirgi avlod Bandera (Italiya) va Macchi (Italiya) ekstruziya usskunalari o'rnatilgan bo'lib, ular xatogarchiliklarsiz to'liq avtomatik tarzda ishlaydi. 
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', marginBottom: 'var(--space-8)' }}>
+                <li style={{ display: 'flex', gap: 'var(--space-4)' }}>
+                  <div className="feature-icon-wrap small" style={{ margin: 0, flexShrink: 0, background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6' }}><Cpu size={20} /></div>
+                  <div>
+                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)' }}>Avtomatlashtirilgan Dozatorlar</h4>
+                    <p style={{ color: 'var(--color-text-muted)' }}>Material va stabilizatorlarni 99.9% aniqlik bilan tayyorlash.</p>
+                  </div>
+                </li>
+                <li style={{ display: 'flex', gap: 'var(--space-4)' }}>
+                  <div className="feature-icon-wrap small" style={{ margin: 0, flexShrink: 0, background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444' }}><PlaySquare size={20} /></div>
+                  <div>
+                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)' }}>Laboratoriya Nazorati</h4>
+                    <p style={{ color: 'var(--color-text-muted)' }}>Koreya litsenziyasi asosida uzilish, Dart-drop va kimyoviy chidamlilik testlari.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div style={{ padding: 'var(--space-8)', background: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-2xl)', border: '1px solid var(--glass-border)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, background: 'radial-gradient(circle at 80% 20%, rgba(0,166,81,0.15) 0%, transparent 60%)' }}></div>
+              <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-6)', position: 'relative' }}>Xom Ashyo va Yetkazib Beruvchilar</h3>
+              <p style={{ color: 'var(--color-text-secondary)', position: 'relative' }}>Biz dunyoning yetakchi polimer gigantlari xom ashyolaridan foydalanamiz, bu barqaror sifatning kalitidir:</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', marginTop: 'var(--space-6)', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-3) 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                   <span>Lotte Chemical (Koreya)</span> <span style={{ color: 'var(--color-accent)' }}>LDPE, LLDPE</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-3) 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                   <span>Sinopec (Xitoy)</span> <span style={{ color: 'var(--color-accent)' }}>Masterbatch</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-3) 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                   <span>Repsol (Ispaniya)</span> <span style={{ color: 'var(--color-accent)' }}>EVA & UV Stabilizers</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-3) 0' }}>
+                   <span>Shurtan GKM (O'zbekiston)</span> <span style={{ color: 'var(--color-accent)' }}>HDPE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CATALOG EXCERPT */}
+      <section className="section">
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'var(--space-8)' }}>
+            <div>
+              <span className="section-badge">Maxsulotlar Katalokgi</span>
+              <h2 className="section-title">Yangi va Ommabop Maxsulotlar</h2>
             </div>
             <Link to="/products" className="btn btn-outline" id="view-all-products">
-              Barchasini ko'rish <ArrowRight size={16} />
+              Barcha maxsulotlar <ArrowRight size={16} />
             </Link>
           </div>
           {featured.length > 0 ? (
@@ -145,116 +225,63 @@ export default function HomePage() {
           ) : (
             <div className="products-grid">
               {[1,2,3,4].map(i => (
-                <div key={i} className="skeleton-card"></div>
+                <div key={i} className="skeleton-card" style={{ background: 'rgba(255,255,255,0.05)' }}></div>
               ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="section section-alt">
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="section-badge">Mijozlar fikri</span>
-            <h2 className="section-title">Bizning mijozlarimiz aytadi</h2>
-          </div>
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            {[
-              { text: "Original Grand Plast plyonkalaridan foydalanib biz issiqxonadagi hosildorlikni oshirdik. Sifatli material tez yetkazildi, narxlari ham maqbul ekan.", name: "Karimbek", role: "Fermer xo'jaligi rahbari" },
-              { text: "Shahar qurilishida Original Grand Plast tom materiallaridan foydalandik. \"Roof Cover\" plyonkasi qurilmani mukammal suv o'tkazmaydigan qilib berdi.", name: "Elmira", role: "Qurilish kompaniyasi menejeri" },
-              { text: "Polietilen paketlaringiz juda mustahkam chiqdi – mahsulotlarimiz yetib kelguncha hech narsa buzilmadi. Ishi oson va professional.", name: "Javlon", role: "Logistika xodimi" }
-            ].map((t, i) => (
-              <div key={i} className="feature-card testimonial-card">
-                <div className="testimonial-stars">
-                  {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="var(--color-accent)" color="var(--color-accent)" />)}
-                </div>
-                <p style={{ fontStyle: 'italic', marginBottom: 'var(--space-4)', lineHeight: 1.8 }}>"{t.text}"</p>
-                <div className="testimonial-author">
-                  <div className="testimonial-avatar">{t.name[0]}</div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 'var(--font-size-sm)' }}>{t.name}</div>
-                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>{t.role}</div>
-                  </div>
-                </div>
+      {/* GLOBAL LOGISTICS */}
+      <section className="section section-alt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+            <span className="section-badge">Logistika va Eksport</span>
+            <h2 className="section-title">Chegara bilmas yetkazib berish tizimi</h2>
+            <p className="section-subtitle" style={{ margin: '0 auto var(--space-12)' }}>O'zimizning avtopark va temir yo'l shaxobchamiz orqali MXX (MDH) mamlakatlariga yirik hajmdagi vagon/furalarda eksport qilamiz.</p>
+            
+            <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Rossiya</h3>
+                <p style={{ color: 'var(--color-text-muted)' }}>Markaziy hududlar va Sibir</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How to Order */}
-      <section className="section">
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="section-badge">Buyurtma jarayoni</span>
-            <h2 className="section-title">Qanday buyurtma berish mumkin?</h2>
-            <p className="section-subtitle" style={{ margin: '0 auto' }}>To'lov usullari: naqd pul, bank o'tkazmasi, UzCard, HUMO, Payme, Click</p>
-          </div>
-          <div className="steps-grid">
-            {[
-              { step: '01', title: "Bog'laning", desc: "Telefon, email yoki sayt orqali murojaat qiling" },
-              { step: '02', title: 'Maslahat oling', desc: "Mutaxassis bilan mahsulot va o'lchamni tanlang" },
-              { step: '03', title: 'Shartnoma tuzing', desc: "Hajm, narx va yetkazish shartlarini kelishing" },
-              { step: '04', title: 'Qabul qiling', desc: "Toshkentda bepul yetkazib beramiz" }
-            ].map((item, i) => (
-              <div key={i} className="step-card">
-                <div className="step-number">{item.step}</div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Qozog'iston</h3>
+                <p style={{ color: 'var(--color-text-muted)' }}>Olmaota va janubiy hududlar</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="section section-alt">
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-            <span className="section-badge">FAQ</span>
-            <h2 className="section-title">Ko'p so'raladigan savollar</h2>
-          </div>
-          <div style={{ maxWidth: 700, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            {[
-              { q: "Original Grand Plast nima ishlab chiqaradi?", a: "Issiqxona plyonkasi, termo-usadoz plyonka, polietilen paketlar, PET kapsulalar, tom yopish materiallari va bitum-polimer mastika." },
-              { q: "Minimal buyurtma miqdori qancha?", a: "Aniq belgilangan minimal buyurtma yo'q — har bir buyurtma hajmi alohida muzokara asosida belgilanadi." },
-              { q: "Yetkazib berish shartlari qanday?", a: "Toshkentda kuryer yoki pochta orqali bepul. Viloyatlarga kelishilgan transport bilan yetkaziladi." },
-              { q: "To'lov usullari?", a: "Naqd pul, bank o'tkazmasi, UzCard, HUMO, Payme, Click va Apelsin orqali to'lash mumkin." },
-              { q: "Ish vaqtingiz?", a: "Dushanbadan jumagacha 08:00 — 18:00. Shanba va yakshanba dam olish kunlari." }
-            ].map((item, i) => (
-              <div key={i} className="feature-card faq-card">
-                <h3 style={{ fontSize: 'var(--font-size-base)', marginBottom: 'var(--space-2)', color: 'var(--color-primary)' }}>{item.q}</h3>
-                <p style={{ margin: 0 }}>{item.a}</p>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Qirg'iziston</h3>
+                <p style={{ color: 'var(--color-text-muted)' }}>Bishkek va Issiqko'l</p>
               </div>
-            ))}
-          </div>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Tojikiston</h3>
+                <p style={{ color: 'var(--color-text-muted)' }}>Dushanbe va So'g'd</p>
+              </div>
+            </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="cta-section">
+      <section className="cta-section" style={{ background: 'var(--color-primary-light)', padding: 'calc(var(--space-20) * 1.5) 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="hero-bg-glow hero-glow-1"></div>
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, var(--font-size-4xl))', fontWeight: 800, marginBottom: 'var(--space-4)', letterSpacing: '-0.03em' }}>
-            Bepul maslahat va narx taklif oling
+          <h2 style={{ fontSize: 'clamp(2rem, 5vw, var(--font-size-5xl))', fontWeight: 800, marginBottom: 'var(--space-4)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            Korporativ va Ulgurji Savdo Uchun <br/> <span style={{ color: 'var(--color-accent)' }}>Katalog va Narxnoma Oling</span>
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 550, margin: '0 auto var(--space-6)', fontSize: 'var(--font-size-lg)' }}>
-            Mutaxassislarimiz sizga eng mos mahsulot va narxni taklif qilishadi
+          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 650, margin: '0 auto var(--space-8)', fontSize: 'var(--font-size-lg)' }}>
+            Bizning dilerlik dasturimiz va eksport logistikasi haqida batafsil ma'lumot olish uchun sotuv bo'limimizga bevosita murojaat qiling. Biz har bir yirik buyurtmachi bilan individual shartnoma tuzamiz.
           </p>
           <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="tel:+998996066333" className="btn btn-primary btn-lg">
-              <Phone size={18} /> +998 99 606 63 33
+            <a href="mailto:ogp-info@mail.ru" className="btn btn-primary btn-lg" style={{ background: 'var(--color-accent)', color: '#0F172A' }}>
+              <FileText size={18} /> Kommercheskiy Taklif Olish
             </a>
-            <a href="tel:+998998186333" className="btn btn-lg btn-glass">
-              <Phone size={16} /> +998 99 818 63 33
-            </a>
-            <a href="mailto:ogp-info@mail.ru" className="btn btn-lg btn-glass">
-              <Mail size={16} /> ogp-info@mail.ru
+            <a href="tel:+998996066333" className="btn btn-lg btn-glass">
+              Boshqaruv Ofisi: +998 99 606 63 33
             </a>
           </div>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 'var(--font-size-xs)', marginTop: 'var(--space-6)' }}>
-            Toshkent, Uchtepa tumani, Foziltepa ko'chasi, 9-uy • ogp.uz
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 'var(--font-size-sm)', marginTop: 'var(--space-8)', display: 'flex', justifyContent: 'center', gap: 'var(--space-4)' }}>
+            <span>Manzil: Toshkent sh., Uchtepa t., Foziltepa 9</span> • 
+            <span>INN: 205 843 129</span> • 
+            <span>Sayt: OGP.UZ</span>
           </p>
         </div>
       </section>
