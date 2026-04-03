@@ -21,10 +21,6 @@ export default function Footer() {
             </a>
             <span style={{ color: '#94A3B8' }}>info@grandplast.uz</span>
           </div>
-        </div>
-        <div className="footer-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem', textAlign: 'center', color: '#64748B', fontSize: '0.875rem' }}>
-          © {new Date().getFullYear()} Original Grand Plast MChJ. Toshkent, Uchtepa tumani. Barcha huquqlar himoyalangan.
-        </div>
       </div>
     </footer>
   );
