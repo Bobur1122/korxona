@@ -1,19 +1,34 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { ArrowRight, Globe, ShieldCheck, Factory, PlaySquare, FileText, Cpu, PenTool, CheckCircle, Award } from 'lucide-react';
+import { ArrowRight, Globe, ShieldCheck, Factory, FileText, CheckCircle, Award } from 'lucide-react';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 
+const heroImages = [
+  '/images/extrusion.png',
+  '/images/hero_shrink.png',
+  '/images/hero_agro.png',
+  '/images/hero_logistics.png'
+];
+
 export default function HomePage() {
   const [featured, setFeatured] = useState([]);
+  const [currentHeroBlock, setCurrentHeroBlock] = useState(0);
 
   useEffect(() => {
     api.getProducts('limit=8').then(res => setFeatured(res.data)).catch(() => {});
+    
+    // Carousel logic
+    const interval = setInterval(() => {
+      setCurrentHeroBlock((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change every 5 seconds
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="fade-in" style={{ backgroundColor: 'var(--color-primary)' }}>
-      {/* MASSIVE ENTERPRISE HERO */}
+      {/* MASSIVE ENTERPRISE HERO WITH CAROUSEL */}
       <section style={{ 
         position: 'relative', 
         height: '90vh', 
@@ -22,21 +37,28 @@ export default function HomePage() {
         alignItems: 'center', 
         justifyContent: 'center',
         background: '#0F172A',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        paddingTop: 'var(--header-height)' /* FIX OVERLAP */
       }}>
-        {/* Background Image with Overlay */}
+        {/* Background Image Carousel with Overlay */}
+        {heroImages.map((imgSrc, idx) => (
+          <div key={idx} style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundImage: `url(${imgSrc})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: currentHeroBlock === idx ? 0.6 : 0,
+            transition: 'opacity 1.5s ease-in-out',
+            zIndex: 1
+          }} />
+        ))}
+        
         <div style={{
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'url(/images/extrusion.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.5
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(to right, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.6) 100%)'
+          background: 'linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.5) 100%)',
+          zIndex: 2
         }} />
 
         <div className="container" style={{ position: 'relative', zIndex: 10, width: '100%', padding: '0 var(--space-4)' }}>
@@ -180,9 +202,7 @@ export default function HomePage() {
 
             {/* Prod 2 */}
             <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-               <div style={{ width: '100%', height: 240, background: '#0F172A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                 <Factory size={64} color="#334155" />
-               </div>
+               <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
                <div style={{ padding: 32 }}>
                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>Termo Qadoqlash (Shrink)</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Guruhli va palletli qadoqlash uchun mo'ljallangan, avtomat uzatgichli liniyalar uchun ideal deformatsiya kuchi bo'lgan texnik plyonkalar.</p>
