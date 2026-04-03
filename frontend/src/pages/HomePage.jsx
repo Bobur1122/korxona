@@ -40,29 +40,34 @@ export default function HomePage() {
         overflow: 'hidden',
         paddingTop: 'var(--header-height)' /* FIX OVERLAP */
       }}>
-        {/* Background Image Carousel with Overlay */}
-        {heroImages.map((imgSrc, idx) => (
-          <div key={idx} style={{
-            position: 'absolute',
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundImage: `url(${imgSrc})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: currentHeroBlock === idx ? 0.6 : 0,
-            transition: 'opacity 1.5s ease-in-out',
-            zIndex: 1
-          }} />
-        ))}
+        {/* Background Image Carousel with Overlay (Sliding Wheels/Koleso) */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: `${heroImages.length * 100}%`, height: '100%',
+          display: 'flex',
+          transition: 'transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)',
+          transform: `translateX(-${currentHeroBlock * (100 / heroImages.length)}%)`,
+          zIndex: 1
+        }}>
+          {heroImages.map((imgSrc, idx) => (
+            <div key={idx} style={{
+              width: `${100 / heroImages.length}%`, height: '100%',
+              backgroundImage: `url(${imgSrc})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }} />
+          ))}
+        </div>
         
         <div style={{
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.5) 100%)',
+          background: 'linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.4) 100%)',
           zIndex: 2
         }} />
 
-        <div className="container" style={{ position: 'relative', zIndex: 10, width: '100%', padding: '0 var(--space-4)' }}>
-          <div style={{ maxWidth: 900, textAlign: 'left', margin: 0 }}>
+        <div className="container" style={{ position: 'relative', zIndex: 10, width: '100%', padding: '0 var(--space-4)', display: 'flex', flexWrap: 'wrap' }}>
+          <div style={{ maxWidth: 900, textAlign: 'left', margin: 'auto 0' }}>
             <div style={{ 
               display: 'inline-flex', 
               alignItems: 'center', 
@@ -175,11 +180,11 @@ export default function HomePage() {
             </p>
           </div>
           
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 32 }}>
+          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 32, alignItems: 'stretch' }}>
             {/* Prod 1 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32 }}>
+               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>Agrosanoat Komplekslari</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Zavodimiz qalinligi 100 dan 200 mikrongacha bo'lgan ko'p qatlamli UV, IR va EVA qo'shimchali plyonkalarni ishlab chiqaradi.</p>
                  <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
@@ -196,14 +201,14 @@ export default function HomePage() {
                       <span style={{ fontWeight: 800, color: '#0F172A' }}>88-92%</span>
                     </div>
                  </div>
-                 <Link to="/products" style={{ color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
+                 <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
                </div>
             </div>
 
             {/* Prod 2 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32 }}>
+               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>Termo Qadoqlash (Shrink)</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Guruhli va palletli qadoqlash uchun mo'ljallangan, avtomat uzatgichli liniyalar uchun ideal deformatsiya kuchi bo'lgan texnik plyonkalar.</p>
                  <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
@@ -220,14 +225,14 @@ export default function HomePage() {
                       <span style={{ fontWeight: 800, color: '#0F172A' }}>0.925 g/cm³</span>
                     </div>
                  </div>
-                 <Link to="/products" style={{ color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
+                 <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
                </div>
             </div>
             
             {/* Prod 3 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/logistics.png" alt="Bozor paketi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32 }}>
+               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>Sanoat Logistika Paketlari</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Og'ir yuk tashish uchun xavfsizlik va mustahkamlikni ta'minlovchi ekstrudirovka qilingan polimer materiallar.</p>
                  <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
@@ -244,7 +249,7 @@ export default function HomePage() {
                       <span style={{ fontWeight: 800, color: '#0F172A' }}>B2B Export</span>
                     </div>
                  </div>
-                 <Link to="/products" style={{ color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
+                 <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>Batafsil Parametrlar <ArrowRight size={16} /></Link>
                </div>
             </div>
           </div>
