@@ -31,9 +31,10 @@ export default function ProductCard({ product }) {
   return (
     <Link to={`/products/${product._id}`} className="product-card">
       <img
-        src={product.image || `https://placehold.co/400x300/f0fdf4/16a34a?text=${encodeURIComponent(product.name)}`}
+        src={product.image || `https://placehold.co/400x300/F1F5F9/334155?text=${encodeURIComponent(product.name)}`}
         alt={product.name}
         className="product-card-image"
+        onError={(e) => { e.target.src = `https://placehold.co/400x300/F1F5F9/334155?text=MAHSULOT`; e.target.onerror = null; }}
       />
       <div className="product-card-body">
         <div className="product-card-category">
@@ -41,8 +42,8 @@ export default function ProductCard({ product }) {
         </div>
         <h3 className="product-card-name">{product.name}</h3>
         {product.thickness && (
-          <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}>
-            Qalinlik: {product.thickness} mkm {product.width ? `• Eni: ${product.width}m` : ''}
+          <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)' }}>
+            Qalinlik: <strong style={{color: 'var(--color-text)'}}>{product.thickness} mkm</strong> <br/> Eni: <strong style={{color: 'var(--color-text)'}}>{product.width || '-'} m</strong>
           </div>
         )}
         <div className="product-card-price">
