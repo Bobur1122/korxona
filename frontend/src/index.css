@@ -3,24 +3,24 @@
    =========================== */
 
 :root {
-  /* Colors - Enterprise Dark (Navy/Slate/Green) */
-  --color-primary: #020617;
-  --color-primary-light: #0F172A;
-  --color-primary-lighter: #1E293B;
+  /* Colors - Enterprise Dark (Zinc/Charcoal/Green) */
+  --color-primary: #09090b; /* Zinc 950 */
+  --color-primary-light: #18181b; /* Zinc 900 */
+  --color-primary-lighter: #27272a; /* Zinc 800 */
   --color-secondary: #000000;
   --color-accent: #00A651; /* Brand Green */
   --color-accent-light: #10B981;
   --color-accent-dark: #064E3B;
   --color-accent-bg: rgba(0, 166, 81, 0.1);
   --color-brand-red: #E60000; /* Brand Red */
-  --color-bg: #0B1120;
-  --color-surface: #1E293B;
-  --color-surface-hover: #334155;
-  --color-border: #334155;
+  --color-bg: #09090b; /* Neutral Near Black */
+  --color-surface: #18181b; 
+  --color-surface-hover: #27272a;
+  --color-border: #27272a;
   --color-border-light: rgba(255,255,255,0.05);
   --color-text: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #475569;
+  --color-text-secondary: #a1a1aa; /* Zinc 400 */
+  --color-text-muted: #52525b; /* Zinc 600 */
   --color-success: #10B981;
   --color-success-bg: rgba(16, 185, 129, 0.1);
   --color-warning: #F59E0B;

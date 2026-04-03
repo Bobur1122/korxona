@@ -90,24 +90,27 @@ export default function HomePage() {
           
           <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))' }}>
             {/* Prod 1 */}
-            <div className="card" style={{ padding: 'var(--space-8)' }}>
-               <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>Agro / Issiqxona Komplekslari</h3>
-               <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>Zavodimiz qalinligi 100 dan 200 mikrongacha bo'lgan ko'p qatlamli UV, IR va EVA qo'shimchali plyonkalarni ishlab chiqaradi.</p>
-               <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
-                    <span style={{ color: 'var(--color-text-muted)' }}>Maksimal kenglik:</span>
-                    <span style={{ fontWeight: 600, color: 'var(--color-accent-light)' }}>12 Metrgacha</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
-                    <span style={{ color: 'var(--color-text-muted)' }}>UV Kafolat:</span>
-                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>3-5 Yil</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--color-text-muted)' }}>Yorug'lik o'tkazuvchanlik:</span>
-                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>88-92%</span>
-                  </div>
+            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+               <img src="/assets/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 220, objectFit: 'cover' }} />
+               <div style={{ padding: 'var(--space-8)' }}>
+                 <h3 style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>Agro / Issiqxona Komplekslari</h3>
+                 <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>Zavodimiz qalinligi 100 dan 200 mikrongacha bo'lgan ko'p qatlamli UV, IR va EVA qo'shimchali plyonkalarni ishlab chiqaradi.</p>
+                 <div style={{ background: 'rgba(0,0,0,0.2)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-6)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--color-border-light)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                      <span style={{ color: 'var(--color-text-muted)' }}>Maksimal kenglik:</span>
+                      <span style={{ fontWeight: 600, color: 'var(--color-accent-light)' }}>12 Metrgacha</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--color-border-light)', paddingBottom: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                      <span style={{ color: 'var(--color-text-muted)' }}>UV Kafolat:</span>
+                      <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>3-5 Yil</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--color-text-muted)' }}>Yorug'lik o'tkazuvchanlik:</span>
+                      <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>88-92%</span>
+                    </div>
+                 </div>
+                 <Link to="/products" className="btn btn-ghost" style={{ width: '100%' }}>Parametrlarni ko'rish</Link>
                </div>
-               <Link to="/products" className="btn btn-ghost" style={{ width: '100%' }}>Parametrlarni ko'rish</Link>
             </div>
 
             {/* Prod 2 */}
@@ -169,18 +172,19 @@ export default function HomePage() {
                 <li style={{ display: 'flex', gap: 'var(--space-4)' }}>
                   <div className="feature-icon-wrap small" style={{ margin: 0, flexShrink: 0, background: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6' }}><Cpu size={20} /></div>
                   <div>
-                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)' }}>Avtomatlashtirilgan Dozatorlar</h4>
+                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)', color: 'var(--color-text)' }}>Avtomatlashtirilgan Dozatorlar</h4>
                     <p style={{ color: 'var(--color-text-muted)' }}>Material va stabilizatorlarni 99.9% aniqlik bilan tayyorlash.</p>
                   </div>
                 </li>
                 <li style={{ display: 'flex', gap: 'var(--space-4)' }}>
                   <div className="feature-icon-wrap small" style={{ margin: 0, flexShrink: 0, background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444' }}><PlaySquare size={20} /></div>
                   <div>
-                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)' }}>Laboratoriya Nazorati</h4>
+                    <h4 style={{ fontWeight: 700, fontSize: 'var(--font-size-lg)', color: 'var(--color-text)' }}>Laboratoriya Nazorati</h4>
                     <p style={{ color: 'var(--color-text-muted)' }}>Koreya litsenziyasi asosida uzilish, Dart-drop va kimyoviy chidamlilik testlari.</p>
                   </div>
                 </li>
               </ul>
+              <img src="/assets/extrusion.png" alt="Ekstruziya Infratuzilmasi" style={{ width: '100%', borderRadius: 'var(--radius-xl)', height: 260, objectFit: 'cover' }} />
             </div>
             
             <div style={{ padding: 'var(--space-8)', background: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-2xl)', border: '1px solid var(--glass-border)', position: 'relative', overflow: 'hidden' }}>
@@ -239,22 +243,26 @@ export default function HomePage() {
             <h2 className="section-title">Chegara bilmas yetkazib berish tizimi</h2>
             <p className="section-subtitle" style={{ margin: '0 auto var(--space-12)' }}>O'zimizning avtopark va temir yo'l shaxobchamiz orqali MXX (MDH) mamlakatlariga yirik hajmdagi vagon/furalarda eksport qilamiz.</p>
             
+            
             <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
-              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
-                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Rossiya</h3>
-                <p style={{ color: 'var(--color-text-muted)' }}>Markaziy hududlar va Sibir</p>
+              <div className="card" style={{ padding: 0, overflow: 'hidden', textAlign: 'center' }}>
+                <img src="/assets/logistics.png" alt="Rossiya eksport" style={{ width: '100%', height: 160, objectFit: 'cover' }} />
+                <div style={{ padding: 'var(--space-6)' }}>
+                  <h3 style={{ fontSize: 'var(--font-size-xl)', color: 'var(--color-text)' }}>Rossiya</h3>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>Markaziy hududlar va Sibir</p>
+                </div>
               </div>
-              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
-                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Qozog'iston</h3>
-                <p style={{ color: 'var(--color-text-muted)' }}>Olmaota va janubiy hududlar</p>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-xl)', color: 'var(--color-text)' }}>Qozog'iston</h3>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>Olmaota va janubiy hududlar</p>
               </div>
-              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
-                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Qirg'iziston</h3>
-                <p style={{ color: 'var(--color-text-muted)' }}>Bishkek va Issiqko'l</p>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-xl)', color: 'var(--color-text)' }}>Qirg'iziston</h3>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>Bishkek va Issiqko'l</p>
               </div>
-              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center' }}>
-                <h3 style={{ fontSize: 'var(--font-size-3xl)', color: 'var(--color-text)' }}>Tojikiston</h3>
-                <p style={{ color: 'var(--color-text-muted)' }}>Dushanbe va So'g'd</p>
+              <div className="card" style={{ padding: 'var(--space-6)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <h3 style={{ fontSize: 'var(--font-size-xl)', color: 'var(--color-text)' }}>Tojikiston</h3>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>Dushanbe va So'g'd</p>
               </div>
             </div>
         </div>
