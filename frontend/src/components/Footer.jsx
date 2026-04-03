@@ -21,6 +21,7 @@ export default function Footer() {
             </a>
             <span style={{ color: '#94A3B8' }}>info@grandplast.uz</span>
           </div>
+        </div>
       </div>
     </footer>
   );
