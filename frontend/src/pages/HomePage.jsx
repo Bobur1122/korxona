@@ -38,7 +38,8 @@ export default function HomePage() {
         justifyContent: 'center',
         background: '#0F172A',
         overflow: 'hidden',
-        paddingTop: 'var(--header-height)' /* FIX OVERLAP */
+        paddingTop: 'calc(var(--header-height) + var(--space-20))' /* INCREASED SPACE FROM HEADER */,
+        paddingBottom: 'var(--space-24)' /* SPACE FROM MAIN CONTENT */
       }}>
         {/* Background Image Carousel with Overlay (Sliding Wheels/Koleso) */}
         <div style={{
@@ -112,33 +113,49 @@ export default function HomePage() {
             </p>
             
             <div style={{ display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
-              <Link to="/products" style={{ 
-                background: '#00A651', 
-                color: '#FFFFFF', 
-                padding: '16px 32px',
-                borderRadius: '4px',
-                fontWeight: 700,
+              <Link to="/products" className="btn btn-primary btn-lg" style={{ 
+                padding: '18px 40px',
                 fontSize: '1.125rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                transition: 'background 0.3s'
+                gap: 12
               }}>
-                Mahsulotlar Katalogi <ArrowRight size={20} />
+                Mahsulotlar Katalogi <ArrowRight size={22} />
               </Link>
-              <a href="#about" style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                color: '#FFFFFF', 
-                padding: '16px 32px',
-                borderRadius: '4px',
-                fontWeight: 600,
+              <a href="#about" className="btn btn-outline btn-lg" style={{ 
+                padding: '18px 40px',
                 fontSize: '1.125rem',
-                border: '1px solid rgba(255,255,255,0.2)',
-                backdropFilter: 'blur(4px)',
-                transition: 'background 0.3s'
+                color: '#FFFFFF',
+                borderColor: 'rgba(255,255,255,0.3)'
               }}>
                 Korxona Haqida
               </a>
+            </div>
+
+            {/* EYE-CATCHING MINI STATS WITHIN HERO */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 40, 
+              marginTop: 60, 
+              padding: '24px', 
+              background: 'rgba(255,255,255,0.03)', 
+              borderRadius: '12px',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(8px)',
+              width: 'fit-content'
+            }}>
+               <div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#10B981' }}>2005-yil</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1 }}>Tashkil Topgan</div>
+               </div>
+               <div style={{ width: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+               <div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#10B981' }}>12 Metr</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1 }}>Max Kenglik (Record)</div>
+               </div>
+               <div style={{ width: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+               <div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#10B981' }}>3 Qavatli</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1 }}>High-Tech Plyonka</div>
+               </div>
             </div>
           </div>
         </div>
