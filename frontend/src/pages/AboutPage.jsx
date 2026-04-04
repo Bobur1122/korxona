@@ -47,18 +47,31 @@ export default function AboutPage() {
                 rulonli tom yopish materiallari va bitum-polimer mastikalari bugungi kunda qurilish bozorida yuqori sifat standarti hisoblanadi.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginTop: 'var(--space-8)' }}>
-                {[
-                  { value: '2005', label: 'Tashkil etilgan' },
-                  { value: '12m', label: 'Max plyonka kengligi' },
-                  { value: '3 qatlamli', label: 'Texnologiya' },
-                  { value: '5+', label: 'Mahsulot turi' }
-                ].map((s, i) => (
-                  <div key={i} className="feature-card" style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
-                    <div style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 800, color: 'var(--color-accent)' }}>{s.value}</div>
-                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>{s.label}</div>
+              <div style={{ display: 'grid', gap: 'var(--space-6)', marginTop: 'var(--space-10)' }}>
+                {/* 2005 Milestone */}
+                <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'flex-start' }}>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--color-accent-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800, color: 'var(--color-accent)', fontSize: '1.25rem', border: '1px solid var(--color-accent)' }}>2005</div>
+                  <div>
+                     <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>Tashkil etilish</h4>
+                     <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>Toshkentda polietilen mahsulotlari ishlab chiqarishga asos solindi.</p>
                   </div>
-                ))}
+                </div>
+                {/* 2013 Milestone */}
+                <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'flex-start' }}>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800, color: 'white', fontSize: '1.25rem', boxShadow: '0 4px 12px rgba(0, 166, 81, 0.3)' }}>2013</div>
+                  <div>
+                     <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px', color: 'var(--color-accent)' }}>12 Metrlik Rekord</h4>
+                     <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>O'zbekistonda ilk bor 3 qatlamli, 12 metrli issiqxona plyonkasi ishlab chiqarish yo'lga qo'yildi.</p>
+                  </div>
+                </div>
+                {/* Global Partners */}
+                <div style={{ display: 'flex', gap: 'var(--space-6)', alignItems: 'flex-start' }}>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--color-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800, color: 'white', fontSize: '1.25rem' }}>Global</div>
+                  <div>
+                     <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>Xalqaro Hamkorlik</h4>
+                     <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>Repsol (Ispaniya), Lotte (Koreya) va Sinopec (Xitoy) xom-ashyolariga o'tildi.</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div style={{
