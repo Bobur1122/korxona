@@ -108,7 +108,7 @@ export default function HomePage() {
               marginTop: 24,
               lineHeight: 1.6
             }}>
-              Markaziy Osiyodagi eng yirik polimer plyonkalar zavodi. 2005 yildan buyon xalqaro sanoat, qishloq xo'jaligi va gigant korxonalar uchun Premium materiallar yetkazib beramiz.
+              2005-yildan buyon Markaziy Osiyo agrosanoati uchun premium polimer materiallar ishlab chiqaruvchi. O'zbekistonda birinchi bo'lib 12 metrlik uch qavatli issiqxona plyonkalarini joriy etgan texnologik yetakchi.
             </p>
             
             <div style={{ display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
@@ -159,7 +159,7 @@ export default function HomePage() {
             <div style={{ display: 'flex', gap: 40, borderLeft: '1px solid #CBD5E1', paddingLeft: 40 }}>
               <div>
                 <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00A651', lineHeight: 1 }}>7500+</div>
-                <div style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 600, marginTop: 4, textTransform: 'uppercase' }}>Tonna Ishlab Chiqarish</div>
+                <div style={{ fontSize: '0.875rem', color: '#64748B', fontWeight: 600, marginTop: 4, textTransform: 'uppercase' }}>Tonna Yillik Quvvat</div>
               </div>
               <div>
                 <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#00A651', lineHeight: 1 }}>20+</div>
@@ -288,24 +288,24 @@ export default function HomePage() {
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32, textAlign: 'center' }}>
              <div style={{ padding: 40, background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 8 }}>
-                <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#00A651', marginBottom: 8 }}>Lotte Chemical</h4>
-                <p style={{ color: '#64748B', fontWeight: 600 }}>Janubiy Koreya</p>
-                <div style={{ fontSize: '0.875rem', marginTop: 16, color: '#94A3B8' }}>LDPE / LLDPE Base</div>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#00A651', marginBottom: 8 }}>Lotte Chemical</h4>
+                <p style={{ color: '#64748B', fontWeight: 600, fontSize: '0.875rem' }}>Janubiy Koreya</p>
+                <div style={{ fontSize: '0.75rem', marginTop: 12, color: '#94A3B8' }}>LDPE / LLDPE Bazaviy Polimerlar</div>
              </div>
              <div style={{ padding: 40, background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 8 }}>
-                <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#E60000', marginBottom: 8 }}>Sinopec</h4>
-                <p style={{ color: '#64748B', fontWeight: 600 }}>Xitoy</p>
-                <div style={{ fontSize: '0.875rem', marginTop: 16, color: '#94A3B8' }}>Masterbatch & Additives</div>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#E60000', marginBottom: 8 }}>Sinopec Group</h4>
+                <p style={{ color: '#64748B', fontWeight: 600, fontSize: '0.875rem' }}>Xitoy</p>
+                <div style={{ fontSize: '0.75rem', marginTop: 12, color: '#94A3B8' }}>Masterbatch va Modifikatorlar</div>
              </div>
              <div style={{ padding: 40, background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 8 }}>
-                <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#D97706', marginBottom: 8 }}>Repsol</h4>
-                <p style={{ color: '#64748B', fontWeight: 600 }}>Ispaniya</p>
-                <div style={{ fontSize: '0.875rem', marginTop: 16, color: '#94A3B8' }}>Premium EVA & UV</div>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#D97706', marginBottom: 8 }}>Repsol SA</h4>
+                <p style={{ color: '#64748B', fontWeight: 600, fontSize: '0.875rem' }}>Ispaniya</p>
+                <div style={{ fontSize: '0.75rem', marginTop: 12, color: '#94A3B8' }}>Premium EVA va UV Stabilizatorlar</div>
              </div>
              <div style={{ padding: 40, background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 8 }}>
-                <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#2563EB', marginBottom: 8 }}>Shurtan GCC</h4>
-                <p style={{ color: '#64748B', fontWeight: 600 }}>O'zbekiston</p>
-                <div style={{ fontSize: '0.875rem', marginTop: 16, color: '#94A3B8' }}>Top markali HDPE</div>
+                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2563EB', marginBottom: 8 }}>Shurtan GCC</h4>
+                <p style={{ color: '#64748B', fontWeight: 600, fontSize: '0.875rem' }}>O'zbekiston</p>
+                <div style={{ fontSize: '0.75rem', marginTop: 12, color: '#94A3B8' }}>Yuqori sifatli HDPE xom-ashyosi</div>
              </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ export default function AboutPage() {
             Original Grand Plast MChJ
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 650, margin: '0 auto', fontSize: 'var(--font-size-lg)', lineHeight: 1.7 }}>
-            Polietilen plyonka va qadoqlash materiallari ishlab chiqaruvchi yetakchi korxona. O'zbekistonda birinchi bo'lib 12 metrlik uch qatlamli issiqxona plyonkasini ishlab chiqargan.
+            2005-yildan buyon polietilen va polimer materiallari ishlab chiqaruvchi Markaziy Osiyodagi yetakchi korxona. O'zbekistonda birinchi bo'lib 12 metrli uch qatlamli plyonkani taqdim etgan innovatsion zavod.
           </p>
         </div>
       </section>
@@ -33,15 +33,18 @@ export default function AboutPage() {
                 polietilen mahsulotlar (paketlar, plyonkalar) ishlab chiqarishga ixtisoslashdi.
               </p>
               <p>
-                <strong>2013 yilda</strong> kompaniya o'z ishlab chiqarish quvvatini kengaytirib, O'zbekistonda birinchi marotaba 
-                uch qatlamli, kengligi <strong>12 metr</strong> bo'lgan issiqxona plyonkasi ishlab chiqarish liniyasini ishga tushirdi. 
-                Bu loyiha agrar tarmoqqa mo'ljallangan mahsulotlarimizni sezilarli darajada kengaytirdi.
+                <strong>2013-yilda</strong> korxonamiz O'zbekiston sanoatida inqilobiy qadam tashladi — mamlakatimizda birinchi marotaba 
+                uch qatlamli, kengligi <strong>12 metrga</strong> yetuvchi issiqxona plyonkalarini ishlab chiqarishni yo'lga qo'ydi. 
+                Bu texnologiya agrar sektorga yirik hajmdagi issiqxonalarni choklarsiz va mustahkam qoplash imkonini berdi.
               </p>
               <p>
-                Hozirgi kunda Original Grand Plast mahsulotlari qishloq xo'jaligi (issiqxonalar), qurilish 
-                (tom yopish va izolyatsiya), sanoat va kundalik iste'mol sohalarida keng qo'llanilmoqda. 
-                Mahsulotlarimiz Ispaniya, Koreya, Xitoy, Turkiya, Singapur va Rossiya kabi davlatlardan olib 
-                kiriladigan yuqori sifatli xomashyo asosida ishlab chiqiladi.
+                Bizning muvaffaqiyatimiz zamonaviy texnologiyalarga asoslangan. Ishlab chiqarish liniyalarimiz Ispaniya, Koreya, Xitoy va Turkiyaning 
+                eng ilg'or uskunalari bilan jihozlangan. Xom-ashyo sifatida esa dunyo gigantlari bo'lmish <strong>Repsol (Ispaniya)</strong>, 
+                <strong>Lotte Chemical (Koreya)</strong> va <strong>Sinopec (Xitoy)</strong> mahsulotlaridan foydalanamiz.
+              </p>
+              <p>
+                Bundan tashqari, biz gidroizolyatsiya sohasida ham o'z so'zimizni aytdik. <strong>"ROOF COVER"</strong> brendi ostida ishlab chiqarilayotgan 
+                rulonli tom yopish materiallari va bitum-polimer mastikalari bugungi kunda qurilish bozorida yuqori sifat standarti hisoblanadi.
               </p>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginTop: 'var(--space-8)' }}>
@@ -93,8 +96,8 @@ export default function AboutPage() {
               { emoji: '📦', title: 'Termo-usadoz plyonka', desc: 'Issiq bilan ishlov berilganda tavlanib, mahsulotlarni mustahkam o\'rashda qo\'llaniladi.' },
               { emoji: '🛍️', title: 'Polietilen paketlar', desc: 'Banklar uchun pulni vakuum bilan o\'rash sumkalari va turli hajmdagi paketlar.' },
               { emoji: '💧', title: 'PET kapsulalar', desc: 'Suv va yog\' idishlari uchun 28-140 gramm oralig\'idagi qopqoq materiallari.' },
-              { emoji: '🏗️', title: 'Tom yopish materiallari', desc: '"Roof Cover" — gidroizolyatsiya uchun rulonli material. Issiq va sovuqqa chidamli.' },
-              { emoji: '⚫', title: 'Bitum-polimer mastika', desc: 'Gidroizolyatsiya va hermetizatsiya ishlari uchun maxsus polimer mastika.' }
+              { emoji: '🏗️', title: 'ROOF COVER — Gidroizolyatsiya', desc: 'Rulonli tom yopish va gidroizolyatsiya materiallari. Issiq va sovuqqa o\'ta chidamli, uzoq umr ko\'ruvchi qoplamalar.' },
+              { emoji: '⚫', title: 'Bitum-polimer mastika', desc: 'Gidroizolyatsiya va hermetizatsiya ishlari uchun yuqori adgeziyali polimer mastikalar.' }
             ].map((item, i) => (
               <div key={i} className="feature-card">
                 <div style={{ fontSize: 36, marginBottom: 'var(--space-3)', lineHeight: 1 }}>{item.emoji}</div>
