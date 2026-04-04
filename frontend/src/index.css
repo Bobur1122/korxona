@@ -1315,7 +1315,7 @@ textarea.form-input {
 
 .admin-sidebar {
   width: var(--sidebar-width);
-  background: var(--color-primary);
+  background: var(--color-secondary); /* Dark Slate 900 */
   color: white;
   padding: var(--space-6) 0;
   display: flex;
@@ -1396,6 +1396,7 @@ textarea.form-input {
 .sidebar-link.active {
   background: var(--color-accent);
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 166, 81, 0.2);
 }
 
 .sidebar-link svg {
