@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 // Public pages
 import HomePage from './pages/HomePage';
@@ -23,7 +24,9 @@ import AdminPromoCodes from './pages/admin/AdminPromoCodes';
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       {/* Admin routes - no navbar/footer */}
       <Route path="/admin" element={
         <ProtectedRoute adminOnly>
