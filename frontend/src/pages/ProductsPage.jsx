@@ -61,16 +61,17 @@ export default function ProductsPage() {
   return (
     <div className="fade-in">
       <section style={{
-        background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%)',
-        color: 'white',
-        padding: 'var(--space-16) 0',
+        background: 'var(--color-primary-light)',
+        borderBottom: '1px solid var(--color-border)',
+        color: 'var(--color-text)',
+        padding: 'calc(var(--header-height) + var(--space-20)) 0 var(--space-12)',
         textAlign: 'center'
       }}>
         <div className="container">
           <h1 style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 800, marginBottom: 'var(--space-3)', letterSpacing: '-0.03em' }}>
             Mahsulotlar
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 'var(--font-size-lg)' }}>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-lg)', maxWidth: 600, margin: '0 auto' }}>
             Issiq xona uchun barcha turdagi plyonkalarni ko'ring va buyurtma bering
           </p>
         </div>

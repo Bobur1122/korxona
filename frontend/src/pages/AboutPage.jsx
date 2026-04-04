@@ -5,16 +5,22 @@ export default function AboutPage() {
   return (
     <div className="fade-in">
       {/* Hero */}
-      <section className="cta-section" style={{ padding: 'calc(var(--space-24) + 60px) 0 var(--space-20)', textAlign: 'center' }}>
-        <div className="hero-bg-glow hero-glow-1"></div>
+      <section style={{ 
+        background: 'var(--color-primary-light)',
+        borderBottom: '1px solid var(--color-border)',
+        color: 'var(--color-text)',
+        padding: 'calc(var(--header-height) + var(--space-20)) 0 var(--space-20)', 
+        textAlign: 'center',
+        position: 'relative'
+      }}>
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="hero-badge" style={{ background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)' }}>
+          <div className="badge badge-accent" style={{ marginBottom: 'var(--space-4)' }}>
             2005 yildan beri faoliyat yuritmoqda
           </div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, var(--font-size-5xl))', fontWeight: 800, marginBottom: 'var(--space-4)', letterSpacing: '-0.03em' }}>
             Original Grand Plast MChJ
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 650, margin: '0 auto', fontSize: 'var(--font-size-lg)', lineHeight: 1.7 }}>
+          <p style={{ color: 'var(--color-text-secondary)', maxWidth: 650, margin: '0 auto', fontSize: 'var(--font-size-lg)', lineHeight: 1.7 }}>
             2005-yildan buyon polietilen va polimer materiallari ishlab chiqaruvchi Markaziy Osiyodagi yetakchi korxona. O'zbekistonda birinchi bo'lib 12 metrli uch qatlamli plyonkani taqdim etgan innovatsion zavod.
           </p>
         </div>
@@ -194,7 +200,7 @@ export default function AboutPage() {
           <h2 style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 800, marginBottom: 'var(--space-4)' }}>
             Hamkorlik qilishga tayyormisiz?
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 'var(--space-6)' }}>
+          <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: 'var(--space-6)', maxWidth: 600, margin: '0 auto var(--space-8)' }}>
             Mahsulotlar, narxlar va yetkazib berish haqida batafsil ma'lumot uchun qo'ng'iroq qiling
           </p>
           <a href="tel:+998996066333" className="btn btn-primary btn-lg">
