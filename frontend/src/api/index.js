@@ -8,29 +8,22 @@ async function request(endpoint, options = {}) {
     ...options.headers
   };
 
-  let res;
   try {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      ...options,
-      headers
-    });
+    const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+    
+    // Check if response is empty
+    const data = res.status !== 204 ? await res.json() : {};
+
+    if (!res.ok) {
+      throw new Error(data.message || 'So\'rov bajarilmadi');
+    }
+    return data;
   } catch (err) {
-    throw new Error('Server bilan aloqa o\'rnatib bo\'lmadi. Backend ishlayotganini tekshiring.');
+    if (err.name === 'SyntaxError') {
+      throw new Error('Server noto\'g\'ri formatda javob qaytardi. Iltimos, keyinroq urinib ko\'ring.');
+    }
+    throw new Error(err.message || 'Server bilan aloqa o\'rnatib bo\'lmadi.');
   }
-
-  let data;
-  try {
-    const text = await res.text();
-    data = text ? JSON.parse(text) : {};
-  } catch (err) {
-    throw new Error('Server xato javob qaytardi. Backend va MongoDB ishlayotganini tekshiring.');
-  }
-
-  if (!res.ok) {
-    throw new Error(data.message || 'So\'rov bajarilmadi');
-  }
-
-  return data;
 }
 
 export const api = {
