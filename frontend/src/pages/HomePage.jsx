@@ -31,15 +31,15 @@ export default function HomePage() {
       {/* MASSIVE ENTERPRISE HERO WITH CAROUSEL */}
       <section style={{ 
         position: 'relative', 
-        height: '90vh', 
-        minHeight: '600px',
+        height: 'auto', 
+        minHeight: '85vh',
         display: 'flex', 
-        alignItems: 'center', 
+        flexDirection: 'column',
         justifyContent: 'center',
         background: '#0F172A',
         overflow: 'hidden',
-        paddingTop: 'calc(var(--header-height) + var(--space-20))' /* INCREASED SPACE FROM HEADER */,
-        paddingBottom: 'var(--space-24)' /* SPACE FROM MAIN CONTENT */
+        paddingTop: 'calc(var(--header-height) + 80px)', 
+        paddingBottom: '100px'
       }}>
         {/* Background Image Carousel with Overlay (Sliding Wheels/Koleso) */}
         <div style={{
@@ -90,7 +90,7 @@ export default function HomePage() {
             </div>
             
             <h1 style={{ 
-              fontSize: 'clamp(3rem, 6vw, 4.5rem)', 
+              fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', 
               lineHeight: 1.1, 
               color: '#FFFFFF',
               fontWeight: 800,
@@ -112,17 +112,17 @@ export default function HomePage() {
               2005-yildan buyon Markaziy Osiyo agrosanoati uchun premium polimer materiallar ishlab chiqaruvchi. O'zbekistonda birinchi bo'lib 12 metrlik uch qavatli issiqxona plyonkalarini joriy etgan texnologik yetakchi.
             </p>
             
-            <div style={{ display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }}>
               <Link to="/products" className="btn btn-primary btn-lg" style={{ 
-                padding: '18px 40px',
-                fontSize: '1.125rem',
-                gap: 12
+                padding: '16px 36px',
+                fontSize: '1rem',
+                gap: 10
               }}>
-                Mahsulotlar Katalogi <ArrowRight size={22} />
+                Mahsulotlar Katalogi <ArrowRight size={20} />
               </Link>
               <a href="#about" className="btn btn-outline btn-lg" style={{ 
-                padding: '18px 40px',
-                fontSize: '1.125rem',
+                padding: '16px 36px',
+                fontSize: '1rem',
                 color: '#FFFFFF',
                 borderColor: 'rgba(255,255,255,0.3)'
               }}>
