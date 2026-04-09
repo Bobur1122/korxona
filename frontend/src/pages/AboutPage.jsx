@@ -115,7 +115,7 @@ export default function AboutPage() {
               { emoji: '📦', title: 'Termo-usadoz plyonka', desc: 'Issiq bilan ishlov berilganda tavlanib, mahsulotlarni mustahkam o\'rashda qo\'llaniladi.' },
               { emoji: '🛍️', title: 'Polietilen paketlar', desc: 'Banklar uchun pulni vakuum bilan o\'rash sumkalari va turli hajmdagi paketlar.' },
               { emoji: '💧', title: 'PET kapsulalar', desc: 'Suv va yog\' idishlari uchun 28-140 gramm oralig\'idagi qopqoq materiallari.' },
-              { emoji: '🏗️', title: 'ROOF COVER — Gidroizolyatsiya', desc: 'Rulonli tom yopish va gidroizolyatsiya materiallari. Issiq va sovuqqa o\'ta chidamli, uzoq umr ko\'ruvchi qoplamalar.' },
+              { emoji: '🏗️', title: ' — Gidroizolyatsiya', desc: 'Rulonli tom yopish va gidroizolyatsiya materiallari. Issiq va sovuqqa o\'ta chidamli, uzoq umr ko\'ruvchi qoplamalar.' },
               { emoji: '⚫', title: 'Bitum-polimer mastika', desc: 'Gidroizolyatsiya va hermetizatsiya ishlari uchun yuqori adgeziyali polimer mastikalar.' }
             ].map((item, i) => (
               <div key={i} className="feature-card">

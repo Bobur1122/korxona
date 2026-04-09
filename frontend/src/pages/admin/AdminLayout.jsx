@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Package, ShoppingCart, Users, Tag,
+  LayoutDashboard, Package, ShoppingCart, Users, Tag, Newspaper,
   ChevronLeft, ChevronRight, LogOut, Home, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
   { to: '/admin/products', icon: Package, label: 'Mahsulotlar' },
+  { to: '/admin/news', icon: Newspaper, label: 'Yangiliklar' },
   { to: '/admin/orders', icon: ShoppingCart, label: 'Buyurtmalar' },
   { to: '/admin/users', icon: Users, label: 'Foydalanuvchilar' },
   { to: '/admin/promo', icon: Tag, label: 'Promokodlar' },

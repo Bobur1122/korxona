@@ -10,7 +10,7 @@ const categories = [
   { value: 'boshqa', label: 'Boshqa' }
 ];
 
-const emptyForm = { name: '', description: '', price: '', stock: '', category: 'oddiy', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
+const emptyForm = { name_uz: '', name_ru: '', name_en: '', description_uz: '', description_ru: '', description_en: '', price: '', stock: '', category: 'Issiqxona plyonkasi', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -22,6 +22,7 @@ export default function AdminProducts() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
+  const [langTab, setLangTab] = useState('uz');
   const fileInputRef = useRef(null);
 
   const fetchProducts = () => {
@@ -45,8 +46,8 @@ export default function AdminProducts() {
   const openEdit = (product) => {
     setEditing(product._id);
     setForm({
-      name: product.name,
-      description: product.description,
+      name_uz: product.name_uz || '', name_ru: product.name_ru || '', name_en: product.name_en || '',
+      description_uz: product.description_uz || '', description_ru: product.description_ru || '', description_en: product.description_en || '',
       price: product.price,
       stock: product.stock,
       category: product.category,
@@ -60,6 +61,7 @@ export default function AdminProducts() {
     });
     setImagePreview(product.image || '');
     setError('');
+    setLangTab('uz');
     setShowModal(true);
   };
 
@@ -79,9 +81,10 @@ export default function AdminProducts() {
       formData.append('image', file);
 
       const uploadUrl = (import.meta.env.VITE_API_URL || '/api') + '/upload';
+      const authToken = localStorage.getItem('token');
       const res = await fetch(uploadUrl, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${authToken}` },
         body: formData
       });
 
@@ -306,13 +309,29 @@ export default function AdminProducts() {
                 )}
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Nomi</label>
-                <input type="text" className="form-input" name="name" value={form.name} onChange={handleChange} required />
+              {/* Language Tabs */}
+              <div style={{ display: 'flex', gap: 0, marginBottom: 'var(--space-4)', borderBottom: '2px solid var(--color-border)' }}>
+                {['uz', 'ru', 'en'].map(lang => (
+                  <button key={lang} type="button" onClick={() => setLangTab(lang)}
+                    style={{
+                      padding: '10px 20px', fontWeight: 600, fontSize: 'var(--font-size-sm)',
+                      border: 'none', background: 'none', cursor: 'pointer',
+                      color: langTab === lang ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                      borderBottom: langTab === lang ? '2px solid var(--color-accent)' : '2px solid transparent',
+                      marginBottom: '-2px', transition: 'all 0.2s ease', fontFamily: 'var(--font-family)'
+                    }}>
+                    {lang === 'uz' ? "🇺🇿 O'zbekcha" : lang === 'ru' ? '🇷🇺 Русский' : '🇬🇧 English'}
+                    {form[`name_${lang}`] && form[`description_${lang}`] ? ' ✓' : ' *'}
+                  </button>
+                ))}
               </div>
               <div className="form-group">
-                <label className="form-label">Tavsif</label>
-                <textarea className="form-input" name="description" value={form.description} onChange={handleChange} required rows={3}></textarea>
+                <label className="form-label">Nomi ({langTab.toUpperCase()}) *</label>
+                <input type="text" className="form-input" name={`name_${langTab}`} value={form[`name_${langTab}`]} onChange={handleChange} required placeholder={`Mahsulot nomi ${langTab.toUpperCase()} tilida`} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Tavsif ({langTab.toUpperCase()}) *</label>
+                <textarea className="form-input" name={`description_${langTab}`} value={form[`description_${langTab}`]} onChange={handleChange} required rows={3} placeholder={`Tavsif ${langTab.toUpperCase()} tilida`}></textarea>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
                 <div className="form-group">

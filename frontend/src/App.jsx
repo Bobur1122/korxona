@@ -13,6 +13,9 @@ import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import NewsPage from './pages/NewsPage';
+import NewsDetailPage from './pages/NewsDetailPage';
+import ContactsPage from './pages/ContactsPage';
 
 // Admin pages
 import AdminLayout from './pages/admin/AdminLayout';
@@ -21,6 +24,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminPromoCodes from './pages/admin/AdminPromoCodes';
+import AdminNews from './pages/admin/AdminNews';
 
 export default function App() {
   return (
@@ -35,6 +39,7 @@ export default function App() {
       }>
         <Route index element={<Dashboard />} />
         <Route path="products" element={<AdminProducts />} />
+        <Route path="news" element={<AdminNews />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="promo" element={<AdminPromoCodes />} />
@@ -50,6 +55,9 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/products/:id" element={<ProductDetailPage />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/:id" element={<NewsDetailPage />} />
+              <Route path="/contacts" element={<ContactsPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />

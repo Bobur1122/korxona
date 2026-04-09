@@ -1,32 +1,19 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Mahsulot nomi kiritilishi shart'],
-    trim: true,
-    maxlength: [200, 'Nom 200 belgidan oshmasligi kerak']
-  },
-  description: {
-    type: String,
-    required: [true, 'Tavsif kiritilishi shart'],
-    maxlength: [2000, 'Tavsif 2000 belgidan oshmasligi kerak']
-  },
-  price: {
-    type: Number,
-    required: [true, 'Narx kiritilishi shart'],
-    min: [0, 'Narx manfiy bo\'lishi mumkin emas']
-  },
-  stock: {
-    type: Number,
-    required: [true, 'Mavjud soni kiritilishi shart'],
-    min: [0, 'Soni manfiy bo\'lishi mumkin emas'],
-    default: 0
-  },
-  image: {
-    type: String,
-    default: ''
-  },
+  // Multi-language name
+  name_uz: { type: String, required: [true, 'Mahsulot nomi (UZ) kiritilishi shart'], trim: true, maxlength: 200 },
+  name_ru: { type: String, default: '', trim: true, maxlength: 200 },
+  name_en: { type: String, default: '', trim: true, maxlength: 200 },
+
+  // Multi-language description
+  description_uz: { type: String, required: [true, 'Tavsif (UZ) kiritilishi shart'], maxlength: 2000 },
+  description_ru: { type: String, default: '', maxlength: 2000 },
+  description_en: { type: String, default: '', maxlength: 2000 },
+
+  price: { type: Number, required: [true, 'Narx kiritilishi shart'], min: [0, 'Narx manfiy bo\'lishi mumkin emas'] },
+  stock: { type: Number, required: true, min: 0, default: 0 },
+  image: { type: String, default: '' },
   category: {
     type: String,
     required: [true, 'Kategoriya kiritilishi shart'],
@@ -36,36 +23,21 @@ const productSchema = new mongoose.Schema({
       message: 'Noto\'g\'ri kategoriya'
     }
   },
-  thickness: {
-    type: Number,
-    min: [0, 'Qalinlik manfiy bo\'lishi mumkin emas']
-  },
-  width: {
-    type: Number,
-    min: [0, 'Eni manfiy bo\'lishi mumkin emas']
-  },
-  length: {
-    type: Number,
-    min: [0, 'Uzunlik manfiy bo\'lishi mumkin emas']
-  },
-  uvProtection: {
-    type: Boolean,
-    default: false
-  },
-  color: {
-    type: String,
-    trim: true,
-    default: 'shaffof'
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  }
-}, {
-  timestamps: true
-});
+  thickness: { type: Number, min: 0 },
+  width: { type: Number, min: 0 },
+  length: { type: Number, min: 0 },
+  uvProtection: { type: Boolean, default: false },
+  color: { type: String, trim: true, default: 'shaffof' },
+  isActive: { type: Boolean, default: true }
+}, { timestamps: true });
 
-productSchema.index({ name: 'text', description: 'text' });
+// Backward-compat virtual getters
+productSchema.virtual('name').get(function() { return this.name_uz; });
+productSchema.virtual('description').get(function() { return this.description_uz; });
+productSchema.set('toJSON', { virtuals: true });
+productSchema.set('toObject', { virtuals: true });
+
+productSchema.index({ name_uz: 'text', name_ru: 'text', name_en: 'text', description_uz: 'text' });
 productSchema.index({ category: 1 });
 productSchema.index({ price: 1 });
 

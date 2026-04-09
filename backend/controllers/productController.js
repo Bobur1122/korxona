@@ -8,8 +8,10 @@ const getProducts = async (req, res, next) => {
 
     if (search) {
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { name_uz: { $regex: search, $options: 'i' } },
+        { name_ru: { $regex: search, $options: 'i' } },
+        { name_en: { $regex: search, $options: 'i' } },
+        { description_uz: { $regex: search, $options: 'i' } }
       ];
     }
 

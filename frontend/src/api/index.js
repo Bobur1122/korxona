@@ -11,7 +11,6 @@ async function request(endpoint, options = {}) {
   try {
     const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
     
-    // Check if response is empty
     const data = res.status !== 204 ? await res.json() : {};
 
     if (!res.ok) {
@@ -63,4 +62,12 @@ export const api = {
   createPromoCode: (body) => request('/promo', { method: 'POST', body: JSON.stringify(body) }),
   updatePromoCode: (id, body) => request(`/promo/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   deletePromoCode: (id) => request(`/promo/${id}`, { method: 'DELETE' }),
+
+  // News
+  getNews: (params = '') => request(`/news?${params}`),
+  getNewsById: (id) => request(`/news/${id}`),
+  getAllNews: () => request('/news/all'),
+  createNews: (body) => request('/news', { method: 'POST', body: JSON.stringify(body) }),
+  updateNews: (id, body) => request(`/news/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
+  deleteNews: (id) => request(`/news/${id}`, { method: 'DELETE' }),
 };

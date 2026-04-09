@@ -2,29 +2,23 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
+import { useLanguage } from '../context/LanguageContext';
 
 const categories = [
-  { value: '', label: 'Barcha kategoriyalar' },
-  { value: 'oddiy', label: 'Oddiy plyonka' },
-  { value: 'uv_plyonka', label: 'UV himoyali' },
-  { value: 'kop_qavatli', label: "Ko'p qavatli" },
-  { value: 'maxsus', label: 'Maxsus plyonka' },
-  { value: 'boshqa', label: 'Boshqa' }
-];
-
-const sortOptions = [
-  { value: '', label: 'Standart' },
-  { value: 'price_asc', label: 'Narx: arzon → qimmat' },
-  { value: 'price_desc', label: 'Narx: qimmat → arzon' },
-  { value: 'name', label: "Nomi bo'yicha" }
+  'Issiqxona plyonkasi',
+  'Termo-usadoz plyonka',
+  'Polietilen paketlar',
+  'PET kapsulalar',
+  'Tom yopish materiallari',
+  'Bitum-polimer mastika'
 ];
 
 export default function ProductsPage() {
+  const { t } = useLanguage();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [sort, setSort] = useState('');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, pages: 1 });
 
@@ -34,7 +28,6 @@ export default function ProductsPage() {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (category) params.set('category', category);
-      if (sort) params.set('sort', sort);
       params.set('page', page);
       params.set('limit', 12);
 
@@ -50,7 +43,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, [category, sort, page]);
+  }, [category, page]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -61,79 +54,83 @@ export default function ProductsPage() {
   return (
     <div className="fade-in">
       <section style={{
-        background: 'var(--color-primary-light)',
-        borderBottom: '1px solid var(--color-border)',
-        color: 'var(--color-text)',
-        padding: 'calc(var(--header-height) + var(--space-20)) 0 var(--space-12)',
+        background: '#0F172A', color: '#fff',
+        padding: 'calc(var(--header-height) + 60px) 0 60px',
         textAlign: 'center'
       }}>
         <div className="container">
-          <h1 style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 800, marginBottom: 'var(--space-3)', letterSpacing: '-0.03em' }}>
-            Mahsulotlar
+          <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, marginBottom: 8, letterSpacing: '-0.03em' }}>
+            {t('allProducts')}
           </h1>
-          <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-lg)', maxWidth: 600, margin: '0 auto' }}>
-            Issiq xona uchun barcha turdagi plyonkalarni ko'ring va buyurtma bering
+          <p style={{ color: '#94A3B8', fontSize: '1.125rem', maxWidth: 600, margin: '0 auto' }}>
+            {t('techDesc')}
           </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="filters-bar">
-            <form onSubmit={handleSearch} className="search-input-wrapper">
-              <Search size={18} />
+      {/* Category Filter */}
+      <section style={{ background: '#fff', borderBottom: '1px solid #E2E8F0', position: 'sticky', top: 'var(--header-height)', zIndex: 50 }}>
+        <div className="container" style={{ display: 'flex', gap: 0, overflowX: 'auto', alignItems: 'center' }}>
+          <button onClick={() => { setCategory(''); setPage(1); }}
+            style={{
+              padding: '16px 24px', fontWeight: 600, fontSize: '0.8125rem',
+              border: 'none', background: 'none', cursor: 'pointer',
+              color: !category ? '#0F172A' : '#64748B',
+              borderBottom: !category ? '3px solid #0F172A' : '3px solid transparent',
+              transition: 'all 0.2s', whiteSpace: 'nowrap', fontFamily: 'var(--font-family)',
+              textTransform: 'uppercase', letterSpacing: '0.05em'
+            }}>
+            {t('allProducts')}
+          </button>
+          {categories.map(cat => (
+            <button key={cat} onClick={() => { setCategory(cat); setPage(1); }}
+              style={{
+                padding: '16px 20px', fontWeight: 600, fontSize: '0.8125rem',
+                border: 'none', background: 'none', cursor: 'pointer',
+                color: category === cat ? '#0F172A' : '#64748B',
+                borderBottom: category === cat ? '3px solid #0F172A' : '3px solid transparent',
+                transition: 'all 0.2s', whiteSpace: 'nowrap', fontFamily: 'var(--font-family)',
+                textTransform: 'uppercase', letterSpacing: '0.03em'
+              }}>
+              {cat}
+            </button>
+          ))}
+
+          {/* Search */}
+          <form onSubmit={handleSearch} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ position: 'relative' }}>
+              <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
               <input
-                type="text"
-                className="form-input"
-                placeholder="Plyonka qidirish..."
-                value={search}
+                type="text" className="form-input"
+                placeholder={t('search')} value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 id="product-search"
-                style={{ paddingLeft: 42 }}
+                style={{ paddingLeft: 36, height: 38, fontSize: '0.875rem', width: 'clamp(120px, 20vw, 200px)', border: '1px solid #E2E8F0', borderRadius: 8 }}
               />
-            </form>
-            <select
-              className="form-select"
-              value={category}
-              onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-              style={{ maxWidth: 200 }}
-              id="category-filter"
-            >
-              {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-            </select>
-            <select
-              className="form-select"
-              value={sort}
-              onChange={(e) => { setSort(e.target.value); setPage(1); }}
-              style={{ maxWidth: 220 }}
-              id="sort-filter"
-            >
-              {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
-          </div>
+            </div>
+          </form>
+        </div>
+      </section>
 
+      <section className="section" style={{ background: '#F8FAFC', minHeight: 400 }}>
+        <div className="container">
           {loading ? (
             <div className="loading-page"><div className="spinner"></div></div>
           ) : products.length === 0 ? (
             <div className="empty-state">
               <Search size={48} />
-              <h3>Mahsulot topilmadi</h3>
-              <p>Boshqa qidiruv so'zini sinab ko'ring</p>
+              <h3>{t('allProducts')}</h3>
             </div>
           ) : (
             <>
-              <div className="products-grid">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24 }}>
                 {products.map(p => <ProductCard key={p._id} product={p} />)}
               </div>
 
               {pagination.pages > 1 && (
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--space-2)', marginTop: 'var(--space-10)' }}>
                   {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(p => (
-                    <button
-                      key={p}
-                      className={`btn ${p === page ? 'btn-primary' : 'btn-ghost'} btn-sm`}
-                      onClick={() => setPage(p)}
-                    >
+                    <button key={p} className={`btn ${p === page ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setPage(p)}>
                       {p}
                     </button>
                   ))}

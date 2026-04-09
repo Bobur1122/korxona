@@ -13,6 +13,7 @@ const orderRoutes = require('./routes/orders');
 const promoRoutes = require('./routes/promo');
 const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
+const newsRoutes = require('./routes/news');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/promo', promoRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/news', newsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
