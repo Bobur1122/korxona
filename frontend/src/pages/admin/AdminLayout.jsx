@@ -47,7 +47,7 @@ export default function AdminLayout() {
         <button onClick={() => setMobileOpen(!mobileOpen)} id="mobile-sidebar-toggle">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-        <img src="/logo.png" alt="OGP" style={{ height: 28, width: 'auto' }} />
+        <img src="/logo.png" alt="OGP" style={{ height: 48, width: 'auto' }} />
       </div>
 
       {/* Mobile overlay */}
