@@ -28,6 +28,7 @@ const productSchema = new mongoose.Schema({
   length: { type: Number, min: 0 },
   uvProtection: { type: Boolean, default: false },
   color: { type: String, trim: true, default: 'shaffof' },
+  soldCount: { type: Number, default: 0, min: 0 },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 
@@ -40,5 +41,6 @@ productSchema.set('toObject', { virtuals: true });
 productSchema.index({ name_uz: 'text', name_ru: 'text', name_en: 'text', description_uz: 'text' });
 productSchema.index({ category: 1 });
 productSchema.index({ price: 1 });
+productSchema.index({ soldCount: -1 });
 
 module.exports = mongoose.model('Product', productSchema);

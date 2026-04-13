@@ -46,6 +46,7 @@ const createOrder = async (req, res, next) => {
 
       // Reduce stock
       product.stock -= item.quantity;
+      product.soldCount = (product.soldCount || 0) + item.quantity;
       await product.save();
     }
 
@@ -97,7 +98,7 @@ const getMyOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ user: req.user._id })
       .sort({ createdAt: -1 })
-      .populate('items.product', 'name image');
+      .populate('items.product', 'name_uz name_ru name_en image');
     res.json({ success: true, data: orders });
   } catch (error) {
     next(error);
@@ -139,6 +140,7 @@ const getAllOrders = async (req, res, next) => {
     const total = await Order.countDocuments(query);
     const orders = await Order.find(query)
       .populate('user', 'name email phone')
+      .populate('items.product', 'name_uz name_ru name_en image')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit));
@@ -166,11 +168,7 @@ const updateOrderStatus = async (req, res, next) => {
       });
     }
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    ).populate('user', 'name email phone');
+    const order = await Order.findById(req.params.id).populate('user', 'name email phone');
 
     if (!order) {
       return res.status(404).json({
@@ -178,6 +176,19 @@ const updateOrderStatus = async (req, res, next) => {
         message: 'Buyurtma topilmadi'
       });
     }
+
+    const currentIndex = validStatuses.indexOf(order.status);
+    const nextIndex = validStatuses.indexOf(status);
+
+    if (nextIndex < currentIndex) {
+      return res.status(400).json({
+        success: false,
+        message: 'Statusni oldingi bosqichga qaytarib bo\'lmaydi'
+      });
+    }
+
+    order.status = status;
+    await order.save();
 
     res.json({ success: true, data: order });
   } catch (error) {

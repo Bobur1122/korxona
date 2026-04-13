@@ -5,8 +5,8 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useState, useEffect, useRef } from 'react';
 
-const LANG_LABELS = { uz: "O'zbekcha", ru: 'Русский', en: 'English' };
-const LANG_FLAGS = { uz: '🇺🇿', ru: '🇷🇺', en: '🇬🇧' };
+const LANG_LABELS = { uz: "O'zbekcha", ru: 'Russian', en: 'English' };
+const LANG_FLAGS = { uz: 'UZ', ru: 'RU', en: 'EN' };
 
 export default function Navbar() {
   const { user, isAdmin } = useAuth();

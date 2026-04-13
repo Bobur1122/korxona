@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { getCategoryLabel } from '../utils/categoryTranslation';
 
 export default function ProductCard({ product }) {
   const { t, tl } = useLanguage();
   const name = tl(product, 'name');
+  const categoryLabel = getCategoryLabel(t, product.category);
   const imgSrc = product.image || `https://placehold.co/600x400/0F172A/FFFFFF?text=${encodeURIComponent(name)}`;
 
   return (
@@ -19,7 +21,7 @@ export default function ProductCard({ product }) {
         <div className="boeing-card__overlay"></div>
       </div>
       <div className="boeing-card__content">
-        <span className="boeing-card__category">{product.category}</span>
+        <span className="boeing-card__category">{categoryLabel}</span>
         <h3 className="boeing-card__title">{name}</h3>
         <div className="boeing-card__link">
           {t('productInfo')} <ArrowRight size={16} />

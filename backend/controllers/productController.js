@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 
 // GET /api/products
 const getProducts = async (req, res, next) => {
@@ -28,14 +29,42 @@ const getProducts = async (req, res, next) => {
     let sortObj = { createdAt: -1 };
     if (sort === 'price_asc') sortObj = { price: 1 };
     if (sort === 'price_desc') sortObj = { price: -1 };
-    if (sort === 'name') sortObj = { name: 1 };
+    if (sort === 'name') sortObj = { name_uz: 1 };
+    if (sort === 'popular') sortObj = { soldCount: -1, createdAt: -1 };
 
     const skip = (Number(page) - 1) * Number(limit);
     const total = await Product.countDocuments(query);
-    const products = await Product.find(query)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(Number(limit));
+    let products = [];
+
+    if (sort === 'popular') {
+      const filteredIds = await Product.find(query).select('_id').lean();
+      const idList = filteredIds.map((item) => item._id);
+
+      const soldAgg = idList.length
+        ? await Order.aggregate([
+            { $unwind: '$items' },
+            { $match: { 'items.product': { $in: idList } } },
+            { $group: { _id: '$items.product', soldQty: { $sum: '$items.quantity' } } }
+          ])
+        : [];
+
+      const soldMap = new Map(soldAgg.map((row) => [String(row._id), row.soldQty]));
+      const allProducts = await Product.find(query).sort({ createdAt: -1 });
+
+      allProducts.sort((a, b) => {
+        const aSold = soldMap.get(String(a._id)) ?? a.soldCount ?? 0;
+        const bSold = soldMap.get(String(b._id)) ?? b.soldCount ?? 0;
+        if (aSold !== bSold) return bSold - aSold;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
+      products = allProducts.slice(skip, skip + Number(limit));
+    } else {
+      products = await Product.find(query)
+        .sort(sortObj)
+        .skip(skip)
+        .limit(Number(limit));
+    }
 
     res.json({
       success: true,

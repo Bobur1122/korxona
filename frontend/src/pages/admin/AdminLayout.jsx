@@ -5,21 +5,23 @@ import {
   ChevronLeft, ChevronRight, LogOut, Home, Menu, X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-
-const navItems = [
-  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-  { to: '/admin/products', icon: Package, label: 'Mahsulotlar' },
-  { to: '/admin/news', icon: Newspaper, label: 'Yangiliklar' },
-  { to: '/admin/orders', icon: ShoppingCart, label: 'Buyurtmalar' },
-  { to: '/admin/users', icon: Users, label: 'Foydalanuvchilar' },
-  { to: '/admin/promo', icon: Tag, label: 'Promokodlar' },
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { logout } = useAuth();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { to: '/admin', icon: LayoutDashboard, label: t('adminDashboard'), exact: true },
+    { to: '/admin/products', icon: Package, label: t('adminProducts') },
+    { to: '/admin/news', icon: Newspaper, label: t('adminNews') },
+    { to: '/admin/orders', icon: ShoppingCart, label: t('adminOrders') },
+    { to: '/admin/users', icon: Users, label: t('adminUsers') },
+    { to: '/admin/promo', icon: Tag, label: t('adminPromo') },
+  ];
 
   // Close mobile sidebar on route change
   useEffect(() => {
@@ -34,6 +36,14 @@ export default function AdminLayout() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Force chart/layout recalculation when sidebar state changes.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 320);
+    return () => clearTimeout(timer);
+  }, [collapsed, mobileOpen, location.pathname]);
 
   const isActive = (item) => {
     if (item.exact) return location.pathname === item.to;
@@ -92,21 +102,21 @@ export default function AdminLayout() {
           <Link
             to="/"
             className="sidebar-link"
-            title={collapsed ? 'Saytga qaytish' : undefined}
+            title={collapsed ? t('backToSite') : undefined}
             onClick={() => { if (window.innerWidth <= 768) setMobileOpen(false); }}
           >
             <Home size={20} />
-            <span className="sidebar-link-text">Saytga qaytish</span>
+            <span className="sidebar-link-text">{t('backToSite')}</span>
           </Link>
           <button
             onClick={() => { logout(); if (window.innerWidth <= 768) setMobileOpen(false); }}
             className="sidebar-link"
             style={{ width: '100%' }}
-            title={collapsed ? 'Chiqish' : undefined}
+            title={collapsed ? t('logout') : undefined}
             id="admin-logout"
           >
             <LogOut size={20} />
-            <span className="sidebar-link-text">Chiqish</span>
+            <span className="sidebar-link-text">{t('logout')}</span>
           </button>
         </div>
       </aside>

@@ -4,6 +4,7 @@ import { ShoppingCart, ArrowLeft, Package, Sun } from 'lucide-react';
 import { api } from '../api';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
+import { getCategoryLabel } from '../utils/categoryTranslation';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -48,6 +49,7 @@ export default function ProductDetailPage() {
 
   const productName = tl(product, 'name') || product.name;
   const productDesc = tl(product, 'description') || product.description;
+  const categoryLabel = getCategoryLabel(t, product.category);
 
   return (
     <div className="fade-in" style={{ paddingTop: 'calc(var(--header-height, 72px) + 32px)', paddingBottom: 60, background: '#fff', minHeight: '100vh' }}>
@@ -82,7 +84,7 @@ export default function ProductDetailPage() {
                 color: '#00A651', fontWeight: 700, fontSize: '0.75rem',
                 borderRadius: '9999px', textTransform: 'uppercase', letterSpacing: '0.05em'
               }}>
-                {product.category}
+                {categoryLabel}
               </span>
             </div>
 
@@ -144,7 +146,7 @@ export default function ProductDetailPage() {
               <>
                 <div className="quantity-selector">
                   <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#475569' }}>{t('quantity') || 'Miqdor'}:</span>
-                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button>
+                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
                   <span>{quantity}</span>
                   <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}>+</button>
                 </div>
@@ -156,7 +158,7 @@ export default function ProductDetailPage() {
                   id="add-to-cart-detail"
                 >
                   <ShoppingCart size={20} />
-                  {added ? '✓ ' + (t('addedToCart') || 'Savatga qo\'shildi!') : t('addToCart') || 'Savatga qo\'shish'}
+                  {added ? (t('addedToCart') || "Savatga qo'shildi!") : t('addToCart') || "Savatga qo'shish"}
                 </button>
 
                 <p style={{ textAlign: 'center', marginTop: 12, fontSize: '0.875rem', color: '#64748B' }}>

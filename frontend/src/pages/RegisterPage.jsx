@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function RegisterPage() {
   const { register } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
@@ -18,12 +20,12 @@ export default function RegisterPage() {
     setError('');
 
     if (form.password !== form.confirmPassword) {
-      setError('Parollar mos kelmaydi');
+      setError(t('passwordMismatch'));
       return;
     }
 
     if (form.password.length < 6) {
-      setError('Parol kamida 6 belgidan iborat bo\'lishi kerak');
+      setError(t('passwordMinLength'));
       return;
     }
 
@@ -41,18 +43,18 @@ export default function RegisterPage() {
   return (
     <div className="auth-page fade-in">
       <div className="auth-card">
-        <h1 className="auth-title">Ro'yxatdan o'tish</h1>
-        <p className="auth-subtitle">Hisob yarating va xarid boshlang</p>
+        <h1 className="auth-title">{t('registerTitle')}</h1>
+        <p className="auth-subtitle">{t('registerSubtitle')}</p>
 
         {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Ism</label>
+            <label className="form-label">{t('name')}</label>
             <input
               type="text"
               className="form-input"
-              placeholder="To'liq ismingiz"
+              placeholder={t('fullNamePlaceholder')}
               name="name"
               value={form.name}
               onChange={handleChange}
@@ -61,7 +63,7 @@ export default function RegisterPage() {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Email</label>
+            <label className="form-label">{t('email')}</label>
             <input
               type="email"
               className="form-input"
@@ -74,11 +76,11 @@ export default function RegisterPage() {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Telefon raqam</label>
+            <label className="form-label">{t('phoneLabel')}</label>
             <input
               type="tel"
               className="form-input"
-              placeholder="+998 90 123 45 67"
+              placeholder={t('phonePlaceholder')}
               name="phone"
               value={form.phone}
               onChange={handleChange}
@@ -87,11 +89,11 @@ export default function RegisterPage() {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Parol</label>
+            <label className="form-label">{t('password')}</label>
             <input
               type="password"
               className="form-input"
-              placeholder="Kamida 6 belgi"
+              placeholder={t('minPasswordPlaceholder')}
               name="password"
               value={form.password}
               onChange={handleChange}
@@ -100,11 +102,11 @@ export default function RegisterPage() {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Parolni tasdiqlash</label>
+            <label className="form-label">{t('confirmPassword')}</label>
             <input
               type="password"
               className="form-input"
-              placeholder="Parolni qayta kiriting"
+              placeholder={t('confirmPasswordPlaceholder')}
               name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
@@ -113,12 +115,12 @@ export default function RegisterPage() {
             />
           </div>
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading} id="register-submit">
-            {loading ? 'Ro\'yxatdan o\'tilmoqda...' : 'Ro\'yxatdan o\'tish'}
+            {loading ? t('registerLoading') : t('register')}
           </button>
         </form>
 
         <div className="auth-footer">
-          Hisobingiz bormi? <Link to="/login">Tizimga kirish</Link>
+          {t('haveAccount')} <Link to="/login">{t('signIn')}</Link>
         </div>
       </div>
     </div>

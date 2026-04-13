@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, PointElement, LineElement,
@@ -15,6 +16,7 @@ ChartJS.register(
 const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyun', 'Iyul', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'];
 
 export default function AdminAnalytics() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,13 +28,13 @@ export default function AdminAnalytics() {
   }, []);
 
   if (loading) return <div className="loading-page"><div className="spinner"></div></div>;
-  if (!stats) return <div className="empty-state"><h3>Ma'lumot yuklanmadi</h3></div>;
+  if (!stats) return <div className="empty-state"><h3>{t('dataLoadError')}</h3></div>;
 
   const revenueData = {
     labels: stats.monthlyRevenue.map(m => months[m._id.month - 1]),
     datasets: [
       {
-        label: 'Daromad (so\'m)',
+        label: t('revenueLabel'),
         data: stats.monthlyRevenue.map(m => m.revenue),
         borderColor: '#6366F1',
         backgroundColor: 'rgba(99, 102, 241, 0.1)',
@@ -42,7 +44,7 @@ export default function AdminAnalytics() {
         pointRadius: 5,
       },
       {
-        label: 'Buyurtmalar soni',
+        label: t('dailyOrdersCountLabel'),
         data: stats.monthlyRevenue.map(m => m.orders),
         borderColor: '#10B981',
         backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -58,7 +60,7 @@ export default function AdminAnalytics() {
   const dailyRevenueData = {
     labels: stats.dailyOrders.map(d => d._id.slice(5)),
     datasets: [{
-      label: 'Kunlik daromad',
+      label: t('dailyRevenueLabel'),
       data: stats.dailyOrders.map(d => d.revenue),
       backgroundColor: 'rgba(99, 102, 241, 0.7)',
       borderRadius: 6,
@@ -68,7 +70,7 @@ export default function AdminAnalytics() {
   const dailyCountData = {
     labels: stats.dailyOrders.map(d => d._id.slice(5)),
     datasets: [{
-      label: 'Buyurtmalar',
+      label: t('ordersLabel'),
       data: stats.dailyOrders.map(d => d.count),
       backgroundColor: 'rgba(16, 185, 129, 0.7)',
       borderRadius: 6,
@@ -76,10 +78,10 @@ export default function AdminAnalytics() {
   };
 
   const statusLabels = {
-    kutilmoqda: 'Kutilmoqda',
-    qabul_qilindi: 'Qabul qilindi',
-    tayyorlanmoqda: 'Tayyorlanmoqda',
-    yetkazildi: 'Yetkazildi'
+    kutilmoqda: t('statusPending'),
+    qabul_qilindi: t('statusAccepted'),
+    tayyorlanmoqda: t('statusPreparing'),
+    yetkazildi: t('statusDelivered')
   };
 
   const statusData = {
@@ -132,7 +134,7 @@ export default function AdminAnalytics() {
   return (
     <div className="fade-in">
       <div className="admin-header">
-        <h1 className="admin-title">Analitika</h1>
+        <h1 className="admin-title">{t('analyticsTitle')}</h1>
       </div>
 
       {/* Key metrics */}
@@ -140,32 +142,32 @@ export default function AdminAnalytics() {
         <div className="stat-card">
           <div>
             <div className="stat-value">{stats.totalRevenue.toLocaleString()}</div>
-            <div className="stat-label">Jami daromad (so'm)</div>
+            <div className="stat-label">{t('totalRevenueLabel')}</div>
           </div>
         </div>
         <div className="stat-card">
           <div>
             <div className="stat-value">{avgOrderValue.toLocaleString()}</div>
-            <div className="stat-label">O'rtacha buyurtma qiymati</div>
+            <div className="stat-label">{t('avgOrderValueLabel')}</div>
           </div>
         </div>
         <div className="stat-card">
           <div>
             <div className="stat-value">{stats.totalOrders}</div>
-            <div className="stat-label">Jami buyurtmalar</div>
+            <div className="stat-label">{t('totalOrdersLabel')}</div>
           </div>
         </div>
         <div className="stat-card">
           <div>
             <div className="stat-value">{stats.totalUsers}</div>
-            <div className="stat-label">Jami foydalanuvchilar</div>
+            <div className="stat-label">{t('totalUsersLabel')}</div>
           </div>
         </div>
       </div>
 
       {/* Revenue chart */}
       <div className="chart-container" style={{ marginBottom: 'var(--space-6)' }}>
-        <h3 className="chart-title">Oylik daromad va buyurtmalar</h3>
+        <h3 className="chart-title">{t('monthlyRevenueOrdersChart')}</h3>
         <div style={{ height: 350 }}>
           <Line data={revenueData} options={dualAxisOpts} />
         </div>
@@ -174,13 +176,13 @@ export default function AdminAnalytics() {
       {/* Daily charts */}
       <div className="charts-grid">
         <div className="chart-container">
-          <h3 className="chart-title">Kunlik daromad (30 kun)</h3>
+          <h3 className="chart-title">{t('dailyRevenueChart')}</h3>
           <div style={{ height: 300 }}>
             <Bar data={dailyRevenueData} options={barOpts} />
           </div>
         </div>
         <div className="chart-container">
-          <h3 className="chart-title">Kunlik buyurtmalar (30 kun)</h3>
+          <h3 className="chart-title">{t('dailyOrdersChart')}</h3>
           <div style={{ height: 300 }}>
             <Bar data={dailyCountData} options={barOpts} />
           </div>
@@ -189,7 +191,7 @@ export default function AdminAnalytics() {
 
       {/* Status pie */}
       <div className="chart-container" style={{ marginTop: 'var(--space-6)', maxWidth: 500 }}>
-        <h3 className="chart-title">Buyurtma statuslari taqsimoti</h3>
+        <h3 className="chart-title">{t('orderStatusesDistributionChart')}</h3>
         <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Doughnut data={statusData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }} />
         </div>

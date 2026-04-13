@@ -22,6 +22,15 @@ export function CartProvider({ children }) {
   const addItem = (product, quantity = 1) => {
     setItems(prev => {
       const existing = prev.find(i => i.product === product._id);
+      const currentLang = localStorage.getItem('grandplast-lang') || 'uz';
+      const localizedName =
+        product[`name_${currentLang}`] ||
+        product.name_en ||
+        product.name_ru ||
+        product.name_uz ||
+        product.name ||
+        '';
+
       if (existing) {
         return prev.map(i =>
           i.product === product._id
@@ -31,7 +40,7 @@ export function CartProvider({ children }) {
       }
       return [...prev, {
         product: product._id,
-        name: product.name,
+        name: localizedName,
         price: product.price,
         image: product.image,
         stock: product.stock,

@@ -3,15 +3,9 @@ import { Search } from 'lucide-react';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
+import { CATALOG_CATEGORY_VALUES, getCategoryLabel } from '../utils/categoryTranslation';
 
-const categories = [
-  'Issiqxona plyonkasi',
-  'Termo-usadoz plyonka',
-  'Polietilen paketlar',
-  'PET kapsulalar',
-  'Tom yopish materiallari',
-  'Bitum-polimer mastika'
-];
+const categories = CATALOG_CATEGORY_VALUES;
 
 export default function ProductsPage() {
   const { t } = useLanguage();
@@ -92,7 +86,7 @@ export default function ProductsPage() {
                 transition: 'all 0.2s', whiteSpace: 'nowrap', fontFamily: 'var(--font-family)',
                 textTransform: 'uppercase', letterSpacing: '0.03em'
               }}>
-              {cat}
+              {getCategoryLabel(t, cat)}
             </button>
           ))}
 

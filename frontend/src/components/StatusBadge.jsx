@@ -1,15 +1,29 @@
-export const STATUS_LABELS = {
-  kutilmoqda: { label: 'Kutilmoqda', class: 'badge-warning', icon: '⏳' },
-  qabul_qilindi: { label: 'Qabul qilindi', class: 'badge-info', icon: '✅' },
-  tayyorlanmoqda: { label: 'Tayyorlanmoqda', class: 'badge-accent', icon: '🔨' },
-  yetkazildi: { label: 'Yetkazildi', class: 'badge-success', icon: '📦' }
+import { useLanguage } from '../context/LanguageContext';
+
+export const ORDER_STATUS_FLOW = ['kutilmoqda', 'qabul_qilindi', 'tayyorlanmoqda', 'yetkazildi'];
+
+export const ORDER_STATUS_META = {
+  kutilmoqda: { labelKey: 'statusPending', className: 'badge-warning', icon: '⏳' },
+  qabul_qilindi: { labelKey: 'statusAccepted', className: 'badge-info', icon: '✅' },
+  tayyorlanmoqda: { labelKey: 'statusPreparing', className: 'badge-accent', icon: '🛠️' },
+  yetkazildi: { labelKey: 'statusDelivered', className: 'badge-success', icon: '📦' },
 };
 
+export function getStatusIndex(status) {
+  return ORDER_STATUS_FLOW.indexOf(status);
+}
+
 export default function StatusBadge({ status }) {
-  const info = STATUS_LABELS[status] || { label: status, class: 'badge-info', icon: '📋' };
+  const { t } = useLanguage();
+  const info = ORDER_STATUS_META[status];
+
+  if (!info) {
+    return <span className="badge badge-info">📋 {status}</span>;
+  }
+
   return (
-    <span className={`badge ${info.class}`}>
-      {info.icon} {info.label}
+    <span className={`badge ${info.className}`}>
+      {info.icon} {t(info.labelKey)}
     </span>
   );
 }
