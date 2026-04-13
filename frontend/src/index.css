@@ -580,7 +580,7 @@ textarea.form-input {
   height: 48px; /* larger logo */
   width: auto;
   object-fit: contain;
-  filter: hue-rotate(0deg) saturate(5) brightness(0.9); /* red tint */
+  filter: none;
   transition: filter 0.3s ease;
 }
 
@@ -3549,14 +3549,14 @@ main,
 
 .gp-header__logo img {
   height: 52px;
-  filter: brightness(0) saturate(100%) invert(12%) sepia(97%) saturate(7422%) hue-rotate(4deg) brightness(96%) contrast(119%);
+  filter: none;
 }
 
 .admin-mobile-logo,
 .admin-sidebar-logo {
   width: auto;
   object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(12%) sepia(97%) saturate(7422%) hue-rotate(4deg) brightness(96%) contrast(119%);
+  filter: none;
 }
 
 .admin-mobile-logo {
@@ -3582,6 +3582,37 @@ main,
 }
 
 @media (max-width: 768px) {
+  .admin-layout {
+    display: block;
+  }
+
+  .admin-mobile-toggle {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    background: #0F172A;
+    color: #fff;
+    z-index: 260;
+  }
+
+  .admin-mobile-toggle button {
+    flex-shrink: 0;
+  }
+
+  .admin-sidebar,
+  .admin-sidebar.collapsed {
+    z-index: 320;
+  }
+
+  .admin-mobile-overlay {
+    z-index: 310;
+  }
+
   .home-hero {
     min-height: 78vh !important;
     padding-top: calc(var(--header-height) + 48px) !important;
@@ -3760,7 +3791,9 @@ main,
   }
 
   .admin-mobile-logo {
-    height: 36px;
+    height: 34px;
+    width: auto;
+    max-width: 140px;
   }
 
   .home-tech-card__specs > div {
