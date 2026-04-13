@@ -3532,10 +3532,14 @@ body,
 
 main,
 .fade-in,
-.admin-layout,
-.admin-main {
+.admin-layout {
   width: 100%;
   max-width: 100%;
+}
+
+.admin-main,
+.admin-main.collapsed {
+  box-sizing: border-box;
 }
 
 .gp-header__inner {
@@ -3560,11 +3564,12 @@ main,
 }
 
 .admin-mobile-logo {
-  height: 42px;
+  height: 40px;
 }
 
 .admin-sidebar-logo {
-  height: 34px;
+  height: 46px;
+  max-width: 180px;
 }
 
 .data-table-container {
@@ -3743,7 +3748,27 @@ main,
     width: 100% !important;
     padding: 14px 10px !important;
     padding-top: 68px !important;
+    overflow-x: clip !important;
+  }
 
+  .stats-grid,
+  .charts-grid,
+  .chart-container {
+    min-width: 0;
+  }
+
+  .chart-container {
+    overflow: hidden;
+  }
+
+  .chart-container > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .chart-container canvas {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .modal [style*="grid-template-columns: 1fr 1fr"],
@@ -3791,9 +3816,9 @@ main,
   }
 
   .admin-mobile-logo {
-    height: 34px;
+    height: 38px;
     width: auto;
-    max-width: 140px;
+    max-width: 160px;
   }
 
   .home-tech-card__specs > div {
@@ -3841,6 +3866,20 @@ main,
 
   .home-cta__btn {
     padding: 12px 14px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .admin-layout {
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  .admin-main,
+  .admin-main.collapsed {
+    width: auto !important;
+    max-width: none !important;
+    overflow-x: hidden;
   }
 }
 
