@@ -47,7 +47,7 @@ export default function AdminLayout() {
         <button onClick={() => setMobileOpen(!mobileOpen)} id="mobile-sidebar-toggle">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-        <img src="/logo.png" alt="OGP" style={{ height: 48, width: 'auto' }} />
+        <img src="/logo.png" alt="OGP" className="admin-mobile-logo" />
       </div>
 
       {/* Mobile overlay */}
@@ -57,7 +57,7 @@ export default function AdminLayout() {
 
       <aside className={`admin-sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
-          <img src="/logo.png" alt="OGP" className="sidebar-brand" style={{ height: 32, width: 'auto' }} />
+          <img src="/logo.png" alt="OGP" className="sidebar-brand admin-sidebar-logo" />
           <button
             className="sidebar-toggle"
             onClick={() => {

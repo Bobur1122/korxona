@@ -31,7 +31,7 @@ export default function HomePage() {
   return (
     <div className="fade-in" style={{ backgroundColor: 'var(--color-primary)' }}>
       {/* MASSIVE ENTERPRISE HERO WITH CAROUSEL */}
-      <section style={{ 
+      <section className="home-hero" style={{
         position: 'relative', 
         height: 'auto', 
         minHeight: '85vh',
@@ -69,11 +69,11 @@ export default function HomePage() {
           zIndex: 2
         }} />
 
-        <div className="container" style={{ position: 'relative', zIndex: 10, width: '100%', padding: '0 var(--space-4)', display: 'flex', flexWrap: 'wrap' }}>
-          <div style={{ maxWidth: 900, textAlign: 'left', margin: 'auto 0' }}>
+        <div className="container home-hero__container" style={{ position: 'relative', zIndex: 10, width: '100%', padding: '0 var(--space-4)', display: 'flex', flexWrap: 'wrap' }}>
+          <div className="home-hero__content" style={{ maxWidth: 900, textAlign: 'left', margin: 'auto 0' }}>
 
             
-            <h1 style={{ 
+            <h1 className="home-hero__title" style={{
               fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', 
               lineHeight: 1.1, 
               color: '#FFFFFF',
@@ -86,7 +86,7 @@ export default function HomePage() {
               {t('heroTitle3')}
             </h1>
             
-            <p style={{ 
+            <p className="home-hero__subtitle" style={{
               fontSize: '1.25rem', 
               color: '#CBD5E1', 
               maxWidth: 750, 
@@ -104,23 +104,23 @@ export default function HomePage() {
 
 
       {/* TECHNICAL SOLUTIONS */}
-      <section className="section" id="about">
+      <section className="section home-tech" id="about">
         <div className="container">
-          <div style={{ marginBottom: 60 }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('techSolutions')}</h2>
-            <p style={{ fontSize: '1.25rem', color: '#475569', maxWidth: 800 }}>
+          <div className="home-tech__head" style={{ marginBottom: 60 }}>
+            <h2 className="home-tech__title" style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('techSolutions')}</h2>
+            <p className="home-tech__subtitle" style={{ fontSize: '1.25rem', color: '#475569', maxWidth: 800 }}>
               {t('techDesc')}
             </p>
           </div>
           
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, alignItems: 'stretch' }}>
+          <div className="features-grid home-tech__grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, alignItems: 'stretch' }}>
             {/* Prod 1 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
+            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                 <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('agroTitle')}</h3>
+               <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                 <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('agroTitle')}</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Zavodimiz qalinligi 100 dan 200 mikrongacha bo'lgan ko'p qatlamli UV, IR va EVA qo'shimchali plyonkalarni ishlab chiqaradi.</p>
-                 <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+                 <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                       <span style={{ color: '#64748B', fontWeight: 500 }}>Maksimal kenglik:</span>
                       <span style={{ fontWeight: 800, color: '#0F172A' }}>12 Metrgacha</span>
@@ -139,12 +139,12 @@ export default function HomePage() {
             </div>
 
             {/* Prod 2 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
+            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                 <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('thermoTitle')}</h3>
+               <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                 <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('thermoTitle')}</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Guruhli va palletli qadoqlash uchun mo'ljallangan, avtomat uzatgichli liniyalar uchun ideal deformatsiya kuchi bo'lgan texnik plyonkalar.</p>
-                 <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+                 <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                       <span style={{ color: '#64748B', fontWeight: 500 }}>Uzilishdagi cho'zilish:</span>
                       <span style={{ fontWeight: 800, color: '#0F172A' }}>≥ 350% MD</span>
@@ -163,12 +163,12 @@ export default function HomePage() {
             </div>
             
             {/* Prod 3 */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
+            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                <img src="/images/logistics.png" alt="Bozor paketi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-               <div style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                 <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('logisticsTitle')}</h3>
+               <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                 <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('logisticsTitle')}</h3>
                  <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>Og'ir yuk tashish uchun xavfsizlik va mustahkamlikni ta'minlovchi ekstrudirovka qilingan polimer materiallar.</p>
-                 <div style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+                 <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                       <span style={{ color: '#64748B', fontWeight: 500 }}>Payvand choki:</span>
                       <span style={{ fontWeight: 800, color: '#E60000' }}>Plexus texnologiyasi</span>
@@ -254,16 +254,16 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section style={{ background: '#0F172A', padding: '100px 0', borderTop: '4px solid #00A651', color: '#FFFFFF', textAlign: 'center' }}>
+      <section className="home-cta" style={{ background: '#0F172A', padding: '100px 0', borderTop: '4px solid #00A651', color: '#FFFFFF', textAlign: 'center' }}>
         <div className="container">
-          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: 24, lineHeight: 1.1 }}>
+          <h2 className="home-cta__title" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: 24, lineHeight: 1.1 }}>
             {t('b2bOffer')}
           </h2>
-          <p style={{ color: '#94A3B8', maxWidth: 700, margin: '0 auto 40px', fontSize: '1.25rem', lineHeight: 1.6 }}>
+          <p className="home-cta__subtitle" style={{ color: '#94A3B8', maxWidth: 700, margin: '0 auto 40px', fontSize: '1.25rem', lineHeight: 1.6 }}>
             {t('b2bDesc')}
           </p>
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="mailto:info@grandplast.uz" style={{ 
+          <div className="home-cta__actions" style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="mailto:info@grandplast.uz" className="home-cta__btn home-cta__btn--primary" style={{
                 background: '#00A651', 
                 color: '#FFFFFF', 
                 padding: '16px 32px',
@@ -276,7 +276,7 @@ export default function HomePage() {
               }}>
               <FileText size={20} /> {t('requestOffer')}
             </a>
-            <a href="tel:+998996066333" style={{ 
+            <a href="tel:+998996066333" className="home-cta__btn home-cta__btn--ghost" style={{
                 background: 'transparent', 
                 color: '#FFFFFF', 
                 padding: '16px 32px',
