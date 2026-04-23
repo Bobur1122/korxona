@@ -19,6 +19,10 @@ const orderItemSchema = new mongoose.Schema({
     required: true,
     min: [1, 'Miqdor kamida 1 bo\'lishi kerak']
   },
+  costPrice: {
+    type: Number,
+    default: 0
+  },
   image: String
 }, { _id: false });
 

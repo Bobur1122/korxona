@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   description_en: { type: String, default: '', maxlength: 2000 },
 
   price: { type: Number, required: [true, 'Narx kiritilishi shart'], min: [0, 'Narx manfiy bo\'lishi mumkin emas'] },
+  costPrice: { type: Number, default: 0, min: [0, 'Tan narx manfiy bo\'lishi mumkin emas'] },
   stock: { type: Number, required: true, min: 0, default: 0 },
   image: { type: String, default: '' },
   category: {

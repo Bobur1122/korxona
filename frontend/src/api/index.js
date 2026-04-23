@@ -45,7 +45,7 @@ export const api = {
   validatePromo: (code) => request('/promo/validate', { method: 'POST', body: JSON.stringify({ code }) }),
   
   // Admin
-  getDashboard: () => request('/admin/dashboard'),
+  getDashboard: (params = '') => request(`/admin/dashboard?${params}`),
   getUsers: () => request('/admin/users'),
   updateUserRole: (id, role) => request(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
   deleteUser: (id) => request(`/admin/users/${id}`, { method: 'DELETE' }),

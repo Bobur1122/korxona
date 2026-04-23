@@ -10,7 +10,7 @@ const categories = [
   { value: 'boshqa', label: 'Boshqa' }
 ];
 
-const emptyForm = { name_uz: '', name_ru: '', name_en: '', description_uz: '', description_ru: '', description_en: '', price: '', stock: '', category: 'Issiqxona plyonkasi', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
+const emptyForm = { name_uz: '', name_ru: '', name_en: '', description_uz: '', description_ru: '', description_en: '', price: '', costPrice: '', stock: '', category: 'Issiqxona plyonkasi', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -49,6 +49,7 @@ export default function AdminProducts() {
       name_uz: product.name_uz || '', name_ru: product.name_ru || '', name_en: product.name_en || '',
       description_uz: product.description_uz || '', description_ru: product.description_ru || '', description_en: product.description_en || '',
       price: product.price,
+      costPrice: product.costPrice || '',
       stock: product.stock,
       category: product.category,
       image: product.image || '',
@@ -109,6 +110,7 @@ export default function AdminProducts() {
       const data = {
         ...form,
         price: Number(form.price),
+        costPrice: form.costPrice ? Number(form.costPrice) : 0,
         stock: Number(form.stock),
         thickness: form.thickness ? Number(form.thickness) : undefined,
         width: form.width ? Number(form.width) : undefined,
@@ -163,6 +165,7 @@ export default function AdminProducts() {
               <th>Kategoriya</th>
               <th>Qalinlik</th>
               <th>Narx</th>
+              <th>Tan narx</th>
               <th>Mavjud</th>
               <th>Holat</th>
               <th>Amallar</th>
@@ -182,6 +185,7 @@ export default function AdminProducts() {
                 <td>{categories.find(c => c.value === p.category)?.label || p.category}</td>
                 <td>{p.thickness ? `${p.thickness} mkm` : '—'}</td>
                 <td>{p.price.toLocaleString()} so'm</td>
+                <td style={{ color: 'var(--color-warning)' }}>{(p.costPrice || 0).toLocaleString()} so'm</td>
                 <td>
                   <span className={`badge ${p.stock > 0 ? 'badge-success' : 'badge-error'}`}>
                     {p.stock} dona
@@ -333,10 +337,14 @@ export default function AdminProducts() {
                 <label className="form-label">Tavsif ({langTab.toUpperCase()}) *</label>
                 <textarea className="form-input" name={`description_${langTab}`} value={form[`description_${langTab}`]} onChange={handleChange} required rows={3} placeholder={`Tavsif ${langTab.toUpperCase()} tilida`}></textarea>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 'var(--space-4)' }}>
                 <div className="form-group">
                   <label className="form-label">Narx (so'm)</label>
                   <input type="number" className="form-input" name="price" value={form.price} onChange={handleChange} required min="0" />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Tan narx (so'm)</label>
+                  <input type="number" className="form-input" name="costPrice" value={form.costPrice} onChange={handleChange} min="0" placeholder="0" style={{ borderColor: 'var(--color-warning)' }} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Mavjud soni</label>
