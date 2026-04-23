@@ -14,11 +14,17 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [activeImage, setActiveImage] = useState('');
 
   useEffect(() => {
     setLoading(true);
     api.getProduct(id)
-      .then(res => setProduct(res.data))
+      .then(res => {
+        const p = res.data;
+        setProduct(p);
+        const imgs = Array.isArray(p.images) && p.images.length ? p.images : (p.image ? [p.image] : []);
+        setActiveImage(imgs[0] || '');
+      })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
   }, [id]);
@@ -50,6 +56,8 @@ export default function ProductDetailPage() {
   const productName = tl(product, 'name') || product.name;
   const productDesc = tl(product, 'description') || product.description;
   const categoryLabel = getCategoryLabel(t, product.category);
+  const images = Array.isArray(product.images) && product.images.length ? product.images : (product.image ? [product.image] : []);
+  const mainImage = activeImage || images[0] || '';
 
   return (
     <div className="fade-in" style={{ paddingTop: 'calc(var(--header-height, 72px) + 32px)', paddingBottom: 60, background: '#fff', minHeight: '100vh' }}>
@@ -67,13 +75,38 @@ export default function ProductDetailPage() {
 
         <div className="product-detail-grid">
           {/* Image */}
-          <div style={{ background: '#F8FAFC', borderRadius: 16, border: '1px solid #E2E8F0', padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#F8FAFC', borderRadius: 16, border: '1px solid #E2E8F0', padding: 16 }}>
             <img
-              src={product.image || `https://placehold.co/600x400/f0fdf4/16a34a?text=${encodeURIComponent(productName)}`}
+              src={mainImage || `https://placehold.co/600x400/f0fdf4/16a34a?text=${encodeURIComponent(productName)}`}
               alt={productName}
               className="product-detail-image"
               style={{ border: 'none', background: 'transparent' }}
             />
+
+            {images.length > 1 && (
+              <div style={{ marginTop: 12, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                {images.map((url) => (
+                  <button
+                    key={url}
+                    type="button"
+                    onClick={() => setActiveImage(url)}
+                    style={{
+                      width: 74,
+                      height: 54,
+                      padding: 0,
+                      borderRadius: 10,
+                      border: (mainImage === url) ? '2px solid #00A651' : '1px solid #E2E8F0',
+                      overflow: 'hidden',
+                      background: '#fff',
+                      cursor: 'pointer',
+                    }}
+                    title="Rasmni ko'rish"
+                  >
+                    <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Info */}

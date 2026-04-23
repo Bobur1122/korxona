@@ -7,6 +7,9 @@ export default function ProductCard({ product }) {
   const { t, tl } = useLanguage();
   const name = tl(product, 'name');
   const categoryLabel = getCategoryLabel(t, product.category);
+  const images = Array.isArray(product.images) && product.images.length
+    ? product.images
+    : (product.image ? [product.image] : []);
   
   const getFallbackImage = (productName) => {
     const s = (productName || '').toLowerCase();
@@ -25,9 +28,9 @@ export default function ProductCard({ product }) {
     return fallbacks[s.length % 4];
   };
 
-  const imgSrc = (product.image && product.image !== '' && product.image !== 'no-image.jpg') 
-      ? product.image 
-      : getFallbackImage(name);
+  const imgSrc = images[0] && images[0] !== '' && images[0] !== 'no-image.jpg'
+    ? images[0]
+    : getFallbackImage(name);
 
   return (
     <Link 
@@ -74,6 +77,23 @@ export default function ProductCard({ product }) {
         zIndex: 1,
         pointerEvents: 'none'
       }} />
+
+      {images.length > 1 && (
+        <div style={{
+          position: 'absolute', top: 14, left: 14, zIndex: 3,
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '6px 10px',
+          borderRadius: 999,
+          background: 'rgba(15,23,42,0.7)',
+          color: '#fff',
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: '0.2px'
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: 999, background: '#A78BFA', display: 'inline-block' }} />
+          {images.length} ta rasm
+        </div>
+      )}
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24, zIndex: 2, display: 'flex', flexDirection: 'column' }}>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#FFFFFF', marginBottom: 8, lineHeight: 1.3, letterSpacing: '0.3px' }}>{name}</h3>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#ffffffff', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>

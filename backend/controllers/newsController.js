@@ -1,4 +1,5 @@
 const News = require('../models/News');
+const { buildCreatedAtFilter } = require('../utils/dateRange');
 
 // GET /api/news (public)
 const getNews = async (req, res, next) => {
@@ -27,7 +28,15 @@ const getNewsById = async (req, res, next) => {
 // GET /api/news/all (admin)
 const getAllNews = async (req, res, next) => {
   try {
-    const news = await News.find().sort({ createdAt: -1 });
+    const { startDate, endDate, category, isActive } = req.query;
+    const createdAt = buildCreatedAtFilter(startDate, endDate);
+
+    const query = {};
+    if (createdAt) query.createdAt = createdAt;
+    if (category) query.category = category;
+    if (typeof isActive !== 'undefined' && isActive !== '') query.isActive = isActive === 'true';
+
+    const news = await News.find(query).sort({ createdAt: -1 });
     res.json({ success: true, data: news });
   } catch (error) { next(error); }
 };

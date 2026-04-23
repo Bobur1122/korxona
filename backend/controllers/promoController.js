@@ -1,9 +1,18 @@
 const PromoCode = require('../models/PromoCode');
+const { buildCreatedAtFilter } = require('../utils/dateRange');
 
 // GET /api/promo
 const getPromoCodes = async (req, res, next) => {
   try {
-    const codes = await PromoCode.find().sort({ createdAt: -1 });
+    const { startDate, endDate, isActive, search } = req.query;
+    const createdAt = buildCreatedAtFilter(startDate, endDate);
+
+    const query = {};
+    if (createdAt) query.createdAt = createdAt;
+    if (typeof isActive !== 'undefined' && isActive !== '') query.isActive = isActive === 'true';
+    if (search) query.code = { $regex: search, $options: 'i' };
+
+    const codes = await PromoCode.find(query).sort({ createdAt: -1 });
     res.json({ success: true, data: codes });
   } catch (error) {
     next(error);

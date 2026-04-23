@@ -43,6 +43,7 @@ export function CartProvider({ children }) {
         name: localizedName,
         price: product.price,
         image: product.image,
+        images: product.images,
         stock: product.stock,
         quantity
       }];

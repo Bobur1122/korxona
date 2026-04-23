@@ -115,7 +115,7 @@ export default function CartPage() {
             {items.map(item => (
               <div key={item.product} className="cart-item">
                 <img
-                  src={item.image || `https://placehold.co/100x100/f1f5f9/64748b?text=${encodeURIComponent(item.name)}`}
+                  src={(Array.isArray(item.images) && item.images.length ? item.images[0] : item.image) || `https://placehold.co/100x100/f1f5f9/64748b?text=${encodeURIComponent(item.name)}`}
                   alt={item.name}
                   className="cart-item-image"
                 />

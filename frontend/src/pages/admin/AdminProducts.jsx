@@ -1,49 +1,95 @@
-import { useState, useEffect, useRef } from 'react';
-import { Plus, Edit, Trash2, X, Upload, Image } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Plus, Edit, Trash2, X, Upload, Languages } from 'lucide-react';
 import { api } from '../../api';
+import { rangeLastDays, rangeThisMonth, prevRange, pctChange } from '../../utils/datePeriod';
 
 const categories = [
-  { value: 'oddiy', label: 'Oddiy plyonka' },
-  { value: 'uv_plyonka', label: 'UV himoyali' },
-  { value: 'kop_qavatli', label: "Ko'p qavatli" },
-  { value: 'maxsus', label: 'Maxsus plyonka' },
-  { value: 'boshqa', label: 'Boshqa' }
+  { value: 'Issiqxona plyonkasi', label: 'Issiqxona plyonkasi' },
+  { value: 'Termo-usadoz plyonka', label: 'Termo-usadoz plyonka' },
+  { value: 'Polietilen paketlar', label: 'Polietilen paketlar' },
+  { value: 'PET kapsulalar', label: 'PET kapsulalar' },
+  { value: 'Tom yopish materiallari', label: 'Tom yopish materiallari' },
+  { value: 'Bitum-polimer mastika', label: 'Bitum-polimer mastika' }
 ];
 
-const emptyForm = { name_uz: '', name_ru: '', name_en: '', description_uz: '', description_ru: '', description_en: '', price: '', costPrice: '', stock: '', category: 'Issiqxona plyonkasi', image: '', thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
+const emptyForm = { name_uz: '', name_ru: '', name_en: '', description_uz: '', description_ru: '', description_en: '', price: '', costPrice: '', stock: '', category: 'Issiqxona plyonkasi', image: '', images: [], thickness: '', width: '', length: '', uvProtection: false, color: 'shaffof', isActive: true };
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [activeFilter, setActiveFilter] = useState('');
+  const [prevCount, setPrevCount] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [imagePreview, setImagePreview] = useState('');
   const [langTab, setLangTab] = useState('uz');
+  const [translating, setTranslating] = useState(false);
   const fileInputRef = useRef(null);
+  const modalRef = useRef(null);
 
-  const fetchProducts = () => {
+  useEffect(() => {
+    const t = setTimeout(() => setSearch(searchInput.trim()), 350);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  const fetchProducts = useCallback(() => {
     setLoading(true);
-    api.getAllProducts()
+    const params = new URLSearchParams();
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
+    if (search) params.set('search', search);
+    if (categoryFilter) params.set('category', categoryFilter);
+    if (activeFilter !== '') params.set('isActive', activeFilter);
+
+    api.getAllProducts(params.toString())
       .then(res => setProducts(res.data))
       .catch(() => {})
       .finally(() => setLoading(false));
-  };
+  }, [startDate, endDate, search, categoryFilter, activeFilter]);
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+
+  useEffect(() => {
+    if (!startDate || !endDate) {
+      setPrevCount(null);
+      return;
+    }
+
+    const prev = prevRange(startDate, endDate);
+    const params = new URLSearchParams();
+    params.set('startDate', prev.start);
+    params.set('endDate', prev.end);
+    if (search) params.set('search', search);
+    if (categoryFilter) params.set('category', categoryFilter);
+    if (activeFilter !== '') params.set('isActive', activeFilter);
+
+    setStatsLoading(true);
+    api.getAllProducts(params.toString())
+      .then(res => setPrevCount(res.data.length))
+      .catch(() => setPrevCount(null))
+      .finally(() => setStatsLoading(false));
+  }, [startDate, endDate, search, categoryFilter, activeFilter]);
 
   const openCreate = () => {
     setEditing(null);
     setForm(emptyForm);
-    setImagePreview('');
     setError('');
     setShowModal(true);
   };
 
   const openEdit = (product) => {
+    const images = Array.isArray(product.images) && product.images.length
+      ? product.images
+      : (product.image ? [product.image] : []);
     setEditing(product._id);
     setForm({
       name_uz: product.name_uz || '', name_ru: product.name_ru || '', name_en: product.name_en || '',
@@ -52,7 +98,8 @@ export default function AdminProducts() {
       costPrice: product.costPrice || '',
       stock: product.stock,
       category: product.category,
-      image: product.image || '',
+      image: images[0] || '',
+      images,
       thickness: product.thickness || '',
       width: product.width || '',
       length: product.length || '',
@@ -60,23 +107,21 @@ export default function AdminProducts() {
       color: product.color || 'shaffof',
       isActive: product.isActive
     });
-    setImagePreview(product.image || '');
     setError('');
     setLangTab('uz');
     setShowModal(true);
   };
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const uploadImageFile = useCallback(async (file) => {
+    if (!file) return null;
 
-    // Show preview immediately
-    const reader = new FileReader();
-    reader.onload = (e) => setImagePreview(e.target.result);
-    reader.readAsDataURL(file);
+    const maxBytes = 5 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setError('Rasm hajmi 5MB dan oshmasligi kerak');
+      return null;
+    }
 
-    // Upload to server
-    setUploading(true);
+    setError('');
     try {
       const formData = new FormData();
       formData.append('image', file);
@@ -90,17 +135,93 @@ export default function AdminProducts() {
       });
 
       const data = await res.json();
-      if (data.success) {
-        setForm(prev => ({ ...prev, image: data.data.url }));
-      } else {
-        setError(data.message || 'Rasm yuklashda xato');
-      }
+      if (data.success) return data.data.url;
+      setError(data.message || 'Rasm yuklashda xato');
     } catch (err) {
       setError('Rasm yuklashda xato yuz berdi');
+    }
+
+    return null;
+  }, []);
+
+  const addImages = useCallback(async (filesLike) => {
+    const files = Array.from(filesLike || []).filter(f => f?.type?.startsWith('image/'));
+    if (!files.length) return;
+
+    setUploading(true);
+    try {
+      for (const file of files) {
+        const url = await uploadImageFile(file);
+        if (!url) continue;
+        setForm(prev => {
+          const current = Array.isArray(prev.images) ? prev.images : (prev.image ? [prev.image] : []);
+          const nextImages = [...current, url];
+          return { ...prev, images: nextImages, image: nextImages[0] || '' };
+        });
+      }
     } finally {
       setUploading(false);
     }
+  }, [uploadImageFile]);
+
+  const handleImageUpload = (e) => {
+    const files = e.target.files;
+    if (!files || !files.length) return;
+    addImages(files);
+    e.target.value = '';
   };
+
+  const removeImage = (url) => {
+    setForm(prev => {
+      const current = Array.isArray(prev.images) ? prev.images : (prev.image ? [prev.image] : []);
+      const nextImages = current.filter(u => u !== url);
+      return { ...prev, images: nextImages, image: nextImages[0] || '' };
+    });
+  };
+
+  const makePrimary = (url) => {
+    setForm(prev => {
+      const current = Array.isArray(prev.images) ? prev.images : (prev.image ? [prev.image] : []);
+      const idx = current.indexOf(url);
+      if (idx <= 0) return prev;
+      const nextImages = [current[idx], ...current.slice(0, idx), ...current.slice(idx + 1)];
+      return { ...prev, images: nextImages, image: nextImages[0] || '' };
+    });
+  };
+
+  useEffect(() => {
+    if (!showModal) return;
+
+    const getPastedImages = (clipboardData) => {
+      if (!clipboardData) return [];
+
+      const fromFiles = clipboardData.files
+        ? Array.from(clipboardData.files).filter(f => f.type?.startsWith('image/'))
+        : [];
+      if (fromFiles.length) return fromFiles;
+
+      const out = [];
+      const items = clipboardData.items ? Array.from(clipboardData.items) : [];
+      for (const item of items) {
+        if (item.kind === 'file' && item.type?.startsWith('image/')) {
+          const f = item.getAsFile();
+          if (f) out.push(f);
+        }
+      }
+      return out;
+    };
+
+    const onPaste = (e) => {
+      const files = getPastedImages(e.clipboardData);
+      if (!files.length) return;
+
+      e.preventDefault();
+      addImages(files);
+    };
+
+    document.addEventListener('paste', onPaste);
+    return () => document.removeEventListener('paste', onPaste);
+  }, [showModal, addImages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,7 +266,11 @@ export default function AdminProducts() {
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  if (loading) return <div className="loading-page"><div className="spinner"></div></div>;
+  const currentImages = Array.isArray(form.images) ? form.images : (form.image ? [form.image] : []);
+  const currentCount = products.length;
+  const change = (startDate && endDate && prevCount !== null) ? pctChange(currentCount, prevCount) : undefined;
+
+  if (loading && products.length === 0) return <div className="loading-page"><div className="spinner"></div></div>;
 
   return (
     <div className="fade-in">
@@ -154,6 +279,120 @@ export default function AdminProducts() {
         <button className="btn btn-primary" onClick={openCreate} id="add-product-btn">
           <Plus size={18} /> Yangi mahsulot
         </button>
+      </div>
+
+      {/* Filters */}
+      <div style={{
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-xl)',
+        padding: 'var(--space-4)',
+        marginBottom: 'var(--space-5)'
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr 1fr 0.9fr', gap: 'var(--space-3)' }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Boshlanish sana</label>
+            <input type="date" className="form-input" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Tugash sana</label>
+            <input type="date" className="form-input" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Qidiruv</label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Nomi yoki tavsif..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Kategoriya</label>
+            <select className="form-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+              <option value="">Barchasi</option>
+              {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Holat</label>
+            <select className="form-select" value={activeFilter} onChange={(e) => setActiveFilter(e.target.value)}>
+              <option value="">Barchasi</option>
+              <option value="true">Faol</option>
+              <option value="false">Nofaol</option>
+            </select>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginTop: 'var(--space-3)', alignItems: 'center' }}>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeLastDays(7);
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Oxirgi 7 kun
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeLastDays(30);
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Oxirgi 30 kun
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeThisMonth();
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Bu oy
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              setStartDate('');
+              setEndDate('');
+              setSearchInput('');
+              setCategoryFilter('');
+              setActiveFilter('');
+            }}
+          >
+            Tozalash
+          </button>
+
+          <div style={{ marginLeft: 'auto', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+            {statsLoading ? 'Hisoblanmoqda...' : (
+              <>
+                {currentCount} ta
+                {(startDate && endDate && prevCount !== null) && (
+                  <span style={{
+                    marginLeft: 10,
+                    color: (change === null || (typeof change === 'number' && change > 0))
+                      ? 'var(--color-success)'
+                      : (typeof change === 'number' && change < 0)
+                        ? 'var(--color-error)'
+                        : 'var(--color-text-muted)'
+                  }}>
+                    {change === null ? 'Yangi' : (typeof change === 'number' ? `${change > 0 ? '+' : ''}${change}%` : '')}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="data-table-container">
@@ -176,7 +415,7 @@ export default function AdminProducts() {
               <tr key={p._id}>
                 <td>
                   <img
-                    src={p.image || `https://placehold.co/40x40/f0fdf4/16a34a?text=${p.name[0]}`}
+                    src={(Array.isArray(p.images) && p.images.length ? p.images[0] : p.image) || `https://placehold.co/40x40/f0fdf4/16a34a?text=${p.name[0]}`}
                     alt={p.name}
                     style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
                   />
@@ -221,7 +460,7 @@ export default function AdminProducts() {
       {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
+          <div ref={modalRef} className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)' }}>
               <h2 className="modal-title" style={{ margin: 0 }}>
                 {editing ? 'Mahsulotni tahrirlash' : 'Yangi mahsulot'}
@@ -236,44 +475,84 @@ export default function AdminProducts() {
             <form onSubmit={handleSubmit}>
               {/* Image Upload */}
               <div className="form-group">
-                <label className="form-label">Mahsulot rasmi</label>
-                <div style={{
-                  border: '2px dashed var(--color-border)',
-                  borderRadius: 'var(--radius-xl)',
-                  padding: 'var(--space-5)',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all var(--transition-fast)',
-                  background: imagePreview ? 'var(--color-bg)' : 'transparent'
-                }}
-                  onClick={() => fileInputRef.current?.click()}
+                <label className="form-label">Mahsulot rasmlari</label>
+                <div
+                  style={{
+                    border: '2px dashed var(--color-border)',
+                    borderRadius: 'var(--radius-xl)',
+                    padding: 'var(--space-5)',
+                    textAlign: 'center',
+                    cursor: currentImages.length ? 'default' : 'pointer',
+                    transition: 'all var(--transition-fast)',
+                    background: currentImages.length ? 'var(--color-bg)' : 'transparent'
+                  }}
+                  onClick={() => { if (!currentImages.length) fileInputRef.current?.click(); }}
                   onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
                   onDragLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                   onDrop={(e) => {
                     e.preventDefault();
                     e.currentTarget.style.borderColor = 'var(--color-border)';
-                    const file = e.dataTransfer.files[0];
-                    if (file) {
-                      const dt = new DataTransfer();
-                      dt.items.add(file);
-                      fileInputRef.current.files = dt.files;
-                      handleImageUpload({ target: { files: [file] } });
-                    }
+                    const files = e.dataTransfer.files;
+                    if (files && files.length) addImages(files);
                   }}
                 >
-                  {imagePreview ? (
-                    <div style={{ position: 'relative' }}>
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
+                  {currentImages.length ? (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: 'var(--space-3)' }}>
+                      {currentImages.map((url, idx) => (
+                        <div key={url} style={{ position: 'relative' }}>
+                          <img
+                            src={url}
+                            alt=""
+                            onClick={() => makePrimary(url)}
+                            title={idx === 0 ? 'Asosiy rasm' : 'Asosiy qilish uchun bosing'}
+                            style={{
+                              width: '100%',
+                              height: 80,
+                              objectFit: 'cover',
+                              borderRadius: 'var(--radius-lg)',
+                              cursor: 'pointer',
+                              border: idx === 0 ? '2px solid var(--color-accent)' : '1px solid var(--color-border)'
+                            }}
+                          />
+                          {idx === 0 && (
+                            <span style={{
+                              position: 'absolute', left: 8, top: 8,
+                              background: 'rgba(0,0,0,0.65)', color: '#fff',
+                              fontSize: 11, fontWeight: 700,
+                              padding: '2px 8px', borderRadius: 999
+                            }}>
+                              Asosiy
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => removeImage(url)}
+                            className="btn btn-ghost btn-sm"
+                            style={{ position: 'absolute', right: 6, top: 6, background: 'rgba(255,255,255,0.9)' }}
+                            title="O'chirish"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
                         style={{
-                          maxHeight: 180, maxWidth: '100%', objectFit: 'contain',
-                          borderRadius: 'var(--radius-lg)', margin: '0 auto'
+                          height: 80,
+                          borderRadius: 'var(--radius-lg)',
+                          border: '1px dashed var(--color-border)',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: 'var(--color-text-muted)'
                         }}
-                      />
-                      <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--space-2)' }}>
-                        Boshqa rasm tanlash uchun bosing
-                      </p>
+                        title="Yana rasm qo'shish"
+                      >
+                        <Upload size={18} />
+                      </button>
                     </div>
                   ) : (
                     <div>
@@ -295,6 +574,9 @@ export default function AdminProducts() {
                       <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
                         JPG, PNG, WEBP • Maks. 5MB
                       </p>
+                      <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: 6 }}>
+                        Ctrl+V orqali ham rasm qo'shishingiz mumkin
+                      </p>
                     </div>
                   )}
                 </div>
@@ -302,6 +584,7 @@ export default function AdminProducts() {
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleImageUpload}
                   style={{ display: 'none' }}
                   id="product-image-upload"
@@ -314,7 +597,7 @@ export default function AdminProducts() {
               </div>
 
               {/* Language Tabs */}
-              <div style={{ display: 'flex', gap: 0, marginBottom: 'var(--space-4)', borderBottom: '2px solid var(--color-border)' }}>
+              <div style={{ display: 'flex', gap: 0, marginBottom: 'var(--space-4)', borderBottom: '2px solid var(--color-border)', alignItems: 'center' }}>
                 {['uz', 'ru', 'en'].map(lang => (
                   <button key={lang} type="button" onClick={() => setLangTab(lang)}
                     style={{
@@ -328,6 +611,47 @@ export default function AdminProducts() {
                     {form[`name_${lang}`] && form[`description_${lang}`] ? ' ✓' : ' *'}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  disabled={translating || !form[`name_${langTab}`]}
+                  onClick={async () => {
+                    if (!form[`name_${langTab}`]) return;
+                    setTranslating(true);
+                    setError('');
+                    try {
+                      const res = await api.translate(
+                        { name: form[`name_${langTab}`], description: form[`description_${langTab}`] || '' },
+                        langTab
+                      );
+                      if (res.success) {
+                        setForm(prev => {
+                          const updated = { ...prev };
+                          for (const [lang, fields] of Object.entries(res.data)) {
+                            if (fields.name) updated[`name_${lang}`] = fields.name;
+                            if (fields.description) updated[`description_${lang}`] = fields.description;
+                          }
+                          return updated;
+                        });
+                      }
+                    } catch (err) {
+                      setError('Tarjima xatosi: ' + err.message);
+                    } finally {
+                      setTranslating(false);
+                    }
+                  }}
+                  style={{
+                    marginLeft: 'auto', padding: '6px 14px', fontSize: 'var(--font-size-xs)',
+                    fontWeight: 600, border: '1.5px solid var(--color-accent)', borderRadius: 'var(--radius-lg)',
+                    background: translating ? 'var(--color-accent-bg)' : 'transparent',
+                    color: 'var(--color-accent)', cursor: translating ? 'wait' : 'pointer',
+                    display: 'flex', alignItems: 'center', gap: 6, marginBottom: '-2px',
+                    transition: 'all 0.2s ease', fontFamily: 'var(--font-family)',
+                    opacity: !form[`name_${langTab}`] ? 0.4 : 1
+                  }}
+                >
+                  <Languages size={14} />
+                  {translating ? 'Tarjima...' : `Boshqa tillarga tarjima`}
+                </button>
               </div>
               <div className="form-group">
                 <label className="form-label">Nomi ({langTab.toUpperCase()}) *</label>

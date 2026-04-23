@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { ArrowRight, FileText, PhoneCall, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, PhoneCall } from 'lucide-react';
 import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
@@ -42,7 +42,7 @@ const heroSlides = [
     id: 5,
     image: '/images/hero_slider/logic.png',
     title: "Hamkorlik va Barqarorlik",
-    subtitle: "O'zbekiston bo'ylab distribyutorlar tarmog'iga qo'shiling. Sifatli plyonka – muvaffaqiyatli savdo garovi.",
+    subtitle: "O'zbekiston bo'ylab distribyutorlar tarmog'iga qo'shiling. Sifatli plyonka вЂ“ muvaffaqiyatli savdo garovi.",
     bgColor: "#312e81",
     reverse: false
   }
@@ -54,14 +54,27 @@ export default function HomePage() {
   const [currentHeroBlock, setCurrentHeroBlock] = useState(0);
 
   useEffect(() => {
-    api.getProducts('limit=6&sort=popular').then(res => setFeatured(res.data)).catch(() => { });
+    let alive = true;
+
+    const fetchFeatured = () => {
+      api.getProducts('limit=8')
+        .then(res => { if (alive) setFeatured(res.data); })
+        .catch(() => { });
+    };
+
+    fetchFeatured();
+    const refreshInterval = setInterval(fetchFeatured, 60000);
 
     // Carousel logic
     const interval = setInterval(() => {
       setCurrentHeroBlock((prev) => (prev + 1) % heroSlides.length);
     }, 10000); // Change every 15 seconds
 
-    return () => clearInterval(interval);
+    return () => {
+      alive = false;
+      clearInterval(interval);
+      clearInterval(refreshInterval);
+    };
   }, []);
 
   return (
@@ -175,21 +188,21 @@ export default function HomePage() {
       {/* TECHNICAL SOLUTIONS */}
       <section className="section home-tech" id="about">
         <div className="container">
-          <div className="home-tech__head" style={{ marginBottom: 60 }}>
-            <h2 className="home-tech__title" style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('techSolutions')}</h2>
-            <p className="home-tech__subtitle" style={{ fontSize: '1.25rem', color: '#475569', maxWidth: 800 }}>
+          <div className="home-tech__head" style={{ marginBottom: 36 }}>
+            <h2 className="home-tech__title" style={{ fontSize: '2.1rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('techSolutions')}</h2>
+            <p className="home-tech__subtitle" style={{ fontSize: '1.05rem', color: '#475569', maxWidth: 800 }}>
               {t('techDesc')}
             </p>
           </div>
 
-          <div className="features-grid home-tech__grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, alignItems: 'stretch' }}>
+          <div className="features-grid home-tech__grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18, alignItems: 'stretch' }}>
             {/* Prod 1 */}
             <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('agroTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>{t('agroDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+              <img src="/images/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
+              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('agroTitle')}</h3>
+                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('agroDesc')}</p>
+                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                     <span style={{ color: '#64748B', fontWeight: 500 }}>{t('agroSpecWidthLabel')}:</span>
                     <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('agroSpecWidthValue')}</span>
@@ -209,11 +222,11 @@ export default function HomePage() {
 
             {/* Prod 2 */}
             <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('thermoTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>{t('thermoDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+              <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
+              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('thermoTitle')}</h3>
+                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('thermoDesc')}</p>
+                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                     <span style={{ color: '#64748B', fontWeight: 500 }}>{t('thermoSpecStretchLabel')}:</span>
                     <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('thermoSpecStretchValue')}</span>
@@ -233,11 +246,11 @@ export default function HomePage() {
 
             {/* Prod 3 */}
             <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/logistics.png" alt="Bozor paketi" style={{ width: '100%', height: 240, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 32, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0F172A', marginBottom: 16 }}>{t('logisticsTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 24, lineHeight: 1.6 }}>{t('logisticsDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 24, borderRadius: 8, marginBottom: 24, border: '1px solid #E2E8F0' }}>
+              <img src="/images/logistics.png" alt="Bozor paketi" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
+              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('logisticsTitle')}</h3>
+                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('logisticsDesc')}</p>
+                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
                     <span style={{ color: '#64748B', fontWeight: 500 }}>{t('logisticsSpecSeamLabel')}:</span>
                     <span style={{ fontWeight: 800, color: '#E60000' }}>{t('logisticsSpecSeamValue')}</span>
@@ -275,7 +288,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="products-grid">
-              {[1, 2, 3, 4].map(i => (
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
                 <div key={i} className="skeleton-card" style={{ background: '#E2E8F0', height: 350, borderRadius: 8 }}></div>
               ))}
             </div>
@@ -323,31 +336,71 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="home-cta" style={{ background: '#0F172A', padding: '100px 0', borderTop: '4px solid #00A651', color: '#FFFFFF' }}>
-        <div className="container">
-          <div className="home-cta__shell">
-            <h2 className="home-cta__title" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: 24, lineHeight: 1.1 }}>
-              {t('b2bOffer')}
-            </h2>
+      <section style={{ position: 'relative', borderTop: '4px solid #00A651', background: '#0B1220' }}>
+        <div
+          style={{
+            position: 'relative',
+            minHeight: 540,
+            backgroundImage: 'url(/images/b2b/b2b.jpeg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(110deg, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.45) 55%, rgba(2,6,23,0.84) 100%)',
+            }}
+          />
 
-            <p className="home-cta__subtitle" style={{ color: '#94A3B8', maxWidth: 740, margin: '0 auto 40px', fontSize: '1.25rem', lineHeight: 1.6 }}>
-              {t('b2bDesc')}
-            </p>
+          <div className="container" style={{  position: 'relative', padding: '110px 0 90px' }}>
+            <div style={{ maxWidth: 410 }}>
+              <h2 style={{
+                margin: '0 0 14px',
+                fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
+                fontWeight: 900,
+                lineHeight: 1.05,
+                color: '#fff',
+              }}>
+                Katta hajmli buyurtmalar uchun ishlab chiqaruvchidan to'g'ridan-to'g'ri
+              </h2>
 
-            <div className="home-cta__benefits">
-              <div className="home-cta__benefit"><CheckCircle2 size={16} /> {t('b2bBenefit1')}</div>
-              <div className="home-cta__benefit"><CheckCircle2 size={16} /> {t('b2bBenefit2')}</div>
-              <div className="home-cta__benefit"><CheckCircle2 size={16} /> {t('b2bBenefit3')}</div>
-              <div className="home-cta__benefit"><CheckCircle2 size={16} /> {t('b2bBenefit4')}</div>
-            </div>
+              <p style={{
+                margin: 0,
+                maxWidth: 720,
+                fontSize: '1.2rem',
+                lineHeight: 1.65,
+                color: '#CBD5E1',
+              }}>
+                Individual narxlar, barqaror yetkazib berish, eksport hujjatlari va logistika yordami — hammasi bir joyda.
+              </p>
 
-            <div className="home-cta__actions" style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="mailto:info@grandplast.uz" className="home-cta__btn home-cta__btn--primary" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <FileText size={20} /> {t('requestOffer')}
-              </a>
-              <a href="tel:+998996066333" className="home-cta__btn home-cta__btn--ghost" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <PhoneCall size={18} /> {t('headOffice')}: +998 99 606 63 33
-              </a>
+              <div style={{
+                marginTop: 22,
+                display: 'flex',
+                gap: 14,
+                flexWrap: 'wrap',
+                alignItems: 'center'
+              }}>
+                <a
+                  href="tel:+998996066333"
+                  className="btn btn-ghost"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    padding: '12px 18px',
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(255,255,255,0.16)',
+                    color: '#fff'
+                  }}
+                >
+                  <PhoneCall size={18} /> +998 99 606 63 33
+                </a>
+              </div>
+
             </div>
           </div>
         </div>
@@ -355,4 +408,3 @@ export default function HomePage() {
     </div>
   );
 }
-

@@ -1,17 +1,49 @@
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const { buildCreatedAtFilter } = require('../utils/dateRange');
+
+function normalizeProductImages(body, { keepMissing = false } = {}) {
+  const next = { ...(body || {}) };
+
+  const hasImage = Object.prototype.hasOwnProperty.call(next, 'image');
+  const hasImages = Object.prototype.hasOwnProperty.call(next, 'images');
+
+  if (keepMissing && !hasImage && !hasImages) return next;
+
+  const images = Array.isArray(next.images)
+    ? next.images.filter((u) => typeof u === 'string' && u.trim() !== '')
+    : undefined;
+
+  const image = typeof next.image === 'string' ? next.image.trim() : undefined;
+
+  if (images && images.length) {
+    next.images = images;
+    next.image = images[0];
+  } else if (image) {
+    next.image = image;
+    next.images = [image];
+  } else {
+    next.image = '';
+    next.images = [];
+  }
+
+  return next;
+}
 
 // GET /api/products
 const getProducts = async (req, res, next) => {
   try {
     const { search, category, minPrice, maxPrice, sort, page = 1, limit = 12 } = req.query;
-    const query = { isActive: true };
+    // Treat legacy products with missing `isActive` as active.
+    const query = { isActive: { $ne: false } };
 
     if (search) {
       query.$or = [
+        { name: { $regex: search, $options: 'i' } },
         { name_uz: { $regex: search, $options: 'i' } },
         { name_ru: { $regex: search, $options: 'i' } },
         { name_en: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
         { description_uz: { $regex: search, $options: 'i' } }
       ];
     }
@@ -83,7 +115,11 @@ const getProducts = async (req, res, next) => {
 // GET /api/products/:id
 const getProduct = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { viewCount: 1 } },
+      { new: true }
+    );
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -99,7 +135,7 @@ const getProduct = async (req, res, next) => {
 // POST /api/products (admin)
 const createProduct = async (req, res, next) => {
   try {
-    const product = await Product.create(req.body);
+    const product = await Product.create(normalizeProductImages(req.body));
     res.status(201).json({ success: true, data: product });
   } catch (error) {
     next(error);
@@ -109,7 +145,7 @@ const createProduct = async (req, res, next) => {
 // PUT /api/products/:id (admin)
 const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    const product = await Product.findByIdAndUpdate(req.params.id, normalizeProductImages(req.body, { keepMissing: true }), {
       new: true,
       runValidators: true
     });
@@ -144,7 +180,25 @@ const deleteProduct = async (req, res, next) => {
 // GET /api/products/all (admin - includes inactive)
 const getAllProducts = async (req, res, next) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const { startDate, endDate, isActive, category, search } = req.query;
+    const createdAt = buildCreatedAtFilter(startDate, endDate);
+
+    const query = {};
+    if (createdAt) query.createdAt = createdAt;
+    if (typeof isActive !== 'undefined' && isActive !== '') query.isActive = isActive === 'true';
+    if (category) query.category = category;
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { name_uz: { $regex: search, $options: 'i' } },
+        { name_ru: { $regex: search, $options: 'i' } },
+        { name_en: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { description_uz: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const products = await Product.find(query).sort({ createdAt: -1 });
     res.json({ success: true, data: products });
   } catch (error) {
     next(error);

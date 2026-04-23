@@ -46,11 +46,11 @@ export const api = {
   
   // Admin
   getDashboard: (params = '') => request(`/admin/dashboard?${params}`),
-  getUsers: () => request('/admin/users'),
+  getUsers: (params = '') => request(`/admin/users?${params}`),
   updateUserRole: (id, role) => request(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
   deleteUser: (id) => request(`/admin/users/${id}`, { method: 'DELETE' }),
   
-  getAllProducts: () => request('/products/all'),
+  getAllProducts: (params = '') => request(`/products/all?${params}`),
   createProduct: (body) => request('/products', { method: 'POST', body: JSON.stringify(body) }),
   updateProduct: (id, body) => request(`/products/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   deleteProduct: (id) => request(`/products/${id}`, { method: 'DELETE' }),
@@ -58,7 +58,7 @@ export const api = {
   getAllOrders: (params = '') => request(`/orders/admin/all?${params}`),
   updateOrderStatus: (id, status) => request(`/orders/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
   
-  getPromoCodes: () => request('/promo'),
+  getPromoCodes: (params = '') => request(`/promo?${params}`),
   createPromoCode: (body) => request('/promo', { method: 'POST', body: JSON.stringify(body) }),
   updatePromoCode: (id, body) => request(`/promo/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   deletePromoCode: (id) => request(`/promo/${id}`, { method: 'DELETE' }),
@@ -66,8 +66,11 @@ export const api = {
   // News
   getNews: (params = '') => request(`/news?${params}`),
   getNewsById: (id) => request(`/news/${id}`),
-  getAllNews: () => request('/news/all'),
+  getAllNews: (params = '') => request(`/news/all?${params}`),
   createNews: (body) => request('/news', { method: 'POST', body: JSON.stringify(body) }),
   updateNews: (id, body) => request(`/news/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   deleteNews: (id) => request(`/news/${id}`, { method: 'DELETE' }),
+
+  // Translate
+  translate: (texts, sourceLang) => request('/translate', { method: 'POST', body: JSON.stringify({ texts, sourceLang }) }),
 };

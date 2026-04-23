@@ -170,7 +170,21 @@ const getDashboardStats = async (req, res, next) => {
 // GET /api/admin/users
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const { startDate, endDate, role, search } = req.query;
+    const createdAt = buildCreatedAtFilter(startDate, endDate);
+
+    const query = {};
+    if (createdAt) query.createdAt = createdAt;
+    if (role) query.role = role;
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const users = await User.find(query).sort({ createdAt: -1 });
     res.json({ success: true, data: users });
   } catch (error) {
     next(error);

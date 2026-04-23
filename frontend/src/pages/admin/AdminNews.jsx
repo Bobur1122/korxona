@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, Edit, Trash2, X, Upload, Image, Newspaper } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Upload, Image, Newspaper, Languages } from 'lucide-react';
 import { api } from '../../api';
+import { rangeLastDays, rangeThisMonth } from '../../utils/datePeriod';
 
 const categories = [
   { value: 'yangilik', label: 'Yangilik' },
@@ -18,6 +19,10 @@ const emptyForm = {
 export default function AdminNews() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [activeFilter, setActiveFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
@@ -26,17 +31,24 @@ export default function AdminNews() {
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [langTab, setLangTab] = useState('uz');
+  const [translating, setTranslating] = useState(false);
   const fileInputRef = useRef(null);
 
   const fetchNews = () => {
     setLoading(true);
-    api.getAllNews()
+    const params = new URLSearchParams();
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
+    if (categoryFilter) params.set('category', categoryFilter);
+    if (activeFilter !== '') params.set('isActive', activeFilter);
+
+    api.getAllNews(params.toString())
       .then(res => setNews(res.data))
       .catch(() => {})
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchNews(); }, []);
+  useEffect(() => { fetchNews(); }, [startDate, endDate, categoryFilter, activeFilter]);
 
   const openCreate = () => {
     setEditing(null);
@@ -136,7 +148,7 @@ export default function AdminNews() {
 
   const formatDate = (d) => new Date(d).toLocaleDateString('uz-UZ', { year: 'numeric', month: 'short', day: 'numeric' });
 
-  if (loading) return <div className="loading-page"><div className="spinner"></div></div>;
+  if (loading && news.length === 0) return <div className="loading-page"><div className="spinner"></div></div>;
 
   return (
     <div className="fade-in">
@@ -145,6 +157,93 @@ export default function AdminNews() {
         <button className="btn btn-primary" onClick={openCreate} id="add-news-btn">
           <Plus size={18} /> Yangi yangilik
         </button>
+      </div>
+
+      {/* Filters */}
+      <div style={{
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-xl)',
+        padding: 'var(--space-4)',
+        marginBottom: 'var(--space-5)'
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 'var(--space-3)' }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Boshlanish sana</label>
+            <input type="date" className="form-input" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Tugash sana</label>
+            <input type="date" className="form-input" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Kategoriya</label>
+            <select className="form-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+              <option value="">Barchasi</option>
+              {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Holat</label>
+            <select className="form-select" value={activeFilter} onChange={(e) => setActiveFilter(e.target.value)}>
+              <option value="">Barchasi</option>
+              <option value="true">Faol</option>
+              <option value="false">Nofaol</option>
+            </select>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap', marginTop: 'var(--space-3)', alignItems: 'center' }}>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeLastDays(7);
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Oxirgi 7 kun
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeLastDays(30);
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Oxirgi 30 kun
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              const r = rangeThisMonth();
+              setStartDate(r.start);
+              setEndDate(r.end);
+            }}
+          >
+            Bu oy
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              setStartDate('');
+              setEndDate('');
+              setCategoryFilter('');
+              setActiveFilter('');
+            }}
+          >
+            Tozalash
+          </button>
+
+          <div style={{ marginLeft: 'auto' }}>
+            <span className="badge badge-accent">{news.length} ta</span>
+          </div>
+        </div>
       </div>
 
       <div className="data-table-container">
@@ -244,7 +343,7 @@ export default function AdminNews() {
               </div>
 
               {/* Language Tabs */}
-              <div style={{ display: 'flex', gap: 0, marginBottom: 'var(--space-4)', borderBottom: '2px solid var(--color-border)' }}>
+              <div style={{ display: 'flex', gap: 0, marginBottom: 'var(--space-4)', borderBottom: '2px solid var(--color-border)', alignItems: 'center' }}>
                 {['uz', 'ru', 'en'].map(lang => (
                   <button key={lang} type="button" onClick={() => setLangTab(lang)}
                     style={{
@@ -256,10 +355,50 @@ export default function AdminNews() {
                       fontFamily: 'var(--font-family)'
                     }}>
                     {lang === 'uz' ? "🇺🇿 O'zbekcha" : lang === 'ru' ? '🇷🇺 Русский' : '🇬🇧 English'}
-                    {/* Show check if filled */}
                     {form[`title_${lang}`] && form[`content_${lang}`] ? ' ✓' : ' *'}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  disabled={translating || !form[`title_${langTab}`]}
+                  onClick={async () => {
+                    if (!form[`title_${langTab}`]) return;
+                    setTranslating(true);
+                    setError('');
+                    try {
+                      const res = await api.translate(
+                        { title: form[`title_${langTab}`], content: form[`content_${langTab}`] || '' },
+                        langTab
+                      );
+                      if (res.success) {
+                        setForm(prev => {
+                          const updated = { ...prev };
+                          for (const [lang, fields] of Object.entries(res.data)) {
+                            if (fields.title) updated[`title_${lang}`] = fields.title;
+                            if (fields.content) updated[`content_${lang}`] = fields.content;
+                          }
+                          return updated;
+                        });
+                      }
+                    } catch (err) {
+                      setError('Tarjima xatosi: ' + err.message);
+                    } finally {
+                      setTranslating(false);
+                    }
+                  }}
+                  style={{
+                    marginLeft: 'auto', padding: '6px 14px', fontSize: 'var(--font-size-xs)',
+                    fontWeight: 600, border: '1.5px solid var(--color-accent)', borderRadius: 'var(--radius-lg)',
+                    background: translating ? 'var(--color-accent-bg)' : 'transparent',
+                    color: 'var(--color-accent)', cursor: translating ? 'wait' : 'pointer',
+                    display: 'flex', alignItems: 'center', gap: 6, marginBottom: '-2px',
+                    transition: 'all 0.2s ease', fontFamily: 'var(--font-family)',
+                    opacity: !form[`title_${langTab}`] ? 0.4 : 1
+                  }}
+                >
+                  <Languages size={14} />
+                  {translating ? 'Tarjima...' : 'Boshqa tillarga tarjima'}
+                </button>
               </div>
 
               {/* Language-specific fields */}

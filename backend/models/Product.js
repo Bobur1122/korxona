@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
+  // Legacy single-language fields (kept for backward compatibility)
+  name: { type: String, default: '', trim: true, maxlength: 200 },
+  description: { type: String, default: '', maxlength: 2000 },
+
   // Multi-language name
   name_uz: { type: String, required: [true, 'Mahsulot nomi (UZ) kiritilishi shart'], trim: true, maxlength: 200 },
   name_ru: { type: String, default: '', trim: true, maxlength: 200 },
@@ -15,6 +19,7 @@ const productSchema = new mongoose.Schema({
   costPrice: { type: Number, default: 0, min: [0, 'Tan narx manfiy bo\'lishi mumkin emas'] },
   stock: { type: Number, required: true, min: 0, default: 0 },
   image: { type: String, default: '' },
+  images: { type: [String], default: [] },
   category: {
     type: String,
     required: [true, 'Kategoriya kiritilishi shart'],
@@ -30,12 +35,10 @@ const productSchema = new mongoose.Schema({
   uvProtection: { type: Boolean, default: false },
   color: { type: String, trim: true, default: 'shaffof' },
   soldCount: { type: Number, default: 0, min: 0 },
+  viewCount: { type: Number, default: 0, min: 0 },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 
-// Backward-compat virtual getters
-productSchema.virtual('name').get(function() { return this.name_uz; });
-productSchema.virtual('description').get(function() { return this.description_uz; });
 productSchema.set('toJSON', { virtuals: true });
 productSchema.set('toObject', { virtuals: true });
 

@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const PromoCode = require('../models/PromoCode');
 const { sendTelegramNotification } = require('../utils/telegram');
+const { buildCreatedAtFilter } = require('../utils/dateRange');
 
 // POST /api/orders
 const createOrder = async (req, res, next) => {
@@ -19,6 +20,14 @@ const createOrder = async (req, res, next) => {
     let totalPrice = 0;
 
     for (const item of items) {
+      const quantity = Number(item.quantity);
+      if (!quantity || quantity < 1) {
+        return res.status(400).json({
+          success: false,
+          message: 'Miqdor kamida 1 bo\'lishi kerak'
+        });
+      }
+
       const product = await Product.findById(item.product);
       if (!product) {
         return res.status(404).json({
@@ -27,28 +36,50 @@ const createOrder = async (req, res, next) => {
         });
       }
 
-      if (product.stock < item.quantity) {
+      const displayName =
+        product.name_uz ||
+        product.name ||
+        product.name_ru ||
+        product.name_en ||
+        'Mahsulot';
+
+      if (product.stock < quantity) {
         return res.status(400).json({
           success: false,
-          message: `"${product.name}" yetarli miqdorda mavjud emas. Mavjud: ${product.stock}`
+          message: `"${displayName}" yetarli miqdorda mavjud emas. Mavjud: ${product.stock}`
         });
       }
 
       orderItems.push({
         product: product._id,
-        name: product.name,
+        name: displayName,
         price: product.price,
         costPrice: product.costPrice || 0,
-        quantity: item.quantity,
+        quantity,
         image: product.image
       });
 
-      totalPrice += product.price * item.quantity;
+      totalPrice += product.price * quantity;
 
-      // Reduce stock
-      product.stock -= item.quantity;
-      product.soldCount = (product.soldCount || 0) + item.quantity;
-      await product.save();
+      // Reduce stock (no validation — supports legacy Product docs missing name_uz/description_uz)
+      const setFields = {};
+      if (!product.name_uz && product.name) setFields.name_uz = product.name;
+      if (!product.description_uz && product.description) setFields.description_uz = product.description;
+
+      const update = { $inc: { stock: -quantity, soldCount: quantity } };
+      if (Object.keys(setFields).length) update.$set = setFields;
+
+      const updated = await Product.collection.updateOne(
+        { _id: product._id, stock: { $gte: quantity } },
+        update
+      );
+
+      if (!updated.modifiedCount) {
+        return res.status(400).json({
+          success: false,
+          message: `"${displayName}" yetarli miqdorda mavjud emas. Iltimos, qaytadan urinib ko'ring.`
+        });
+      }
     }
 
     let discountAmount = 0;
@@ -133,9 +164,11 @@ const getOrder = async (req, res, next) => {
 // GET /api/orders/admin/all (admin)
 const getAllOrders = async (req, res, next) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, startDate, endDate, page = 1, limit = 20 } = req.query;
     const query = {};
     if (status) query.status = status;
+    const createdAt = buildCreatedAtFilter(startDate, endDate);
+    if (createdAt) query.createdAt = createdAt;
 
     const skip = (Number(page) - 1) * Number(limit);
     const total = await Order.countDocuments(query);
