@@ -545,8 +545,10 @@ textarea.form-input {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  width: 100%;
+  z-index: 9999;
   height: var(--header-height);
+  min-height: var(--header-height);
   background: transparent;
   transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
   border-bottom: 1px solid transparent;

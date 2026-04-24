@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ArrowRight, PhoneCall } from 'lucide-react';
 import { api } from '../api';
@@ -88,6 +88,8 @@ export default function HomePage() {
            overflow: hidden;
            margin-top: 0;
            background: #0F172A;
+           isolation: isolate;
+           z-index: 1;
         }
         .split-slide { 
            display: flex; 
@@ -102,7 +104,7 @@ export default function HomePage() {
            padding: 6% 4%; 
            color: white; 
            position: relative;
-           z-index: 10;
+           z-index: 2;
         }
         .split-image { 
            flex: 1; 
@@ -113,6 +115,130 @@ export default function HomePage() {
            .split-slide { flex-direction: column-reverse !important; justify-content: flex-end; }
            .split-text { flex: 0 0 55%; padding: 40px 20px; align-items: flex-start; }
            .split-image { flex: 0 0 45%; }
+        }
+
+        /* ====== PREMIUM TECH CARDS — Compact Brand Style ====== */
+        .tech-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        @media (max-width: 900px) {
+          .tech-cards-grid { grid-template-columns: 1fr; gap: 16px; }
+        }
+        @media (min-width: 901px) and (max-width: 1100px) {
+          .tech-cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .tech-brand-card {
+          background: #FFFFFF;
+          border: 1px solid #E2E8F0;
+          border-radius: 12px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+        }
+        .tech-brand-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,166,81,0.15);
+          border-color: rgba(0,166,81,0.25);
+        }
+
+        .tech-brand-card__img {
+          width: 100%;
+          height: 140px;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+        .tech-brand-card:hover .tech-brand-card__img {
+          transform: scale(1.05);
+        }
+        .tech-brand-card__img-wrap {
+          overflow: hidden;
+          position: relative;
+        }
+        .tech-brand-card__img-wrap::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          background: linear-gradient(to top, #fff, transparent);
+          pointer-events: none;
+        }
+
+        .tech-brand-card__body {
+          padding: 16px 18px 18px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+        .tech-brand-card__title {
+          font-size: 1rem;
+          font-weight: 800;
+          color: #0F172A;
+          margin-bottom: 6px;
+          letter-spacing: -0.01em;
+        }
+        .tech-brand-card__desc {
+          font-size: 0.8rem;
+          color: #64748B;
+          line-height: 1.5;
+          margin-bottom: 12px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .tech-brand-card__specs {
+          background: #F8FAFC;
+          border: 1px solid #F1F5F9;
+          border-radius: 8px;
+          padding: 10px 12px;
+          margin-bottom: 12px;
+        }
+        .tech-brand-card__spec-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 4px 0;
+          font-size: 0.75rem;
+        }
+        .tech-brand-card__spec-row:not(:last-child) {
+          border-bottom: 1px solid #E2E8F0;
+          padding-bottom: 6px;
+          margin-bottom: 6px;
+        }
+        .tech-brand-card__spec-label {
+          color: #94A3B8;
+          font-weight: 500;
+        }
+        .tech-brand-card__spec-value {
+          font-weight: 700;
+          color: #0F172A;
+          font-size: 0.75rem;
+        }
+        .tech-brand-card__spec-value--accent {
+          color: #E60000;
+        }
+
+        .tech-brand-card__link {
+          margin-top: auto;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: #00A651;
+          font-weight: 700;
+          font-size: 0.8rem;
+          text-decoration: none;
+          transition: gap 0.25s ease;
+        }
+        .tech-brand-card__link:hover {
+          gap: 10px;
         }
       `}</style>
 
@@ -130,7 +256,7 @@ export default function HomePage() {
               opacity: isActive ? 1 : 0,
               visibility: isActive ? 'visible' : 'hidden',
               transition: 'opacity 0.8s ease-in-out',
-              zIndex: isActive ? 5 : 1
+              zIndex: isActive ? 2 : 1
             }}>
               <div className="split-slide" style={{ flexDirection: slide.reverse ? 'row-reverse' : 'row' }}>
 
@@ -162,7 +288,7 @@ export default function HomePage() {
         })}
 
         {/* Custom Indicators */}
-        <div style={{ position: 'absolute', bottom: 40, left: 0, width: '100%', zIndex: 20, display: 'flex', justifyContent: 'center', gap: 12 }}>
+        <div style={{ position: 'absolute', bottom: 40, left: 0, width: '100%', zIndex: 3, display: 'flex', justifyContent: 'center', gap: 12 }}>
           {heroSlides.map((_, idx) => (
             <button
               key={idx}
@@ -185,86 +311,92 @@ export default function HomePage() {
 
 
 
-      {/* TECHNICAL SOLUTIONS */}
+      {/* TECHNICAL SOLUTIONS — Compact Premium Brand Cards */}
       <section className="section home-tech" id="about">
         <div className="container">
-          <div className="home-tech__head" style={{ marginBottom: 36 }}>
-            <h2 className="home-tech__title" style={{ fontSize: '2.1rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('techSolutions')}</h2>
-            <p className="home-tech__subtitle" style={{ fontSize: '1.05rem', color: '#475569', maxWidth: 800 }}>
+          <div style={{ marginBottom: 28 }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 850, color: '#0F172A', marginBottom: 8, letterSpacing: '-0.02em' }}>{t('techSolutions')}</h2>
+            <p style={{ fontSize: '0.95rem', color: '#64748B', maxWidth: 600 }}>
               {t('techDesc')}
             </p>
           </div>
 
-          <div className="features-grid home-tech__grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18, alignItems: 'stretch' }}>
-            {/* Prod 1 */}
-            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/greenhouse.png" alt="Issiqxona plyonkasi" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('agroTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('agroDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('agroSpecWidthLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('agroSpecWidthValue')}</span>
+          <div className="tech-cards-grid">
+            {/* Card 1 — Agro */}
+            <div className="tech-brand-card">
+              <div className="tech-brand-card__img-wrap">
+                <img className="tech-brand-card__img" src="/images/greenhouse.png" alt="Issiqxona plyonkasi" />
+              </div>
+              <div className="tech-brand-card__body">
+                <h3 className="tech-brand-card__title">{t('agroTitle')}</h3>
+                <p className="tech-brand-card__desc">{t('agroDesc')}</p>
+                <div className="tech-brand-card__specs">
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('agroSpecWidthLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('agroSpecWidthValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('agroSpecUvLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('agroSpecUvValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('agroSpecUvLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('agroSpecUvValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('agroSpecLightLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('agroSpecLightValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('agroSpecLightLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('agroSpecLightValue')}</span>
                   </div>
                 </div>
-                <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>{t('moreParams')} <ArrowRight size={16} /></Link>
+                <Link to="/products" className="tech-brand-card__link">{t('moreParams')} <ArrowRight size={14} /></Link>
               </div>
             </div>
 
-            {/* Prod 2 */}
-            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/hero_shrink.png" alt="Termo Qadoqlash" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('thermoTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('thermoDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('thermoSpecStretchLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('thermoSpecStretchValue')}</span>
+            {/* Card 2 — Thermo */}
+            <div className="tech-brand-card">
+              <div className="tech-brand-card__img-wrap">
+                <img className="tech-brand-card__img" src="/images/hero_shrink.png" alt="Termo Qadoqlash" />
+              </div>
+              <div className="tech-brand-card__body">
+                <h3 className="tech-brand-card__title">{t('thermoTitle')}</h3>
+                <p className="tech-brand-card__desc">{t('thermoDesc')}</p>
+                <div className="tech-brand-card__specs">
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('thermoSpecStretchLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('thermoSpecStretchValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('thermoSpecShrinkLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('thermoSpecShrinkValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('thermoSpecShrinkLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('thermoSpecShrinkValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('thermoSpecDensityLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('thermoSpecDensityValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('thermoSpecDensityLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('thermoSpecDensityValue')}</span>
                   </div>
                 </div>
-                <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>{t('moreParams')} <ArrowRight size={16} /></Link>
+                <Link to="/products" className="tech-brand-card__link">{t('moreParams')} <ArrowRight size={14} /></Link>
               </div>
             </div>
 
-            {/* Prod 3 */}
-            <div className="home-tech-card" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-              <img src="/images/logistics.png" alt="Bozor paketi" style={{ width: '100%', height: 180, objectFit: 'cover', borderBottom: '1px solid #E2E8F0' }} />
-              <div className="home-tech-card__body" style={{ padding: 20, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <h3 className="home-tech-card__title" style={{ fontSize: '1.25rem', fontWeight: 850, color: '#0F172A', marginBottom: 12 }}>{t('logisticsTitle')}</h3>
-                <p style={{ color: '#475569', marginBottom: 16, lineHeight: 1.6, fontSize: 15 }}>{t('logisticsDesc')}</p>
-                <div className="home-tech-card__specs" style={{ background: '#F8FAFC', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #E2E8F0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('logisticsSpecSeamLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#E60000' }}>{t('logisticsSpecSeamValue')}</span>
+            {/* Card 3 — Logistics */}
+            <div className="tech-brand-card">
+              <div className="tech-brand-card__img-wrap">
+                <img className="tech-brand-card__img" src="/images/logistics.png" alt="Sanoat logistika" />
+              </div>
+              <div className="tech-brand-card__body">
+                <h3 className="tech-brand-card__title">{t('logisticsTitle')}</h3>
+                <p className="tech-brand-card__desc">{t('logisticsDesc')}</p>
+                <div className="tech-brand-card__specs">
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('logisticsSpecSeamLabel')}</span>
+                    <span className="tech-brand-card__spec-value tech-brand-card__spec-value--accent">{t('logisticsSpecSeamValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: 8, marginBottom: 8 }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('logisticsSpecLoadLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('logisticsSpecLoadValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('logisticsSpecLoadLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('logisticsSpecLoadValue')}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#64748B', fontWeight: 500 }}>{t('logisticsSpecIndustryLabel')}:</span>
-                    <span style={{ fontWeight: 800, color: '#0F172A' }}>{t('logisticsSpecIndustryValue')}</span>
+                  <div className="tech-brand-card__spec-row">
+                    <span className="tech-brand-card__spec-label">{t('logisticsSpecIndustryLabel')}</span>
+                    <span className="tech-brand-card__spec-value">{t('logisticsSpecIndustryValue')}</span>
                   </div>
                 </div>
-                <Link to="/products" style={{ marginTop: 'auto', color: '#00A651', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>{t('moreParams')} <ArrowRight size={16} /></Link>
+                <Link to="/products" className="tech-brand-card__link">{t('moreParams')} <ArrowRight size={14} /></Link>
               </div>
             </div>
           </div>
