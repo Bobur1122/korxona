@@ -9,10 +9,10 @@ export default function Footer() {
 
   return (
     <footer className="ft" id="footer">
-      {/* === Wave divider - overlaps content above === */}
-      <div className="ft__wave">
+      {/* === Wave divider (decorative) === */}
+      <div className="ft__wave" aria-hidden="true">
         <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
-          <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z" fill="#0a1628"/>
+          <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z" />
         </svg>
       </div>
 
@@ -26,7 +26,7 @@ export default function Footer() {
                 <img src="/logo.png" alt="OGP" className="ft__logo-img" />
                 <div className="ft__logo-text">
                   <span className="ft__logo-name">Original Grand Plast</span>
-                  <span className="ft__logo-sub">Premium polimer yechimlar</span>
+                  <span className="ft__logo-sub">{t('footerBrandSubtitle')}</span>
                 </div>
               </Link>
               <p className="ft__about">{t('footerDesc')}</p>
@@ -45,7 +45,7 @@ export default function Footer() {
             </div>
 
             {/* Col 2: Navigation */}
-            <div className="ft__col">
+            <div className="ft__col ft__col--nav">
               <h4 className="ft__heading">{t('quickLinks')}</h4>
               <ul className="ft__nav">
                 {[
@@ -73,7 +73,7 @@ export default function Footer() {
                   <div className="ft__contact-glow" style={{'--glow': '#00A651'}}></div>
                   <Phone size={18} className="ft__contact-icon" />
                   <div>
-                    <small>Telefon</small>
+                    <small>{t('footerPhone')}</small>
                     <span>+998 99 606 63 33</span>
                   </div>
                 </a>
@@ -81,7 +81,7 @@ export default function Footer() {
                   <div className="ft__contact-glow" style={{'--glow': '#3B82F6'}}></div>
                   <Mail size={18} className="ft__contact-icon" />
                   <div>
-                    <small>Email</small>
+                    <small>{t('footerEmail')}</small>
                     <span>ogp-info@mail.ru</span>
                   </div>
                 </a>
@@ -89,8 +89,8 @@ export default function Footer() {
                   <div className="ft__contact-glow" style={{'--glow': '#F59E0B'}}></div>
                   <MapPin size={18} className="ft__contact-icon" />
                   <div>
-                    <small>Manzil</small>
-                    <span>Toshkent, O'zbekiston</span>
+                    <small>{t('footerAddress')}</small>
+                    <span>{t('footerAddressValue')}</span>
                   </div>
                 </div>
               </div>

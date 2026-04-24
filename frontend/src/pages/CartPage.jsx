@@ -3,11 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingCart, ArrowRight, Tag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { api } from '../api';
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, discountAmount, finalPrice, promoCode, applyPromo, clearCart } = useCart();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [promoInput, setPromoInput] = useState('');
@@ -42,7 +44,7 @@ export default function CartPage() {
       return;
     }
     if (!address.trim() || !phone.trim()) {
-      setOrderError('Manzil va telefon raqam kiritilishi shart');
+      setOrderError(t('addressPhoneRequired'));
       return;
     }
 
@@ -71,14 +73,14 @@ export default function CartPage() {
         <div className="container" style={{ textAlign: 'center', padding: 'var(--space-24) 0' }}>
           <div style={{ fontSize: 64, marginBottom: 'var(--space-4)' }}>🎉</div>
           <h2 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, marginBottom: 'var(--space-3)' }}>
-            Buyurtma qabul qilindi!
+            {t('orderSuccess')}
           </h2>
           <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-6)' }}>
-            Sizning buyurtmangiz muvaffaqiyatli qabul qilindi. Profilingizda buyurtma holatini kuzatishingiz mumkin.
+            {t('orderSuccessDesc')}
           </p>
           <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center' }}>
-            <Link to="/profile" className="btn btn-primary">Profilga o'tish</Link>
-            <Link to="/products" className="btn btn-outline">Xaridni davom ettirish</Link>
+            <Link to="/profile" className="btn btn-primary">{t('goToProfile')}</Link>
+            <Link to="/products" className="btn btn-outline">{t('continueShopping')}</Link>
           </div>
         </div>
       </div>
@@ -91,10 +93,10 @@ export default function CartPage() {
         <div className="container">
           <div className="empty-state">
             <ShoppingCart size={48} />
-            <h3>Savat bo'sh</h3>
-            <p>Mahsulotlarni ko'rib, savatga qo'shing</p>
+            <h3>{t('emptyCart')}</h3>
+            <p>{t('emptyCartDesc')}</p>
             <Link to="/products" className="btn btn-primary" style={{ marginTop: 'var(--space-4)' }}>
-              Mahsulotlarni ko'rish
+              {t('viewProducts')}
             </Link>
           </div>
         </div>
@@ -106,7 +108,7 @@ export default function CartPage() {
     <div className="cart-page fade-in">
       <div className="container">
         <h1 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, marginBottom: 'var(--space-8)' }}>
-          Savat ({items.length} ta mahsulot)
+          {t('cartTitle')} ({items.length} {t('cartItemCount')})
         </h1>
 
         <div className="cart-grid">
@@ -115,13 +117,14 @@ export default function CartPage() {
             {items.map(item => (
               <div key={item.product} className="cart-item">
                 <img
-                  src={(Array.isArray(item.images) && item.images.length ? item.images[0] : item.image) || `https://placehold.co/100x100/f1f5f9/64748b?text=${encodeURIComponent(item.name)}`}
+                  src={item.image || '/images/products/agro.png'}
                   alt={item.name}
                   className="cart-item-image"
+                  onError={(e) => { e.target.src = '/images/products/agro.png'; e.target.onerror = null; }}
                 />
                 <div className="cart-item-details">
                   <h3 className="cart-item-name">{item.name}</h3>
-                  <div className="cart-item-price">{item.price.toLocaleString()} so'm</div>
+                  <div className="cart-item-price">{item.price.toLocaleString()} {t('som')}</div>
                   <div className="cart-quantity">
                     <button onClick={() => updateQuantity(item.product, item.quantity - 1)}>−</button>
                     <span>{item.quantity}</span>
@@ -133,7 +136,7 @@ export default function CartPage() {
                     <Trash2 size={16} />
                   </button>
                   <span style={{ fontWeight: 700 }}>
-                    {(item.price * item.quantity).toLocaleString()} so'm
+                    {(item.price * item.quantity).toLocaleString()} {t('som')}
                   </span>
                 </div>
               </div>
@@ -142,14 +145,14 @@ export default function CartPage() {
 
           {/* Summary */}
           <div className="cart-summary">
-            <h3 style={{ fontWeight: 700, marginBottom: 'var(--space-4)' }}>Buyurtma xulosasi</h3>
+            <h3 style={{ fontWeight: 700, marginBottom: 'var(--space-4)' }}>{t('orderSummary')}</h3>
 
             {/* Promo Code */}
             <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
               <input
                 type="text"
                 className="form-input"
-                placeholder="Promokod"
+                placeholder={t('promoCode')}
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value)}
                 disabled={!!promoCode}
@@ -167,41 +170,41 @@ export default function CartPage() {
             {promoError && <div className="alert alert-error" style={{ marginBottom: 'var(--space-3)' }}>{promoError}</div>}
             {promoCode && (
               <div className="alert alert-success" style={{ marginBottom: 'var(--space-3)' }}>
-                ✓ Promokod "{promoCode}" qo'llanildi
+                ✓ {t('promoCode')} "{promoCode}" {t('promoApplied')}
               </div>
             )}
 
             <div className="cart-summary-row">
-              <span>Mahsulotlar:</span>
-              <span>{totalPrice.toLocaleString()} so'm</span>
+              <span>{t('productsLabel')}:</span>
+              <span>{totalPrice.toLocaleString()} {t('som')}</span>
             </div>
             {discountAmount > 0 && (
               <div className="cart-summary-row" style={{ color: 'var(--color-success)' }}>
-                <span>Chegirma:</span>
-                <span>-{discountAmount.toLocaleString()} so'm</span>
+                <span>{t('discount')}:</span>
+                <span>-{discountAmount.toLocaleString()} {t('som')}</span>
               </div>
             )}
             <div className="cart-summary-row cart-summary-total">
-              <span>Jami:</span>
-              <span>{finalPrice.toLocaleString()} so'm</span>
+              <span>{t('total')}:</span>
+              <span>{finalPrice.toLocaleString()} {t('som')}</span>
             </div>
 
             {/* Order Form */}
             <form onSubmit={handleOrder} style={{ marginTop: 'var(--space-6)' }}>
               <div className="form-group">
-                <label className="form-label">Yetkazish manzili *</label>
+                <label className="form-label">{t('shippingAddress')} *</label>
                 <input
                   type="text"
                   className="form-input"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="To'liq manzil"
+                  placeholder={t('fullAddress')}
                   required
                   id="shipping-address"
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Telefon raqam *</label>
+                <label className="form-label">{t('phoneNumber')} *</label>
                 <input
                   type="tel"
                   className="form-input"
@@ -213,12 +216,12 @@ export default function CartPage() {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Izoh</label>
+                <label className="form-label">{t('note')}</label>
                 <textarea
                   className="form-input"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Qo'shimcha izoh..."
+                  placeholder={t('additionalNote')}
                   rows={3}
                   id="order-notes"
                 ></textarea>
@@ -233,8 +236,8 @@ export default function CartPage() {
                 disabled={orderLoading}
                 id="place-order"
               >
-                {orderLoading ? 'Yuborilmoqda...' : (
-                  <>{user ? 'Buyurtma berish' : 'Kirish va buyurtma berish'} <ArrowRight size={18} /></>
+                {orderLoading ? t('sending') : (
+                  <>{user ? t('checkout') : t('loginAndOrder')} <ArrowRight size={18} /></>
                 )}
               </button>
             </form>

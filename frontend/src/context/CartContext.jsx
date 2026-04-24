@@ -31,10 +31,28 @@ export function CartProvider({ children }) {
         product.name ||
         '';
 
+      // Build a clean image list
+      const isValid = (u) => u && typeof u === 'string' && u.trim() !== '' && u !== 'no-image.jpg';
+      const validImages = (Array.isArray(product.images) ? product.images : []).filter(isValid);
+      if (!validImages.length && isValid(product.image)) validImages.push(product.image);
+
+      // Category-based fallback
+      const getFallback = (name) => {
+        const s = (name || '').toLowerCase();
+        if (s.includes('issiqxona') || s.includes('agro')) return '/images/products/agro.png';
+        if (s.includes('termo') || s.includes('shrink')) return '/images/products/shrink.png';
+        if (s.includes('roof') || s.includes('tom') || s.includes('gidro') || s.includes('bitum')) return '/images/products/build.png';
+        if (s.includes('pet') || s.includes('paket') || s.includes('kapsul')) return '/images/products/food.png';
+        const fallbacks = ['/images/products/agro.png', '/images/products/shrink.png', '/images/products/build.png', '/images/products/food.png'];
+        return fallbacks[s.length % 4];
+      };
+
+      const cartImage = validImages[0] || getFallback(localizedName);
+
       if (existing) {
         return prev.map(i =>
           i.product === product._id
-            ? { ...i, quantity: Math.min(i.quantity + quantity, product.stock) }
+            ? { ...i, quantity: Math.min(i.quantity + quantity, product.stock), image: cartImage, images: validImages }
             : i
         );
       }
@@ -42,8 +60,8 @@ export function CartProvider({ children }) {
         product: product._id,
         name: localizedName,
         price: product.price,
-        image: product.image,
-        images: product.images,
+        image: cartImage,
+        images: validImages,
         stock: product.stock,
         quantity
       }];

@@ -22,7 +22,9 @@ export default function ProductDetailPage() {
       .then(res => {
         const p = res.data;
         setProduct(p);
-        const imgs = Array.isArray(p.images) && p.images.length ? p.images : (p.image ? [p.image] : []);
+        const isValid = (u) => u && typeof u === 'string' && u.trim() !== '' && u !== 'no-image.jpg';
+        const imgs = (Array.isArray(p.images) ? p.images : []).filter(isValid);
+        if (!imgs.length && isValid(p.image)) imgs.push(p.image);
         setActiveImage(imgs[0] || '');
       })
       .catch(err => console.error(err))
@@ -56,8 +58,23 @@ export default function ProductDetailPage() {
   const productName = tl(product, 'name') || product.name;
   const productDesc = tl(product, 'description') || product.description;
   const categoryLabel = getCategoryLabel(t, product.category);
-  const images = Array.isArray(product.images) && product.images.length ? product.images : (product.image ? [product.image] : []);
-  const mainImage = activeImage || images[0] || '';
+
+  const isValid = (u) => u && typeof u === 'string' && u.trim() !== '' && u !== 'no-image.jpg' && !u.startsWith('https://placehold.co');
+  const images = (Array.isArray(product.images) ? product.images : []).filter(isValid);
+  if (!images.length && isValid(product.image)) images.push(product.image);
+
+  // Category-based fallback
+  const getFallback = (name) => {
+    const s = (name || '').toLowerCase();
+    if (s.includes('issiqxona') || s.includes('agro')) return '/images/products/agro.png';
+    if (s.includes('termo') || s.includes('shrink')) return '/images/products/shrink.png';
+    if (s.includes('roof') || s.includes('tom') || s.includes('gidro') || s.includes('bitum')) return '/images/products/build.png';
+    if (s.includes('pet') || s.includes('paket') || s.includes('kapsul')) return '/images/products/food.png';
+    const fallbacks = ['/images/products/agro.png', '/images/products/shrink.png', '/images/products/build.png', '/images/products/food.png'];
+    return fallbacks[s.length % 4];
+  };
+
+  const mainImage = activeImage || images[0] || getFallback(productName);
 
   return (
     <div className="fade-in" style={{ paddingTop: 'calc(var(--header-height, 72px) + 32px)', paddingBottom: 60, background: '#fff', minHeight: '100vh' }}>
@@ -77,10 +94,11 @@ export default function ProductDetailPage() {
           {/* Image */}
           <div style={{ background: '#F8FAFC', borderRadius: 16, border: '1px solid #E2E8F0', padding: 16 }}>
             <img
-              src={mainImage || `https://placehold.co/600x400/f0fdf4/16a34a?text=${encodeURIComponent(productName)}`}
+              src={mainImage}
               alt={productName}
               className="product-detail-image"
               style={{ border: 'none', background: 'transparent' }}
+              onError={(e) => { e.target.src = getFallback(productName); e.target.onerror = null; }}
             />
 
             {images.length > 1 && (
@@ -100,7 +118,7 @@ export default function ProductDetailPage() {
                       background: '#fff',
                       cursor: 'pointer',
                     }}
-                    title="Rasmni ko'rish"
+                    title={t('viewImage')}
                   >
                     <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   </button>
@@ -156,7 +174,7 @@ export default function ProductDetailPage() {
                 {product.uvProtection && (
                   <div style={{ padding: 14, background: '#FFFBEB', borderRadius: 12, textAlign: 'center' }}>
                     <Sun size={16} style={{ color: '#F59E0B', margin: '0 auto 4px', display: 'block' }} />
-                    <div style={{ fontWeight: 700, color: '#F59E0B', fontSize: '0.75rem' }}>UV himoya</div>
+                    <div style={{ fontWeight: 700, color: '#F59E0B', fontSize: '0.75rem' }}>{t('uvProtection')}</div>
                   </div>
                 )}
               </div>

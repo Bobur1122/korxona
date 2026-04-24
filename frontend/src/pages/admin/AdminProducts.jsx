@@ -92,8 +92,12 @@ export default function AdminProducts() {
       : (product.image ? [product.image] : []);
     setEditing(product._id);
     setForm({
-      name_uz: product.name_uz || '', name_ru: product.name_ru || '', name_en: product.name_en || '',
-      description_uz: product.description_uz || '', description_ru: product.description_ru || '', description_en: product.description_en || '',
+      name_uz: product.name_uz || product.name || '',
+      name_ru: product.name_ru || '',
+      name_en: product.name_en || '',
+      description_uz: product.description_uz || product.description || '',
+      description_ru: product.description_ru || '',
+      description_en: product.description_en || '',
       price: product.price,
       costPrice: product.costPrice || '',
       stock: product.stock,

@@ -2286,17 +2286,6 @@ textarea.form-input {
 }
 
 /* ===========================
-   CTA SECTION
-   =========================== */
-.cta-section {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #065F46 50%, var(--color-primary-light) 100%);
-  color: white;
-  padding: var(--space-20) 0;
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===========================
    SKELETON
    =========================== */
 .skeleton-card {
@@ -4534,20 +4523,24 @@ main,
   position: relative;
 }
 
-/* Wave Divider */
+/* Wave Divider (no layout shift) */
 .ft__wave {
-  position: relative;
-  height: 80px;
+  position: absolute;
+  top: -44px;
+  left: 0;
+  width: 100%;
+  height: 44px;
   overflow: hidden;
-  background: transparent;
-  margin-top: -80px;
-  z-index: 2;
   pointer-events: none;
+  z-index: 2;
 }
 .ft__wave svg {
   display: block;
   width: 100%;
   height: 100%;
+}
+.ft__wave path {
+  fill: #0a1628;
 }
 
 /* === Badge Row === */
@@ -4597,7 +4590,7 @@ main,
 /* === Main Body === */
 .ft__body {
   background: linear-gradient(180deg, #0a1628 0%, #060e1e 100%);
-  padding: 48px 0 36px;
+  padding: 40px 0 28px;
 }
 .ft__grid {
   display: grid;
@@ -4874,20 +4867,102 @@ main,
   .ft__badge { border-right: none; border-bottom: 1px solid rgba(148,163,184,0.06); }
   .ft__grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
   }
   .ft__col--brand { text-align: center; }
   .ft__logo-link { justify-content: center; }
-  .ft__about { margin: 0 auto 20px; }
+  .ft__about { margin: 0 auto 16px; }
   .ft__social-row { justify-content: center; }
   .ft__heading::after { left: 50%; transform: translateX(-50%); }
   .ft__nav { align-items: center; }
   .ft__contact-card { justify-content: center; }
   .ft__bottom-inner { flex-direction: column; gap: 10px; text-align: center; }
 }
+
+/* Compact mobile footer */
+@media (max-width: 768px) {
+  .ft__wave {
+    top: -30px;
+    height: 30px;
+  }
+  .ft__body {
+    padding: 24px 0 16px;
+  }
+  .ft__grid {
+    gap: 16px;
+  }
+  .ft__col--nav {
+    display: none; /* Nav links already in header/mobile menu */
+  }
+  .ft__col--brand {
+    text-align: center;
+  }
+  .ft__about {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    max-width: 300px;
+  }
+  .ft__logo-img {
+    height: 36px;
+  }
+  .ft__logo-name {
+    font-size: 1rem;
+  }
+  .ft__logo-sub {
+    font-size: 0.6rem;
+  }
+  .ft__social {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+  .ft__social-row {
+    gap: 8px;
+  }
+  .ft__heading {
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    text-align: center;
+  }
+  .ft__contacts {
+    gap: 6px;
+  }
+  .ft__contact-card {
+    padding: 8px 12px;
+    gap: 10px;
+    border-radius: 8px;
+  }
+  .ft__contact-card small {
+    font-size: 0.6rem;
+  }
+  .ft__contact-card span {
+    font-size: 0.78rem;
+  }
+  .ft__contact-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 @media (max-width: 480px) {
+  .ft__wave {
+    top: -24px;
+    height: 24px;
+  }
   .ft__badges-row { grid-template-columns: 1fr; }
   .ft__cta-card { padding: 22px 16px; }
+  .ft__body {
+    padding: 18px 0 12px;
+  }
+  .ft__about {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 260px;
+  }
 }
 
 .charts-grid>*,

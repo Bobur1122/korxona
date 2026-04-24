@@ -5,53 +5,24 @@ import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 
-const heroSlides = [
-  {
-    id: 1,
-    image: '/images/hero_slider/agro.png',
-    title: "Agro-Plyonkalar bilan yuqori hosil",
-    subtitle: "Issiqxonalaringiz uchun maxsus ishlab chiqilgan, UV-nurlari va murakkab ob-havodan himoya qiluvchi premium plyonkalar.",
-    bgColor: "#064e3b",
-    reverse: false
-  },
-  {
-    id: 2,
-    image: '/images/hero_slider/shrink.png',
-    title: "Sanoat Termo Qadoqlash",
-    subtitle: "Logistika jarayonida mahsulotlaringiz xavfsizligini 100% taminlang. Mustahkam va cho'ziluvchan termo plyonkalar.",
-    bgColor: "#1e3a8a",
-    reverse: true
-  },
-  {
-    id: 3,
-    image: '/images/hero_slider/build.png',
-    title: "Qurilish va Gidroizolyatsiya",
-    subtitle: "Kuchli va qalin qoplamalar bilan poydevor va tomlarni namlikdan mukammal asrang. Biz bilan inshootlaringiz uzoq umr ko'radi.",
-    bgColor: "#171717",
-    reverse: false
-  },
-  {
-    id: 4,
-    image: '/images/hero_slider/food.png',
-    title: "Ishonchli va Ekologik toza",
-    subtitle: "Oziq-ovqat sanoati uchun mutlaqo xavfsiz innovatsion qadoqlash plyonkalari. Mahsulot yangiligini uzoq muddat saqlaydi.",
-    bgColor: "#78350f",
-    reverse: true
-  },
-  {
-    id: 5,
-    image: '/images/hero_slider/logic.png',
-    title: "Hamkorlik va Barqarorlik",
-    subtitle: "O'zbekiston bo'ylab distribyutorlar tarmog'iga qo'shiling. Sifatli plyonka вЂ“ muvaffaqiyatli savdo garovi.",
-    bgColor: "#312e81",
-    reverse: false
-  }
+// Slide config (without text - text comes from translations)
+const heroSlideConfig = [
+  { id: 1, image: '/images/hero_slider/agro.png', titleKey: 'heroSlide1Title', subtitleKey: 'heroSlide1Subtitle', bgColor: '#064e3b', reverse: false, durationMs: 6000 },
+  { id: 2, image: '/images/hero_slider/shrink.png', titleKey: 'heroSlide2Title', subtitleKey: 'heroSlide2Subtitle', bgColor: '#1e3a8a', reverse: true, durationMs: 6000 },
+  { id: 3, image: '/images/hero_slider/build.png', titleKey: 'heroSlide3Title', subtitleKey: 'heroSlide3Subtitle', bgColor: '#171717', reverse: false, durationMs: 7000 },
+  { id: 4, image: '/images/hero_slider/food.png', titleKey: 'heroSlide4Title', subtitleKey: 'heroSlide4Subtitle', bgColor: '#78350f', reverse: true, durationMs: 8000 },
+  { id: 5, image: '/images/hero_slider/logic.png', titleKey: 'heroSlide5Title', subtitleKey: 'heroSlide5Subtitle', bgColor: '#312e81', reverse: false, durationMs: 6000 },
 ];
 
 export default function HomePage() {
   const { t } = useLanguage();
   const [featured, setFeatured] = useState([]);
   const [currentHeroBlock, setCurrentHeroBlock] = useState(0);
+  const heroSlides = heroSlideConfig.map((slide) => ({
+    ...slide,
+    title: t(slide.titleKey),
+    subtitle: t(slide.subtitleKey),
+  }));
 
   useEffect(() => {
     let alive = true;
@@ -65,17 +36,21 @@ export default function HomePage() {
     fetchFeatured();
     const refreshInterval = setInterval(fetchFeatured, 60000);
 
-    // Carousel logic
-    const interval = setInterval(() => {
-      setCurrentHeroBlock((prev) => (prev + 1) % heroSlides.length);
-    }, 10000); // Change every 15 seconds
-
     return () => {
       alive = false;
-      clearInterval(interval);
       clearInterval(refreshInterval);
     };
   }, []);
+
+  // Carousel timer — each slide gets its own custom duration
+  useEffect(() => {
+    const duration = heroSlideConfig[currentHeroBlock]?.durationMs || 5000;
+    const timer = setTimeout(() => {
+      setCurrentHeroBlock((prev) => (prev + 1) % heroSlideConfig.length);
+    }, duration);
+
+    return () => clearTimeout(timer);
+  }, [currentHeroBlock]);
 
   return (
     <div className="fade-in" style={{ backgroundColor: 'var(--color-primary)' }}>
@@ -265,7 +240,7 @@ export default function HomePage() {
                   <div style={{ maxWidth: 650, transform: isActive ? 'translateY(0)' : 'translateY(30px)', transition: 'transform 1s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '0.2s', opacity: isActive ? 1 : 0 }}>
                     <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: 24, paddingRight: '20px' }}>{slide.title}</h2>
                     <p style={{ fontSize: '1.25rem', color: '#E2E8F0', lineHeight: 1.7, marginBottom: 40, paddingRight: '40px' }}>{slide.subtitle}</p>
-                    <Link to="/products" style={{ background: 'transparent', color: '#FFF', border: '2px solid rgba(255,255,255,0.8)', padding: '14px 40px', borderRadius: 50, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 12, fontSize: '1.05rem', transition: 'all 0.3s ease', textDecoration: 'none', letterSpacing: 1, textTransform: 'uppercase' }} onMouseOver={e => { e.currentTarget.style.background = '#FFF'; e.currentTarget.style.color = slide.bgColor; }} onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#FFF'; }}>Batafsil ma'lumot <ArrowRight size={20} /></Link>
+                    <Link to="/products" style={{ background: 'transparent', color: '#FFF', border: '2px solid rgba(255,255,255,0.8)', padding: '14px 40px', borderRadius: 50, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 12, fontSize: '1.05rem', transition: 'all 0.3s ease', textDecoration: 'none', letterSpacing: 1, textTransform: 'uppercase' }} onMouseOver={e => { e.currentTarget.style.background = '#FFF'; e.currentTarget.style.color = slide.bgColor; }} onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#FFF'; }}>{t('moreParams')} <ArrowRight size={20} /></Link>
                   </div>
                 </div>
 
@@ -496,7 +471,7 @@ export default function HomePage() {
                 lineHeight: 1.05,
                 color: '#fff',
               }}>
-                Katta hajmli buyurtmalar uchun ishlab chiqaruvchidan to'g'ridan-to'g'ri
+                {t('ctaTitle')}
               </h2>
 
               <p style={{
@@ -506,7 +481,7 @@ export default function HomePage() {
                 lineHeight: 1.65,
                 color: '#CBD5E1',
               }}>
-                Individual narxlar, barqaror yetkazib berish, eksport hujjatlari va logistika yordami — hammasi bir joyda.
+                {t('ctaDesc')}
               </p>
 
               <div style={{
