@@ -415,12 +415,12 @@ export default function AdminProducts() {
               <tr key={p._id}>
                 <td>
                   <img
-                    src={(Array.isArray(p.images) && p.images.length ? p.images[0] : p.image) || `https://placehold.co/40x40/f0fdf4/16a34a?text=${p.name[0]}`}
-                    alt={p.name}
+                    src={(Array.isArray(p.images) && p.images.length ? p.images[0] : p.image) || `https://placehold.co/40x40/f0fdf4/16a34a?text=${(p.name_uz || p.name || 'M')[0]}`}
+                    alt={p.name_uz || p.name}
                     style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
                   />
                 </td>
-                <td style={{ fontWeight: 500 }}>{p.name}</td>
+                <td style={{ fontWeight: 500 }}>{p.name_uz || p.name || '—'}</td>
                 <td>{categories.find(c => c.value === p.category)?.label || p.category}</td>
                 <td>{p.thickness ? `${p.thickness} mkm` : '—'}</td>
                 <td>{p.price.toLocaleString()} so'm</td>
