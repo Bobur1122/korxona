@@ -7,11 +7,11 @@ import { useLanguage } from '../context/LanguageContext';
 
 // Slide config (without text - text comes from translations)
 const heroSlideConfig = [
-  { id: 1, image: '/images/hero_slider/agro.png', titleKey: 'heroSlide1Title', subtitleKey: 'heroSlide1Subtitle', bgColor: '#064e3b', reverse: false, durationMs: 6000 },
-  { id: 2, image: '/images/hero_slider/shrink.png', titleKey: 'heroSlide2Title', subtitleKey: 'heroSlide2Subtitle', bgColor: '#1e3a8a', reverse: true, durationMs: 6000 },
-  { id: 3, image: '/images/hero_slider/build.png', titleKey: 'heroSlide3Title', subtitleKey: 'heroSlide3Subtitle', bgColor: '#171717', reverse: false, durationMs: 7000 },
-  { id: 4, image: '/images/hero_slider/food.png', titleKey: 'heroSlide4Title', subtitleKey: 'heroSlide4Subtitle', bgColor: '#78350f', reverse: true, durationMs: 8000 },
-  { id: 5, image: '/images/hero_slider/logic.png', titleKey: 'heroSlide5Title', subtitleKey: 'heroSlide5Subtitle', bgColor: '#312e81', reverse: false, durationMs: 6000 },
+  { id: 1, image: '/images/hero_slider/agro.png', titleKey: 'heroSlide1Title', subtitleKey: 'heroSlide1Subtitle', bgColor: '#064e3b', reverse: false, durationMs: 5000 },
+  { id: 2, image: '/images/hero_slider/shrink.png', titleKey: 'heroSlide2Title', subtitleKey: 'heroSlide2Subtitle', bgColor: '#1e3a8a', reverse: true, durationMs: 5000 },
+  { id: 3, image: '/images/hero_slider/build.png', titleKey: 'heroSlide3Title', subtitleKey: 'heroSlide3Subtitle', bgColor: '#171717', reverse: false, durationMs: 6000 },
+  { id: 4, image: '/images/hero_slider/food.png', titleKey: 'heroSlide4Title', subtitleKey: 'heroSlide4Subtitle', bgColor: '#78350f', reverse: true, durationMs: 6000 },
+  { id: 5, image: '/images/hero_slider/logic.png', titleKey: 'heroSlide5Title', subtitleKey: 'heroSlide5Subtitle', bgColor: '#312e81', reverse: false, durationMs: 5000 },
 ];
 
 export default function HomePage() {
