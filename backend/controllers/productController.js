@@ -81,7 +81,7 @@ const getProducts = async (req, res, next) => {
         : [];
 
       const soldMap = new Map(soldAgg.map((row) => [String(row._id), row.soldQty]));
-      const allProducts = await Product.find(query).sort({ createdAt: -1 });
+      const allProducts = await Product.find(query).sort({ createdAt: -1 }).lean();
 
       allProducts.sort((a, b) => {
         const aSold = soldMap.get(String(a._id)) ?? a.soldCount ?? 0;
@@ -95,7 +95,8 @@ const getProducts = async (req, res, next) => {
       products = await Product.find(query)
         .sort(sortObj)
         .skip(skip)
-        .limit(Number(limit));
+        .limit(Number(limit))
+        .lean();
     }
 
     res.json({
@@ -198,7 +199,7 @@ const getAllProducts = async (req, res, next) => {
       ];
     }
 
-    const products = await Product.find(query).sort({ createdAt: -1 });
+    const products = await Product.find(query).sort({ createdAt: -1 }).lean();
     res.json({ success: true, data: products });
   } catch (error) {
     next(error);

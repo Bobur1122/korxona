@@ -26,8 +26,8 @@ const translations = {
     agroTitle: 'Agrosanoat komplekslari',
     thermoTitle: 'Termo qadoqlash (Shrink)',
     logisticsTitle: 'Sanoat logistika paketlari',
-    moreParams: 'Batafsil parametrlar',
-    onlineCatalog: 'Onlayn katalog',
+    moreParams: 'Batafsil ',
+    onlineCatalog: 'Katalog',
     fullList: "To'liq ro'yxat",
     partnersTitle: 'Hamkorlar',
 
@@ -344,7 +344,7 @@ const translations = {
     thermoTitle: 'Термоусадочная упаковка (Shrink)',
     logisticsTitle: 'Промышленные логистические пакеты',
     moreParams: 'Подробнее',
-    onlineCatalog: 'Онлайн каталог',
+    onlineCatalog: 'Каталог',
     fullList: 'Полный список',
     partnersTitle: 'Партнеры',
 
@@ -661,7 +661,7 @@ const translations = {
     thermoTitle: 'Shrink packaging',
     logisticsTitle: 'Industrial logistics packaging',
     moreParams: 'More details',
-    onlineCatalog: 'Online catalog',
+    onlineCatalog: 'Catalog',
     fullList: 'Full list',
     partnersTitle: 'Partners',
 

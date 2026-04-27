@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingCart, ArrowLeft, Package, Sun } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, Package, Sun, ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { api } from '../api';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,6 +15,8 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [activeImage, setActiveImage] = useState('');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -93,17 +95,31 @@ export default function ProductDetailPage() {
         <div className="product-detail-grid">
           {/* Image */}
           <div style={{ background: '#F8FAFC', borderRadius: 16, border: '1px solid #E2E8F0', padding: 16 }}>
-            <img
-              src={mainImage}
-              alt={productName}
-              className="product-detail-image"
-              style={{ border: 'none', background: 'transparent' }}
-              onError={(e) => { e.target.src = getFallback(productName); e.target.onerror = null; }}
-            />
+            <div
+              style={{ position: 'relative', cursor: 'zoom-in', borderRadius: 12, overflow: 'hidden' }}
+              onClick={() => { setLightboxIndex(images.indexOf(mainImage) >= 0 ? images.indexOf(mainImage) : 0); setLightboxOpen(true); }}
+            >
+              <img
+                src={mainImage}
+                alt={productName}
+                className="product-detail-image"
+                style={{ border: 'none', background: 'transparent', minHeight: 350 }}
+                onError={(e) => { e.target.src = getFallback(productName); e.target.onerror = null; }}
+              />
+              <div style={{
+                position: 'absolute', bottom: 12, right: 12,
+                width: 40, height: 40, borderRadius: 10,
+                background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', pointerEvents: 'none'
+              }}>
+                <ZoomIn size={18} />
+              </div>
+            </div>
 
             {images.length > 1 && (
               <div style={{ marginTop: 12, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                {images.map((url) => (
+                {images.map((url, idx) => (
                   <button
                     key={url}
                     type="button"
@@ -117,6 +133,7 @@ export default function ProductDetailPage() {
                       overflow: 'hidden',
                       background: '#fff',
                       cursor: 'pointer',
+                      transition: 'border-color 0.2s',
                     }}
                     title={t('viewImage')}
                   >
@@ -220,6 +237,87 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* LIGHTBOX */}
+      {lightboxOpen && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 9999,
+            background: "rgba(0,0,0,0.92)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "zoom-out",
+          }}
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            style={{
+              position: "absolute", top: 20, right: 20, zIndex: 10,
+              width: 44, height: 44, borderRadius: 999,
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)",
+              color: "#fff", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <X size={20} />
+          </button>
+
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i - 1 + images.length) % images.length); }}
+                style={{
+                  position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", zIndex: 10,
+                  width: 48, height: 48, borderRadius: 999,
+                  background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+                  color: "#fff", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
+              >
+                <ChevronLeft size={22} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i + 1) % images.length); }}
+                style={{
+                  position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", zIndex: 10,
+                  width: 48, height: 48, borderRadius: 999,
+                  background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+                  color: "#fff", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
+              >
+                <ChevronRight size={22} />
+              </button>
+            </>
+          )}
+
+          <img
+            src={images[lightboxIndex] || mainImage}
+            alt={productName}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: "90vw", maxHeight: "85vh",
+              objectFit: "contain", borderRadius: 12,
+              cursor: "default",
+              boxShadow: "0 10px 60px rgba(0,0,0,0.5)",
+            }}
+            onError={(e) => { e.target.src = getFallback(productName); e.target.onerror = null; }}
+          />
+
+          {images.length > 1 && (
+            <div style={{
+              position: "absolute", bottom: 24, left: "50%", transform: "translateX(-50%)",
+              padding: "8px 18px", borderRadius: 999,
+              background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)",
+              color: "#fff", fontWeight: 700, fontSize: "0.85rem",
+              border: "1px solid rgba(255,255,255,0.15)",
+            }}>
+              {lightboxIndex + 1} / {images.length}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

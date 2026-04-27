@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage';
 import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import ContactsPage from './pages/ContactsPage';
+import AccessoryDetailPage from './pages/AccessoryDetailPage';
 
 // Admin pages
 import AdminLayout from './pages/admin/AdminLayout';
@@ -58,6 +59,7 @@ export default function App() {
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:id" element={<NewsDetailPage />} />
               <Route path="/contacts" element={<ContactsPage />} />
+              <Route path="/accessory/:slug" element={<AccessoryDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />

@@ -46,5 +46,7 @@ productSchema.index({ name_uz: 'text', name_ru: 'text', name_en: 'text', descrip
 productSchema.index({ category: 1 });
 productSchema.index({ price: 1 });
 productSchema.index({ soldCount: -1 });
+productSchema.index({ isActive: 1, category: 1, createdAt: -1 });
+productSchema.index({ isActive: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Product', productSchema);
