@@ -19,8 +19,6 @@ const sunSlideConfig = [
   {
     id: 'light-30',
     percent: 30,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_30.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Soyalash (ekonom)" },
@@ -37,8 +35,6 @@ const sunSlideConfig = [
   {
     id: 'light-45',
     percent: 45,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_45.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Soyalash (standart)" },
@@ -55,8 +51,6 @@ const sunSlideConfig = [
   {
     id: 'light-65',
     percent: 65,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_65.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Issiqxona (UV)" },
@@ -73,8 +67,6 @@ const sunSlideConfig = [
   {
     id: 'light-75',
     percent: 75,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_75.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Issiqxona (UV+IR)" },
@@ -91,8 +83,6 @@ const sunSlideConfig = [
   {
     id: 'light-88',
     percent: 88,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_88.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Premium (UV+IR+EVA)" },
@@ -109,8 +99,6 @@ const sunSlideConfig = [
   {
     id: 'light-92',
     percent: 92,
-    percentImg: '',
-    sunImage: '/images/sun_carousel/sun_92.jpg',
     leftTitle: 'Parametrlar',
     left: [
       { k: "Plyonka turi", v: "Ultra premium" },
@@ -524,18 +512,125 @@ export default function HomePage() {
         }
         .sun-img-wrap {
           width: 100%;
-          max-width: 380px;
-          aspect-ratio: 1;
+          max-width: 340px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .sun-visual {
+          position: relative;
+          width: 260px;
+          height: 260px;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .sun-img-wrap img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
+        /* Animated rotating rays */
+        .sun-rays {
+          position: absolute;
+          inset: -30px;
           border-radius: 50%;
-          filter: drop-shadow(0 0 40px rgba(255,180,50,0.5));
+          transition: opacity 0.8s ease, filter 0.8s ease;
+        }
+        @keyframes sunRaysSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .sun-ray-line {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 2px;
+          transform-origin: 0 0;
+          border-radius: 999px;
+          transition: height 0.8s ease, opacity 0.8s ease, background 0.8s ease;
+        }
+        /* Core sun circle */
+        .sun-core {
+          position: relative;
+          width: 160px;
+          height: 160px;
+          border-radius: 50%;
+          z-index: 2;
+          transition: background 0.8s ease, box-shadow 0.8s ease;
+        }
+        /* Film overlay on sun */
+        .sun-film-overlay {
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          z-index: 3;
+          transition: background 0.8s ease;
+          pointer-events: none;
+        }
+        /* Percent badge below sun */
+        .sun-percent-badge {
+          margin-top: 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+        }
+        .sun-percent-value {
+          font-size: 2.6rem;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+          line-height: 1;
+          transition: color 0.8s ease;
+        }
+        .sun-percent-caption {
+          font-size: 0.78rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(226,232,240,0.55);
+        }
+        /* Light bar */
+        .sun-light-meter {
+          margin-top: 16px;
+          width: 200px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .sun-light-meter-labels {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(226,232,240,0.45);
+        }
+        .sun-light-meter-track {
+          width: 100%;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.08);
+          overflow: hidden;
+        }
+        .sun-light-meter-fill {
+          height: 100%;
+          border-radius: 999px;
+          transition: width 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.8s ease;
+        }
+        @media (max-width: 980px) {
+          .sun-img-wrap {
+            max-width: 280px;
+          }
+          .sun-visual {
+            width: 200px;
+            height: 200px;
+          }
+          .sun-core {
+            width: 120px;
+            height: 120px;
+          }
+          .sun-percent-value {
+            font-size: 2rem;
+          }
         }
         .sun-controls {
           margin-top: 28px;
@@ -837,10 +932,105 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                {/* CENTER — Sun Image */}
+                {/* CENTER — Creative Sun Visualization */}
                 <div className="sun-center-col">
                   <div className="sun-img-wrap">
-                    <img src={slide.sunImage} alt={`${slide.percent}% yorug'lik`} />
+                    {(() => {
+                      const pct = slide.percent;
+                      // brightness: 30% blocking = bright sun, 92% blocking = very dim sun
+                      const brightness = Math.max(0.08, 1 - pct / 100);
+                      const glowIntensity = brightness;
+                      const coreLight = Math.round(25 + brightness * 50); // 25-75
+                      const coreSat = Math.round(40 + brightness * 55); // 40-95
+                      const coreColor = `hsl(42, ${coreSat}%, ${coreLight}%)`;
+                      const coreGlow = `hsl(38, ${coreSat}%, ${Math.round(coreLight * 1.1)}%)`;
+                      const glowSize = Math.round(10 + glowIntensity * 60);
+                      const rayCount = 24;
+                      const rayOpacity = Math.max(0.05, brightness * 0.7);
+                      const rayLength = Math.round(20 + brightness * 55);
+                      const filmOpacity = pct / 130; // 0.23 at 30%, 0.71 at 92%
+                      const percentColor = brightness > 0.4
+                        ? `hsl(42, 90%, 65%)`
+                        : brightness > 0.2
+                          ? `hsl(42, 60%, 45%)`
+                          : `hsl(42, 30%, 35%)`;
+                      const meterFill = brightness > 0.4
+                        ? 'linear-gradient(90deg, #F59E0B, #FBBF24)'
+                        : brightness > 0.2
+                          ? 'linear-gradient(90deg, #B45309, #D97706)'
+                          : 'linear-gradient(90deg, #78350F, #92400E)';
+                      return (
+                        <>
+                          <div className="sun-visual">
+                            {/* Rays */}
+                            <div className="sun-rays" style={{ opacity: rayOpacity, animation: 'sunRaysSpin 60s linear infinite' }}>
+                              {Array.from({ length: rayCount }).map((_, i) => {
+                                const angle = (360 / rayCount) * i;
+                                const rLen = rayLength + (i % 3 === 0 ? 12 : 0);
+                                return (
+                                  <div
+                                    key={i}
+                                    className="sun-ray-line"
+                                    style={{
+                                      height: rLen,
+                                      transform: `rotate(${angle}deg) translateY(-${80 + rLen}px)`,
+                                      background: `linear-gradient(to bottom, ${coreGlow}, transparent)`,
+                                      opacity: i % 2 === 0 ? 1 : 0.5,
+                                    }}
+                                  />
+                                );
+                              })}
+                            </div>
+                            {/* Core sun */}
+                            <div
+                              className="sun-core"
+                              style={{
+                                background: `radial-gradient(circle at 40% 35%, ${coreGlow}, ${coreColor} 60%, hsl(42, 30%, ${Math.max(8, coreLight - 15)}%) 100%)`,
+                                boxShadow: `0 0 ${glowSize}px ${glowSize / 2}px hsla(42, ${coreSat}%, ${coreLight}%, ${glowIntensity * 0.5}), 0 0 ${glowSize * 2.5}px ${glowSize}px hsla(38, ${coreSat}%, ${coreLight}%, ${glowIntensity * 0.25})`,
+                              }}
+                            />
+                            {/* Film overlay — darkens the sun */}
+                            <div
+                              className="sun-film-overlay"
+                              style={{
+                                background: `rgba(7, 11, 20, ${filmOpacity})`,
+                                inset: 0,
+                                position: 'absolute',
+                                borderRadius: '50%',
+                                width: 160,
+                                height: 160,
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                              }}
+                            />
+                          </div>
+                          {/* Percent badge */}
+                          <div className="sun-percent-badge">
+                            <div className="sun-percent-value" style={{ color: percentColor }}>
+                              {slide.percent}<span style={{ fontSize: '1.4rem' }}>%</span>
+                            </div>
+                            <div className="sun-percent-caption">yorug'lik o'tishi</div>
+                          </div>
+                          {/* Light meter */}
+                          <div className="sun-light-meter">
+                            <div className="sun-light-meter-labels">
+                              <span>kam</span>
+                              <span>ko'p</span>
+                            </div>
+                            <div className="sun-light-meter-track">
+                              <div
+                                className="sun-light-meter-fill"
+                                style={{
+                                  width: `${100 - pct}%`,
+                                  background: meterFill,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 
