@@ -4,6 +4,7 @@ const Product = require('../models/Product');
 const { buildCreatedAtFilter } = require('../utils/dateRange');
 
 const DASHBOARD_TIMEZONE = process.env.DASHBOARD_TIMEZONE || 'Asia/Tashkent';
+const VALID_USER_ROLES = ['user', 'admin', 'direktor', 'hodim'];
 
 // Helper: build stats for a date range
 async function buildRangeStats(startDate, endDate) {
@@ -191,11 +192,53 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+// POST /api/admin/users
+const createUser = async (req, res, next) => {
+  try {
+    const { name, email, phone, password, role } = req.body;
+    const normalizedRole = role || 'user';
+
+    if (!name || !email || !phone || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Ism, email, telefon va parol kiritilishi shart'
+      });
+    }
+
+    if (!VALID_USER_ROLES.includes(normalizedRole)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Noto\'g\'ri rol'
+      });
+    }
+
+    const exists = await User.findOne({ email: String(email).toLowerCase().trim() });
+    if (exists) {
+      return res.status(400).json({
+        success: false,
+        message: 'Bu email allaqachon mavjud'
+      });
+    }
+
+    const user = await User.create({
+      name,
+      email,
+      phone,
+      password,
+      role: normalizedRole
+    });
+
+    res.status(201).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // PUT /api/admin/users/:id/role
 const updateUserRole = async (req, res, next) => {
   try {
     const { role } = req.body;
-    if (!['user', 'admin'].includes(role)) {
+    if (!VALID_USER_ROLES.includes(role)) {
       return res.status(400).json({ success: false, message: 'Noto\'g\'ri rol' });
     }
 
@@ -223,4 +266,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getDashboardStats, getUsers, updateUserRole, deleteUser };
+module.exports = { getDashboardStats, getUsers, createUser, updateUserRole, deleteUser };

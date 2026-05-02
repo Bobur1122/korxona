@@ -4,10 +4,81 @@ const PromoCode = require('../models/PromoCode');
 const { sendTelegramNotification } = require('../utils/telegram');
 const { buildCreatedAtFilter } = require('../utils/dateRange');
 
+const BACKOFFICE_ROLES = ['admin', 'direktor', 'hodim'];
+const ORDER_STATUS_FLOW = ['kutilmoqda', 'qabul_qilindi', 'tayyorlanmoqda', 'yuklandi', 'yuborildi', 'yetkazildi'];
+const PAYMENT_PLANS = ['oldindan', 'avans', 'yuklangandan_keyin'];
+const PAYMENT_STATUSES = ['kutilmoqda', 'tushdi'];
+const ORDER_STATUS_ALIASES = {
+  kutilmoqda: 'kutilmoqda',
+  "kutilmoqda": 'kutilmoqda',
+  pending: 'kutilmoqda',
+  qabul_qilindi: 'qabul_qilindi',
+  'qabul qilindi': 'qabul_qilindi',
+  qabulqilindi: 'qabul_qilindi',
+  accepted: 'qabul_qilindi',
+  tayyorlanmoqda: 'tayyorlanmoqda',
+  tayyor: 'tayyorlanmoqda',
+  preparing: 'tayyorlanmoqda',
+  yuklandi: 'yuklandi',
+  loaded: 'yuklandi',
+  yuborildi: 'yuborildi',
+  sent: 'yuborildi',
+  yetkazildi: 'yetkazildi',
+  delivered: 'yetkazildi',
+};
+
+function statusIndex(status) {
+  return ORDER_STATUS_FLOW.indexOf(status);
+}
+
+function normalizeOrderStatus(status) {
+  const raw = String(status || '').trim().toLowerCase();
+  if (!raw) return '';
+  if (ORDER_STATUS_FLOW.includes(raw)) return raw;
+  const compact = raw.replace(/\s+/g, '_');
+  if (ORDER_STATUS_FLOW.includes(compact)) return compact;
+  return ORDER_STATUS_ALIASES[raw] || ORDER_STATUS_ALIASES[compact] || '';
+}
+
 // POST /api/orders
 const createOrder = async (req, res, next) => {
   try {
-    const { items, shippingAddress, phone, notes, promoCode } = req.body;
+    const { items, shippingAddress, phone, notes, promoCode, customerName, companyName, orderSource, paymentPlan } = req.body;
+    const isBackofficeUser = BACKOFFICE_ROLES.includes(req.user.role);
+    const requestedSource = orderSource === 'offline' ? 'offline' : 'online';
+
+    if (requestedSource === 'offline' && !isBackofficeUser) {
+      return res.status(403).json({
+        success: false,
+        message: 'Qo\'ng\'iroq orqali buyurtma qo\'shish ruxsati yo\'q'
+      });
+    }
+
+    const finalOrderSource = requestedSource === 'offline' && isBackofficeUser ? 'offline' : 'online';
+    const normalizedCustomerName = String(customerName || req.user.name || '').trim();
+    const normalizedCompanyName = String(companyName || '').trim();
+    const normalizedPaymentPlan = paymentPlan || 'avans';
+
+    if (!normalizedCustomerName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Mijoz ismini kiriting'
+      });
+    }
+
+    if (finalOrderSource === 'offline' && !normalizedCompanyName) {
+      return res.status(400).json({
+        success: false,
+        message: 'Kompaniya nomini kiriting'
+      });
+    }
+
+    if (!PAYMENT_PLANS.includes(normalizedPaymentPlan)) {
+      return res.status(400).json({
+        success: false,
+        message: 'To\'lov turi noto\'g\'ri'
+      });
+    }
 
     if (!items || items.length === 0) {
       return res.status(400).json({
@@ -85,7 +156,7 @@ const createOrder = async (req, res, next) => {
     let discountAmount = 0;
     let finalPrice = totalPrice;
 
-    if (promoCode) {
+    if (promoCode && finalOrderSource === 'online') {
       const promo = await PromoCode.findOne({ code: promoCode.toUpperCase() });
       if (promo && promo.isValid()) {
         discountAmount = Math.round(totalPrice * promo.discountPercent / 100);
@@ -102,11 +173,17 @@ const createOrder = async (req, res, next) => {
 
     const order = await Order.create({
       user: req.user._id,
+      customerName: normalizedCustomerName,
+      companyName: normalizedCompanyName,
+      orderSource: finalOrderSource,
+      createdByStaff: finalOrderSource === 'offline' ? req.user._id : null,
       items: orderItems,
       totalPrice,
       discountAmount,
       finalPrice,
-      promoCode: promoCode ? promoCode.toUpperCase() : null,
+      promoCode: promoCode && finalOrderSource === 'online' ? promoCode.toUpperCase() : null,
+      paymentPlan: normalizedPaymentPlan,
+      paymentStatus: 'kutilmoqda',
       shippingAddress,
       phone,
       notes
@@ -148,7 +225,9 @@ const getOrder = async (req, res, next) => {
       });
     }
 
-    if (order.user._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    const canAccessBackofficeOrder = ['admin', 'direktor', 'hodim'].includes(req.user.role);
+    const orderUserId = order.user?._id?.toString?.() || order.user?.toString?.() || null;
+    if (!canAccessBackofficeOrder && orderUserId !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Ruxsat etilmagan'
@@ -166,7 +245,10 @@ const getAllOrders = async (req, res, next) => {
   try {
     const { status, startDate, endDate, page = 1, limit = 20 } = req.query;
     const query = {};
-    if (status) query.status = status;
+    if (status) {
+      const normalized = normalizeOrderStatus(status);
+      if (normalized) query.status = normalized;
+    }
     const createdAt = buildCreatedAtFilter(startDate, endDate);
     if (createdAt) query.createdAt = createdAt;
 
@@ -174,6 +256,7 @@ const getAllOrders = async (req, res, next) => {
     const total = await Order.countDocuments(query);
     const orders = await Order.find(query)
       .populate('user', 'name email phone')
+      .populate('createdByStaff', 'name role')
       .populate('items.product', 'name_uz name_ru name_en image')
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -193,9 +276,9 @@ const getAllOrders = async (req, res, next) => {
 const updateOrderStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
-    const validStatuses = ['kutilmoqda', 'qabul_qilindi', 'tayyorlanmoqda', 'yetkazildi'];
+    const normalizedStatus = normalizeOrderStatus(status);
 
-    if (!validStatuses.includes(status)) {
+    if (!ORDER_STATUS_FLOW.includes(normalizedStatus)) {
       return res.status(400).json({
         success: false,
         message: 'Noto\'g\'ri status'
@@ -211,8 +294,9 @@ const updateOrderStatus = async (req, res, next) => {
       });
     }
 
-    const currentIndex = validStatuses.indexOf(order.status);
-    const nextIndex = validStatuses.indexOf(status);
+    const currentStatus = normalizeOrderStatus(order.status) || order.status;
+    const currentIndex = statusIndex(currentStatus);
+    const nextIndex = statusIndex(normalizedStatus);
 
     if (nextIndex < currentIndex) {
       return res.status(400).json({
@@ -221,7 +305,7 @@ const updateOrderStatus = async (req, res, next) => {
       });
     }
 
-    order.status = status;
+    order.status = normalizedStatus;
     await order.save();
 
     res.json({ success: true, data: order });
@@ -230,4 +314,43 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { createOrder, getMyOrders, getOrder, getAllOrders, updateOrderStatus };
+// PUT /api/orders/:id/payment
+const updateOrderPaymentStatus = async (req, res, next) => {
+  try {
+    const { paymentStatus } = req.body;
+
+    if (!PAYMENT_STATUSES.includes(paymentStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Noto\'g\'ri to\'lov statusi'
+      });
+    }
+
+    const order = await Order.findById(req.params.id).populate('user', 'name email phone');
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Buyurtma topilmadi'
+      });
+    }
+
+    const normalizedCurrentStatus = normalizeOrderStatus(order.status) || order.status;
+    if (paymentStatus === 'tushdi' && statusIndex(normalizedCurrentStatus) < statusIndex('yuklandi')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Pul tushdi statusi uchun buyurtma kamida "yuklandi" bosqichida bo\'lishi kerak'
+      });
+    }
+
+    order.paymentStatus = paymentStatus;
+    order.paymentReceivedAt = paymentStatus === 'tushdi' ? new Date() : null;
+    await order.save();
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createOrder, getMyOrders, getOrder, getAllOrders, updateOrderStatus, updateOrderPaymentStatus };

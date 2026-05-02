@@ -11,6 +11,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const rolePath = {
+    admin: '/admin',
+    direktor: '/director',
+    hodim: '/hodim/orders',
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +23,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const user = await login(email, password);
-      navigate(user.role === 'admin' ? '/admin' : '/');
+      navigate(rolePath[user.role] || '/');
     } catch (err) {
       setError(err.message);
     } finally {

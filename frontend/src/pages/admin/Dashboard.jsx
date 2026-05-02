@@ -222,10 +222,17 @@ export default function Dashboard() {
     orderDS.push({ label: `${t('dailyOrdersCountLabel')} (${t('period1')})`, data: previous.dailyOrders.map(d => d.count), backgroundColor: 'rgba(59,130,246,.25)', borderRadius: 4 });
   }
 
-  const sLabels = { kutilmoqda: t('statusPending'), qabul_qilindi: t('statusAccepted'), tayyorlanmoqda: t('statusPreparing'), yetkazildi: t('statusDelivered') };
+  const sLabels = {
+    kutilmoqda: t('statusPending'),
+    qabul_qilindi: t('statusAccepted'),
+    tayyorlanmoqda: t('statusPreparing'),
+    yuklandi: t('statusLoaded'),
+    yuborildi: t('statusSent'),
+    yetkazildi: t('statusDelivered'),
+  };
   const statusD = {
     labels: current.ordersByStatus.map(s => sLabels[s._id]||s._id),
-    datasets: [{ data: current.ordersByStatus.map(s => s.count), backgroundColor: ['#F59E0B','#3B82F6','#16A34A','#10B981'], borderWidth: 0 }]
+    datasets: [{ data: current.ordersByStatus.map(s => s.count), backgroundColor: ['#F59E0B','#3B82F6','#16A34A','#0EA5E9','#8B5CF6','#10B981'], borderWidth: 0 }]
   };
 
   const chartOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, padding: 14, font: { size: 11, family: 'Inter, system-ui, sans-serif' } } } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 10 } } }, y: { grid: { color: '#f1f5f9' }, beginAtZero: true, ticks: { font: { size: 10 } } } } };
@@ -377,7 +384,7 @@ export default function Dashboard() {
               <div key={o._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid #F8FAFC', fontSize: 13 }}>
                 <div>
                   <div style={{ fontWeight: 600, color: '#1E293B' }}>{o.orderNumber}</div>
-                  <div style={{ color: '#94A3B8', fontSize: 11 }}>{o.user?.name || t('unknownUser')}</div>
+                  <div style={{ color: '#94A3B8', fontSize: 11 }}>{o.customerName || o.user?.name || o.phone || t('unknownUser')}</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <StatusBadge status={o.status} />

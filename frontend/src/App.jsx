@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -35,7 +35,7 @@ export default function App() {
       {/* Admin routes - no navbar/footer */}
       <Route path="/admin" element={
         <ProtectedRoute adminOnly>
-          <AdminLayout />
+          <AdminLayout panelRole="admin" />
         </ProtectedRoute>
       }>
         <Route index element={<Dashboard />} />
@@ -44,6 +44,26 @@ export default function App() {
         <Route path="orders" element={<AdminOrders />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="promo" element={<AdminPromoCodes />} />
+      </Route>
+
+      <Route path="/director" element={
+        <ProtectedRoute allowRoles={['direktor']}>
+          <AdminLayout panelRole="direktor" />
+        </ProtectedRoute>
+      }>
+        <Route index element={<Dashboard />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="news" element={<AdminNews />} />
+        <Route path="orders" element={<AdminOrders />} />
+      </Route>
+
+      <Route path="/hodim" element={
+        <ProtectedRoute allowRoles={['hodim']}>
+          <AdminLayout panelRole="hodim" />
+        </ProtectedRoute>
+      }>
+        <Route index element={<Navigate to="/hodim/orders" replace />} />
+        <Route path="orders" element={<AdminOrders />} />
       </Route>
 
       {/* Public routes with navbar/footer */}

@@ -9,7 +9,7 @@ const LANG_LABELS = { uz: "O'zbekcha", ru: 'Russian', en: 'English' };
 const LANG_FLAGS = { uz: 'UZ', ru: 'RU', en: 'EN' };
 
 export default function Navbar() {
-  const { user, isAdmin } = useAuth();
+  const { user, isBackoffice, backofficePath } = useAuth();
   const { totalItems } = useCart();
   const { language, changeLanguage, t } = useLanguage();
   const location = useLocation();
@@ -73,10 +73,10 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          {isAdmin && (
+          {isBackoffice && backofficePath && (
             <Link
-              to="/admin"
-              className={`gp-header__nav-link ${location.pathname.startsWith('/admin') ? 'gp-header__nav-link--active' : ''}`}
+              to={backofficePath}
+              className={`gp-header__nav-link ${location.pathname.startsWith(backofficePath) ? 'gp-header__nav-link--active' : ''}`}
             >
               {t('adminPanel')}
             </Link>
@@ -176,8 +176,8 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link to="/admin" className="gp-header__mobile-link" onClick={() => setMobileOpen(false)}>
+          {isBackoffice && backofficePath && (
+            <Link to={backofficePath} className="gp-header__mobile-link" onClick={() => setMobileOpen(false)}>
               {t('adminPanel')}
             </Link>
           )}

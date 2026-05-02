@@ -1,7 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Shield, Trash2, User } from 'lucide-react';
+import { Shield, Trash2, User, UserCog, BriefcaseBusiness, Plus, X } from 'lucide-react';
 import { api } from '../../api';
 import { rangeLastDays, rangeThisMonth } from '../../utils/datePeriod';
+
+const ROLE_OPTIONS = [
+  { value: 'user', label: 'Foydalanuvchi' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'direktor', label: 'Direktor' },
+  { value: 'hodim', label: 'Hodim' },
+];
+
+const ROLE_META = {
+  admin: { label: 'Admin', badge: 'badge-accent', icon: Shield },
+  direktor: { label: 'Direktor', badge: 'badge-info', icon: BriefcaseBusiness },
+  hodim: { label: 'Hodim', badge: 'badge-info', icon: UserCog },
+  user: { label: 'Foydalanuvchi', badge: 'badge-info', icon: User },
+};
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -11,6 +25,15 @@ export default function AdminUsers() {
   const [role, setRole] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    role: 'hodim',
+  });
+  const [creating, setCreating] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setSearch(searchInput.trim()), 350);
@@ -52,13 +75,44 @@ export default function AdminUsers() {
     }
   };
 
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    setCreating(true);
+    try {
+      await api.createUser(form);
+      setForm({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        role: 'hodim',
+      });
+      setIsCreateModalOpen(false);
+      fetchUsers();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setCreating(false);
+    }
+  };
+
   if (loading && users.length === 0) return <div className="loading-page"><div className="spinner"></div></div>;
 
   return (
     <div className="fade-in">
       <div className="admin-header">
         <h1 className="admin-title">Foydalanuvchilar</h1>
-        <span className="badge badge-accent">{users.length} ta foydalanuvchi</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <Plus size={14} />
+            Foydalanuvchi qo'shish
+          </button>
+          <span className="badge badge-accent">{users.length} ta foydalanuvchi</span>
+        </div>
       </div>
 
       {/* Filters */}
@@ -82,8 +136,11 @@ export default function AdminUsers() {
             <label className="form-label" style={{ fontSize: 'var(--font-size-xs)' }}>Rol</label>
             <select className="form-select" value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="">Barchasi</option>
-              <option value="user">Foydalanuvchi</option>
-              <option value="admin">Admin</option>
+              {ROLE_OPTIONS.map((roleOption) => (
+                <option key={roleOption.value} value={roleOption.value}>
+                  {roleOption.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
@@ -163,6 +220,10 @@ export default function AdminUsers() {
             {users.map(u => (
               <tr key={u._id}>
                 <td>
+                  {(() => {
+                    const meta = ROLE_META[u.role] || ROLE_META.user;
+                    const Icon = meta.icon;
+                    return (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: 'var(--radius-full)',
@@ -170,16 +231,18 @@ export default function AdminUsers() {
                       color: u.role === 'admin' ? 'var(--color-accent)' : 'var(--color-text-muted)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
-                      {u.role === 'admin' ? <Shield size={16} /> : <User size={16} />}
+                      <Icon size={16} />
                     </div>
                     <span style={{ fontWeight: 500 }}>{u.name}</span>
                   </div>
+                    );
+                  })()}
                 </td>
                 <td>{u.email}</td>
                 <td>{u.phone}</td>
                 <td>
-                  <span className={`badge ${u.role === 'admin' ? 'badge-accent' : 'badge-info'}`}>
-                    {u.role === 'admin' ? 'Admin' : 'Foydalanuvchi'}
+                  <span className={`badge ${(ROLE_META[u.role] || ROLE_META.user).badge}`}>
+                    {(ROLE_META[u.role] || ROLE_META.user).label}
                   </span>
                 </td>
                 <td style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
@@ -187,13 +250,18 @@ export default function AdminUsers() {
                 </td>
                 <td>
                   <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                    <button
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => handleRoleChange(u._id, u.role === 'admin' ? 'user' : 'admin')}
-                      title={u.role === 'admin' ? 'Foydalanuvchi qilish' : 'Admin qilish'}
+                    <select
+                      className="form-select"
+                      value={u.role}
+                      onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                      style={{ minWidth: 140 }}
                     >
-                      <Shield size={14} />
-                    </button>
+                      {ROLE_OPTIONS.map((roleOption) => (
+                        <option key={roleOption.value} value={roleOption.value}>
+                          {roleOption.label}
+                        </option>
+                      ))}
+                    </select>
                     <button
                       className="btn btn-ghost btn-sm"
                       style={{ color: 'var(--color-error)' }}
@@ -208,6 +276,108 @@ export default function AdminUsers() {
           </tbody>
         </table>
       </div>
+
+      {isCreateModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foydalanuvchi qo'shish"
+          onClick={() => setIsCreateModalOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.45)',
+            backdropFilter: 'blur(3px)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: 720,
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-xl)',
+              padding: 'var(--space-5)',
+              boxShadow: '0 24px 80px rgba(2, 6, 23, 0.25)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+              <h3 style={{ margin: 0 }}>Hodim yoki direktor hisobi yaratish</h3>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => setIsCreateModalOpen(false)}
+                aria-label="Yopish"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateUser}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+                <input
+                  className="form-input"
+                  placeholder="Ism"
+                  value={form.name}
+                  onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="Email"
+                  value={form.email}
+                  onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+                  required
+                />
+                <input
+                  className="form-input"
+                  placeholder="Telefon"
+                  value={form.phone}
+                  onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
+                  required
+                />
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="Parol (kamida 6 ta)"
+                  minLength={6}
+                  value={form.password}
+                  onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
+                  required
+                />
+                <select
+                  className="form-select"
+                  value={form.role}
+                  onChange={(e) => setForm((prev) => ({ ...prev, role: e.target.value }))}
+                >
+                  <option value="hodim">Hodim</option>
+                  <option value="direktor">Direktor</option>
+                </select>
+              </div>
+
+              <div style={{ marginTop: 'var(--space-4)', display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-2)' }}>
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => setIsCreateModalOpen(false)}
+                >
+                  Bekor qilish
+                </button>
+                <button className="btn btn-primary" disabled={creating}>
+                  {creating ? 'Yaratilmoqda...' : 'Hisob yaratish'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

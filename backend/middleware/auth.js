@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const BACKOFFICE_ROLES = ['admin', 'direktor', 'hodim'];
 
 const protect = async (req, res, next) => {
   try {
@@ -47,4 +48,16 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-module.exports = { protect, adminOnly };
+const rolesOnly = (...roles) => (req, res, next) => {
+  if (!req.user || !roles.includes(req.user.role)) {
+    return res.status(403).json({
+      success: false,
+      message: 'Ruxsat etilmagan'
+    });
+  }
+  next();
+};
+
+const backofficeOnly = rolesOnly(...BACKOFFICE_ROLES);
+
+module.exports = { protect, adminOnly, rolesOnly, backofficeOnly, BACKOFFICE_ROLES };

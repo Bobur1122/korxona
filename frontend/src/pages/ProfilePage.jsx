@@ -7,11 +7,18 @@ import { api } from '../api';
 import StatusBadge from '../components/StatusBadge';
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, isBackoffice, backofficePath } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const roleLabel = user?.role === 'admin'
+    ? 'Admin'
+    : user?.role === 'direktor'
+      ? 'Direktor'
+      : user?.role === 'hodim'
+        ? 'Hodim'
+        : null;
 
   useEffect(() => {
     api.getMyOrders()
@@ -55,8 +62,8 @@ export default function ProfilePage() {
               <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', color: '#94A3B8', fontSize: '0.9375rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Mail size={14} /> {user?.email}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Phone size={14} /> {user?.phone}</span>
-                {user?.role === 'admin' && (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#F59E0B' }}><Shield size={14} /> Admin</span>
+                {roleLabel && (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#F59E0B' }}><Shield size={14} /> {roleLabel}</span>
                 )}
               </div>
             </div>
@@ -84,8 +91,8 @@ export default function ProfilePage() {
               <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{orders.length}</div>
               <div style={{ color: '#94A3B8', fontSize: '0.8125rem', fontWeight: 500 }}>{t('cartTitle') || 'Buyurtmalar'}</div>
             </div>
-            {user?.role === 'admin' && (
-              <Link to="/admin" style={{
+            {isBackoffice && backofficePath && (
+              <Link to={backofficePath} style={{
                 background: 'rgba(0,166,81,0.12)', border: '1px solid rgba(0,166,81,0.3)',
                 borderRadius: 12, padding: '16px 24px', minWidth: 140,
                 textDecoration: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: 12,

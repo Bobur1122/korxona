@@ -526,6 +526,18 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           justify-content: center;
+          isolation: isolate;
+        }
+        /* Soft halo behind the sun (more realistic than a flat glow) */
+        .sun-corona {
+          position: absolute;
+          inset: -26px;
+          border-radius: 50%;
+          z-index: 0;
+          pointer-events: none;
+          filter: blur(10px);
+          transform: translateZ(0);
+          transition: opacity 0.8s ease, background 0.8s ease;
         }
         /* Animated rotating rays */
         .sun-rays {
@@ -533,6 +545,7 @@ export default function HomePage() {
           inset: -30px;
           border-radius: 50%;
           transition: opacity 0.8s ease, filter 0.8s ease;
+          z-index: 1;
         }
         @keyframes sunRaysSpin {
           0% { transform: rotate(0deg); }
@@ -546,6 +559,7 @@ export default function HomePage() {
           transform-origin: 0 0;
           border-radius: 999px;
           transition: height 0.8s ease, opacity 0.8s ease, background 0.8s ease;
+          filter: blur(0.15px);
         }
         /* Core sun circle */
         .sun-core {
@@ -555,6 +569,39 @@ export default function HomePage() {
           border-radius: 50%;
           z-index: 2;
           transition: background 0.8s ease, box-shadow 0.8s ease;
+          overflow: hidden;
+          transform: translateZ(0);
+        }
+        @keyframes sunShimmer {
+          0% { transform: translate(-2px, -1px) rotate(-1deg); opacity: 0.85; }
+          50% { transform: translate(2px, 1px) rotate(1deg); opacity: 0.95; }
+          100% { transform: translate(-2px, -1px) rotate(-1deg); opacity: 0.85; }
+        }
+        /* Surface highlight + subtle texture */
+        .sun-core::before {
+          content: "";
+          position: absolute;
+          inset: -14%;
+          border-radius: 50%;
+          background:
+            radial-gradient(circle at 28% 25%, rgba(255,255,255,0.55), rgba(255,255,255,0) 42%),
+            radial-gradient(circle at 65% 70%, rgba(255,206,120,0.22), rgba(255,206,120,0) 58%),
+            conic-gradient(from 190deg, rgba(255,255,255,0.03), rgba(0,0,0,0.04), rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+          mix-blend-mode: soft-light;
+          opacity: 0.9;
+          animation: sunShimmer 6s ease-in-out infinite;
+          pointer-events: none;
+        }
+        /* Limb darkening / edge falloff */
+        .sun-core::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          background: radial-gradient(circle at 48% 52%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.26) 100%);
+          mix-blend-mode: multiply;
+          opacity: 0.95;
+          pointer-events: none;
         }
         /* Film overlay on sun */
         .sun-film-overlay {
@@ -562,8 +609,14 @@ export default function HomePage() {
           inset: 0;
           border-radius: 50%;
           z-index: 3;
-          transition: background 0.8s ease;
+          transition: opacity 0.8s ease;
           pointer-events: none;
+          background: rgba(7, 11, 20, 1);
+          mix-blend-mode: multiply;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .sun-rays { animation: none !important; }
+          .sun-core::before { animation: none !important; }
         }
         /* Percent badge below sun */
         .sun-percent-badge {
@@ -962,17 +1015,27 @@ export default function HomePage() {
                       return (
                         <>
                           <div className="sun-visual">
+                            {/* Soft corona */}
+                            <div
+                              className="sun-corona"
+                              style={{
+                                opacity: Math.min(1, 0.15 + glowIntensity * 0.65),
+                                background: `radial-gradient(circle at 45% 40%, hsla(48, 100%, 75%, ${0.35 + glowIntensity * 0.35}) 0%, hsla(45, 95%, 58%, ${0.22 + glowIntensity * 0.25}) 35%, rgba(0,0,0,0) 70%)`,
+                              }}
+                            />
                             {/* Rays */}
                             <div className="sun-rays" style={{ opacity: rayOpacity, animation: 'sunRaysSpin 60s linear infinite' }}>
                               {Array.from({ length: rayCount }).map((_, i) => {
                                 const angle = (360 / rayCount) * i;
                                 const rLen = rayLength + (i % 3 === 0 ? 12 : 0);
+                                const rWidth = i % 6 === 0 ? 3 : i % 2 === 0 ? 2 : 1;
                                 return (
                                   <div
                                     key={i}
                                     className="sun-ray-line"
                                     style={{
                                       height: rLen,
+                                      width: rWidth,
                                       transform: `rotate(${angle}deg) translateY(-${80 + rLen}px)`,
                                       background: `linear-gradient(to bottom, ${coreGlow}, transparent)`,
                                       opacity: i % 2 === 0 ? 1 : 0.5,
@@ -985,25 +1048,12 @@ export default function HomePage() {
                             <div
                               className="sun-core"
                               style={{
-                                background: `radial-gradient(circle at 40% 35%, ${coreGlow}, ${coreColor} 60%, hsl(42, 30%, ${Math.max(8, coreLight - 15)}%) 100%)`,
+                                background: `radial-gradient(circle at 38% 32%, ${coreGlow} 0%, ${coreColor} 46%, hsl(42, 30%, ${Math.max(8, coreLight - 18)}%) 100%), radial-gradient(circle at 62% 70%, hsla(45, 100%, 78%, ${0.14 + glowIntensity * 0.10}) 0%, rgba(0,0,0,0) 60%)`,
                                 boxShadow: `0 0 ${glowSize}px ${glowSize / 2}px hsla(42, ${coreSat}%, ${coreLight}%, ${glowIntensity * 0.5}), 0 0 ${glowSize * 2.5}px ${glowSize}px hsla(38, ${coreSat}%, ${coreLight}%, ${glowIntensity * 0.25})`,
                               }}
-                            />
-                            {/* Film overlay — darkens the sun */}
-                            <div
-                              className="sun-film-overlay"
-                              style={{
-                                background: `rgba(7, 11, 20, ${filmOpacity})`,
-                                inset: 0,
-                                position: 'absolute',
-                                borderRadius: '50%',
-                                width: 160,
-                                height: 160,
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                              }}
-                            />
+                            >
+                              <div className="sun-film-overlay" style={{ opacity: filmOpacity }} />
+                            </div>
                           </div>
                           {/* Percent badge */}
                           <div className="sun-percent-badge">

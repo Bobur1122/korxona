@@ -119,6 +119,14 @@ app.get('/api/seed', async (req, res) => {
   }
 });
 
+// Unknown API endpoint fallback (always JSON)
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'API endpoint topilmadi'
+  });
+});
+
 // Error handler
 app.use(errorHandler);
 

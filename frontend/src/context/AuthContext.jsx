@@ -2,6 +2,12 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../api';
 
 const AuthContext = createContext(null);
+const BACKOFFICE_ROLES = ['admin', 'direktor', 'hodim'];
+const BACKOFFICE_PATH_BY_ROLE = {
+  admin: '/admin',
+  direktor: '/director',
+  hodim: '/hodim',
+};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -44,8 +50,27 @@ export function AuthProvider({ children }) {
     setUser(updatedUser);
   };
 
+  const role = user?.role || null;
+  const isAdmin = role === 'admin';
+  const isDirector = role === 'direktor';
+  const isHodim = role === 'hodim';
+  const isBackoffice = role ? BACKOFFICE_ROLES.includes(role) : false;
+  const backofficePath = role ? BACKOFFICE_PATH_BY_ROLE[role] || '/admin' : null;
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      updateUser,
+      isAdmin,
+      isDirector,
+      isHodim,
+      isBackoffice,
+      backofficePath,
+    }}>
       {children}
     </AuthContext.Provider>
   );

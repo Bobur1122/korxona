@@ -7,21 +7,37 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
-export default function AdminLayout() {
+export default function AdminLayout({ panelRole }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { t } = useLanguage();
+  const currentRole = panelRole || user?.role || 'user';
+  const panel = currentRole === 'admin' || currentRole === 'direktor' || currentRole === 'hodim'
+    ? currentRole
+    : 'admin';
+  const basePath = panel === 'admin' ? '/admin' : panel === 'direktor' ? '/director' : '/hodim';
 
-  const navItems = [
-    { to: '/admin', icon: LayoutDashboard, label: t('adminDashboard'), exact: true },
-    { to: '/admin/products', icon: Package, label: t('adminProducts') },
-    { to: '/admin/news', icon: Newspaper, label: t('adminNews') },
-    { to: '/admin/orders', icon: ShoppingCart, label: t('adminOrders') },
-    { to: '/admin/users', icon: Users, label: t('adminUsers') },
-    { to: '/admin/promo', icon: Tag, label: t('adminPromo') },
-  ];
+  const navItems = panel === 'admin'
+    ? [
+        { to: `${basePath}`, icon: LayoutDashboard, label: t('adminDashboard'), exact: true },
+        { to: `${basePath}/products`, icon: Package, label: t('adminProducts') },
+        { to: `${basePath}/news`, icon: Newspaper, label: t('adminNews') },
+        { to: `${basePath}/orders`, icon: ShoppingCart, label: t('adminOrders') },
+        { to: `${basePath}/users`, icon: Users, label: t('adminUsers') },
+        { to: `${basePath}/promo`, icon: Tag, label: t('adminPromo') },
+      ]
+    : panel === 'direktor'
+      ? [
+          { to: `${basePath}`, icon: LayoutDashboard, label: t('adminDashboard'), exact: true },
+          { to: `${basePath}/products`, icon: Package, label: t('adminProducts') },
+          { to: `${basePath}/news`, icon: Newspaper, label: t('adminNews') },
+          { to: `${basePath}/orders`, icon: ShoppingCart, label: t('adminOrders') },
+        ]
+      : [
+          { to: `${basePath}/orders`, icon: ShoppingCart, label: t('adminOrders'), exact: true },
+        ];
 
   // Close mobile sidebar on route change
   useEffect(() => {

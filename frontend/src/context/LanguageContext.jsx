@@ -192,6 +192,8 @@ const translations = {
     statusPending: 'Kutilmoqda',
     statusAccepted: 'Qabul qilindi',
     statusPreparing: 'Tayyorlanmoqda',
+    statusLoaded: 'Yuklandi',
+    statusSent: 'Yuborildi',
     statusDelivered: 'Yetkazildi',
     statusRollbackError: "Statusni avvalgi bosqichga qaytarib bo'lmaydi",
 
@@ -826,6 +828,8 @@ const translations = {
     statusPending: 'Pending',
     statusAccepted: 'Accepted',
     statusPreparing: 'Preparing',
+    statusLoaded: 'Loaded',
+    statusSent: 'Sent',
     statusDelivered: 'Delivered',
     statusRollbackError: 'Cannot move order status back to an earlier stage',
 

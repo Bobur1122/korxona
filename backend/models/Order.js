@@ -32,6 +32,27 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  customerName: {
+    type: String,
+    trim: true,
+    maxlength: 120
+  },
+  companyName: {
+    type: String,
+    trim: true,
+    maxlength: 160,
+    default: ''
+  },
+  orderSource: {
+    type: String,
+    enum: ['online', 'offline'],
+    default: 'online'
+  },
+  createdByStaff: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
   orderNumber: {
     type: String,
     unique: true
@@ -64,8 +85,22 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['kutilmoqda', 'qabul_qilindi', 'tayyorlanmoqda', 'yetkazildi'],
+    enum: ['kutilmoqda', 'qabul_qilindi', 'tayyorlanmoqda', 'yuklandi', 'yuborildi', 'yetkazildi'],
     default: 'kutilmoqda'
+  },
+  paymentPlan: {
+    type: String,
+    enum: ['oldindan', 'avans', 'yuklangandan_keyin'],
+    default: 'avans'
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['kutilmoqda', 'tushdi'],
+    default: 'kutilmoqda'
+  },
+  paymentReceivedAt: {
+    type: Date,
+    default: null
   },
   shippingAddress: {
     type: String,

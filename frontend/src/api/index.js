@@ -10,17 +10,33 @@ async function request(endpoint, options = {}) {
 
   try {
     const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-    
-    const data = res.status !== 204 ? await res.json() : {};
+    let data = {};
+    if (res.status !== 204) {
+      const raw = await res.text();
+      if (raw) {
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          data = { message: raw };
+        }
+      }
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || 'So\'rov bajarilmadi');
+      let errorMessage = data.message || `So'rov bajarilmadi (${res.status})`;
+      if (typeof errorMessage === 'string' && errorMessage.includes('<pre>Cannot')) {
+        const match = errorMessage.match(/<pre>(.*?)<\/pre>/i);
+        if (match?.[1]) {
+          errorMessage = match[1];
+        }
+      }
+      if (typeof errorMessage === 'string' && errorMessage.includes('Cannot POST /api/admin/users')) {
+        errorMessage = 'Backend eski versiyada ishlayapti: POST /api/admin/users topilmadi. Backend serverni qayta ishga tushiring.';
+      }
+      throw new Error(errorMessage);
     }
     return data;
   } catch (err) {
-    if (err.name === 'SyntaxError') {
-      throw new Error('Server noto\'g\'ri formatda javob qaytardi. Iltimos, keyinroq urinib ko\'ring.');
-    }
     throw new Error(err.message || 'Server bilan aloqa o\'rnatib bo\'lmadi.');
   }
 }
@@ -47,6 +63,7 @@ export const api = {
   // Admin
   getDashboard: (params = '') => request(`/admin/dashboard?${params}`),
   getUsers: (params = '') => request(`/admin/users?${params}`),
+  createUser: (body) => request('/admin/users', { method: 'POST', body: JSON.stringify(body) }),
   updateUserRole: (id, role) => request(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
   deleteUser: (id) => request(`/admin/users/${id}`, { method: 'DELETE' }),
   
@@ -57,6 +74,7 @@ export const api = {
   
   getAllOrders: (params = '') => request(`/orders/admin/all?${params}`),
   updateOrderStatus: (id, status) => request(`/orders/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
+  updateOrderPaymentStatus: (id, paymentStatus) => request(`/orders/${id}/payment`, { method: 'PUT', body: JSON.stringify({ paymentStatus }) }),
   
   getPromoCodes: (params = '') => request(`/promo?${params}`),
   createPromoCode: (body) => request('/promo', { method: 'POST', body: JSON.stringify(body) }),

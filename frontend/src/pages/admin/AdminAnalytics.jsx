@@ -81,6 +81,8 @@ export default function AdminAnalytics() {
     kutilmoqda: t('statusPending'),
     qabul_qilindi: t('statusAccepted'),
     tayyorlanmoqda: t('statusPreparing'),
+    yuklandi: t('statusLoaded'),
+    yuborildi: t('statusSent'),
     yetkazildi: t('statusDelivered')
   };
 
@@ -88,7 +90,7 @@ export default function AdminAnalytics() {
     labels: stats.ordersByStatus.map(s => statusLabels[s._id] || s._id),
     datasets: [{
       data: stats.ordersByStatus.map(s => s.count),
-      backgroundColor: ['#F59E0B', '#3B82F6', '#6366F1', '#10B981'],
+      backgroundColor: ['#F59E0B', '#3B82F6', '#6366F1', '#0EA5E9', '#8B5CF6', '#10B981'],
       borderWidth: 0,
     }]
   };
